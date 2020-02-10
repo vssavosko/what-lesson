@@ -1,0 +1,6 @@
+{
+  "extends": ["tslint:recommended", "tslint-config-prettier", "tslint-plugin-prettier", "tslint-config-airbnb", "tslint-react"],
+  "rules": {
+    "prettier": true
+  }
+}
