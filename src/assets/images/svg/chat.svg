@@ -1,0 +1,31 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='21' height='23.1' viewBox='0 0 21 23.1'>
+  <g id='chat' transform='translate(-147.309 -460.602)'>
+    <path
+      id='Path_35'
+      data-name='Path 35'
+      d='M-283.3,639.1h10.11v17.835h-8.1l-5.234,4.265v-4.265h-6.667V639.1Z'
+      transform='translate(441 -178)'
+      fill='none'
+      strokeLinejoin='round'
+      strokeWidth='1'
+    />
+    <path
+      id='Path_36'
+      data-name='Path 36'
+      d='M-289.353,643.862h12.6'
+      transform='translate(440.854 -176.123)'
+      fill='none'
+      strokeLinecap='round'
+      strokeWidth='1'
+    />
+    <path
+      id='Path_37'
+      data-name='Path 37'
+      d='M-289.353,647.027h7.71'
+      transform='translate(440.854 -174.875)'
+      fill='none'
+      strokeLinecap='round'
+      strokeWidth='1'
+    />
+  </g>
+</svg>

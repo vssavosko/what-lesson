@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
 import { HeaderBar } from '../components/HeaderBar/HeaderBar';
 import { TabBar } from '../components/TabBar/TabBar';
@@ -33,17 +33,36 @@ const GlobalStyles = createGlobalStyle`
     src: url(${fonts.SFProDisplaySemiboldWoff}) format('woff'),
       url(${fonts.SFProDisplaySemiboldTtf}) format('truetype');
   }
+
+  .icon-light g {
+    stroke: rgba(0,0,0,0.5);
+    transition: .2s;
+  }
+
+  .active-light g {
+    stroke: #000;
+    transition: .2s;
+  }
+`;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 `;
 
 export const App: React.FC = () => {
+  const [theme, setTheme] = useState('light');
+
   return (
     <Router>
       <GlobalStyles />
-      <HeaderBar />
-      <Switch>
-        <Route component={Main} path='/' exact />
-      </Switch>
-      <TabBar />
+      <Wrapper>
+        <HeaderBar />
+        <Switch>
+          <Route path='/' exact render={() => <Main />} />
+        </Switch>
+        <TabBar theme={theme} />
+      </Wrapper>
     </Router>
   );
 };

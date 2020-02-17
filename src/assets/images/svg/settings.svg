@@ -1,0 +1,61 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='19.98' height='23.1' viewBox='0 0 19.98 23.1'>
+    <g id='settings' transform='translate(-135.826 -441.189)'>
+    <path
+        id='Path_28'
+        data-name='Path 28'
+        d='M-301.711,658.184h18.98'
+        transform='translate(438.037 -205.509)'
+        fill='none'
+        strokeLinecap='round'
+        strokeWidth='1'
+    />
+    <path
+        id='Path_30'
+        data-name='Path 30'
+        d='M-299.674,657.711h18.98'
+        transform='translate(436 -196.405)'
+        fill='none'
+        strokeLinecap='round'
+        strokeWidth='1'
+    />
+    <path
+        id='Path_31'
+        data-name='Path 31'
+        d='M-295.816,652.953h-1.128v4.835h2.336v-4.835Z'
+        transform='translate(437.374 -193.999)'
+        fill='#f9f9f9'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        strokeWidth='1'
+    />
+    <path
+        id='Path_32'
+        data-name='Path 32'
+        d='M-305,621.9h18.98'
+        transform='translate(441.326 -177.847)'
+        fill='none'
+        strokeLinecap='round'
+        strokeWidth='1'
+    />
+    <path
+        id='Path_33'
+        data-name='Path 33'
+        d='M-297.665,619.689h1.282V624.5h-2.484v-4.813Z'
+        transform='translate(441.584 -178)'
+        fill='#f9f9f9'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        strokeWidth='1'
+    />
+    <path
+        id='Path_34'
+        data-name='Path 34'
+        d='M-292.131,624.685h1.155v4.837h-2.368v-4.837Z'
+        transform='translate(442.137 -174.493)'
+        fill='#f9f9f9'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        strokeWidth='1'
+    />
+    </g>
+</svg>
