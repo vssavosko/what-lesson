@@ -14,7 +14,7 @@ const Bar = styled.div`
   flex-shrink: 0;
   height: 47px;
   padding: 0 16px;
-  border-top: 2px solid #f3f3f3;
+  border-top: 1px solid #f3f3f3;
   background-color: #f9f9f9;
   justify-content: space-between;
 `;
