@@ -1,8 +1,11 @@
 import React from 'react';
 
 import styled from 'styled-components';
+import Swiper from 'react-id-swiper';
 
 import { IStyledProps } from './interfaces';
+
+import 'swiper/css/swiper.min.css';
 
 import { ReactComponent as UserIcon } from '../../assets/images/svg/user-icon.svg';
 import { ReactComponent as DotsIcon } from '../../assets/images/svg/dots.svg';
@@ -11,7 +14,6 @@ const Page = styled.div`
   display: flex;
   flex-wrap: wrap;
   flex-grow: 1;
-  padding: 0 16px;
   padding-bottom: 16px;
   justify-content: center;
   align-items: flex-end;
@@ -100,6 +102,18 @@ const PrincipalValue = styled.p<IStyledProps>`
   font-size: 18px;
 `;
 
+const SwiperParams = {
+  slidesPerView: 'auto',
+  direction: 'horizontal',
+  centeredSlides: true,
+  centerInsufficientSlides: true,
+  roundLengths: true,
+  spaceBetween: 16,
+  normalizeSlideIndex: true,
+  setWrapperSize: true,
+  freeMode: false,
+};
+
 export const Main: React.FC = () => {
   return (
     <Page>
@@ -109,22 +123,104 @@ export const Main: React.FC = () => {
       </Greeting>
       <Tabs>
         <Date>Воскресенье, 24 ноября</Date>
-        <Tab>
-          <IconsBar>
-            <Circle>
-              <CircleText>ВТ</CircleText>
-            </Circle>
-            <DotsIconPadding>
-              <DotsIcon />
-            </DotsIconPadding>
-          </IconsBar>
-          <TabContent>
-            <SideValues pb='5px'>4 пары</SideValues>
-            <PrincipalValue pb='5px'>ТВиМС</PrincipalValue>
-            <PrincipalValue pb='5px'>Программирование</PrincipalValue>
-            <SideValues>И другие</SideValues>
-          </TabContent>
-        </Tab>
+        <Swiper {...SwiperParams}>
+          <Tab>
+            <IconsBar>
+              <Circle>
+                <CircleText>ВТ</CircleText>
+              </Circle>
+              <DotsIconPadding>
+                <DotsIcon />
+              </DotsIconPadding>
+            </IconsBar>
+            <TabContent>
+              <SideValues pb='5px'>4 пары</SideValues>
+              <PrincipalValue pb='5px'>ТВиМС</PrincipalValue>
+              <PrincipalValue pb='5px'>Программирование</PrincipalValue>
+              <SideValues>И другие</SideValues>
+            </TabContent>
+          </Tab>
+          <Tab>
+            <IconsBar>
+              <Circle>
+                <CircleText>ВТ</CircleText>
+              </Circle>
+              <DotsIconPadding>
+                <DotsIcon />
+              </DotsIconPadding>
+            </IconsBar>
+            <TabContent>
+              <SideValues pb='5px'>4 пары</SideValues>
+              <PrincipalValue pb='5px'>ТВиМС</PrincipalValue>
+              <PrincipalValue pb='5px'>Программирование</PrincipalValue>
+              <SideValues>И другие</SideValues>
+            </TabContent>
+          </Tab>
+          <Tab>
+            <IconsBar>
+              <Circle>
+                <CircleText>ВТ</CircleText>
+              </Circle>
+              <DotsIconPadding>
+                <DotsIcon />
+              </DotsIconPadding>
+            </IconsBar>
+            <TabContent>
+              <SideValues pb='5px'>4 пары</SideValues>
+              <PrincipalValue pb='5px'>ТВиМС</PrincipalValue>
+              <PrincipalValue pb='5px'>Программирование</PrincipalValue>
+              <SideValues>И другие</SideValues>
+            </TabContent>
+          </Tab>
+          <Tab>
+            <IconsBar>
+              <Circle>
+                <CircleText>ВТ</CircleText>
+              </Circle>
+              <DotsIconPadding>
+                <DotsIcon />
+              </DotsIconPadding>
+            </IconsBar>
+            <TabContent>
+              <SideValues pb='5px'>4 пары</SideValues>
+              <PrincipalValue pb='5px'>ТВиМС</PrincipalValue>
+              <PrincipalValue pb='5px'>Программирование</PrincipalValue>
+              <SideValues>И другие</SideValues>
+            </TabContent>
+          </Tab>
+          <Tab>
+            <IconsBar>
+              <Circle>
+                <CircleText>ВТ</CircleText>
+              </Circle>
+              <DotsIconPadding>
+                <DotsIcon />
+              </DotsIconPadding>
+            </IconsBar>
+            <TabContent>
+              <SideValues pb='5px'>4 пары</SideValues>
+              <PrincipalValue pb='5px'>ТВиМС</PrincipalValue>
+              <PrincipalValue pb='5px'>Программирование</PrincipalValue>
+              <SideValues>И другие</SideValues>
+            </TabContent>
+          </Tab>
+          <Tab>
+            <IconsBar>
+              <Circle>
+                <CircleText>ВТ</CircleText>
+              </Circle>
+              <DotsIconPadding>
+                <DotsIcon />
+              </DotsIconPadding>
+            </IconsBar>
+            <TabContent>
+              <SideValues pb='5px'>4 пары</SideValues>
+              <PrincipalValue pb='5px'>ТВиМС</PrincipalValue>
+              <PrincipalValue pb='5px'>Программирование</PrincipalValue>
+              <SideValues>И другие</SideValues>
+            </TabContent>
+          </Tab>
+        </Swiper>
       </Tabs>
     </Page>
   );
