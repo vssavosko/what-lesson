@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import { CSSTransition } from 'react-transition-group'
 
 import styled from 'styled-components';
 import Swiper from 'react-id-swiper';
 
+import { Schedule } from '../Schedule/Schedule';
+
 import { IStyledProps } from './interfaces';
+
+import { lessonsData } from '../../mockData';
 
 import 'swiper/css/swiper.min.css';
 
@@ -37,7 +42,7 @@ const Tabs = styled.div`
   justify-content: center;
   align-items: flex-end;
 `;
-const Date = styled.p`
+const DateValue = styled.p`
   width: 274px;
   margin-bottom: 5px;
   font-family: SFProTextRegular, sans-serif;
@@ -52,10 +57,12 @@ const Tab = styled.div`
   background-color: #F9F9F9;
   border: 1px solid #F3F3F3;
   border-radius: 10px;
+  transition: .4s;
 `;
 const IconsBar = styled.div`
   display: flex;
   width: 100%;
+  height: 42px;
   padding: 0 16px;
   padding-top: 16px;
   justify-content: space-between;
@@ -73,8 +80,13 @@ const CircleText = styled.p`
   font-family: SFProDisplayRegular, sans-serif;
   font-size: 15px;
 `;
-const DotsIconPadding = styled.div`
+const DotsButton = styled.div`
+  width: 20px;
+  height: 20px;
   padding-top: 7px;
+  text-align: right;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 `;
 const TabContent = styled.div`
   display: flex;
@@ -102,19 +114,75 @@ const PrincipalValue = styled.p<IStyledProps>`
   font-size: 18px;
 `;
 
-const SwiperParams = {
-  slidesPerView: 'auto',
-  direction: 'horizontal',
-  centeredSlides: true,
-  centerInsufficientSlides: true,
-  roundLengths: true,
-  spaceBetween: 16,
-  normalizeSlideIndex: true,
-  setWrapperSize: true,
-  freeMode: false,
-};
-
 export const Main: React.FC = () => {
+  const [swiper, setSwiper] = useState();
+  const [initialPoint, setInitialPoint] = useState({ pageY: 0 });
+  const [isShowSchedule, setIsShowSchedule] = useState();
+  const [touches, setTouches] = useState();
+
+  const refSchedule = useRef<HTMLDivElement>(null);
+
+  const dayOfWeek = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
+
+  const weekdayNumber = () => {
+    const date = new Date().getDay();
+
+    if (date === 0) {
+      return dayOfWeek.length - 1;
+    }
+
+    return date - 1;
+  };
+
+  const currentDate = () => {
+    const date = new Date();
+    const options = {
+      day: 'numeric',
+      weekday: 'long',
+      month: 'long',
+    };
+
+    return date.toLocaleString("ru", options);
+  };
+
+  const touchTapStart = (event: React.TouchEvent) => {
+    setTouches(true);
+    setInitialPoint(event.changedTouches[0]);
+  };
+
+  const touchTapEnd = () => {
+    setTouches(false);
+  };
+
+  const touchMove = (event: React.TouchEvent) => {
+    const swipe = initialPoint.pageY - event.touches[0].pageY;
+
+    if (swipe >= 30) {
+      setIsShowSchedule(true);
+    }
+  };
+
+  const clickOnDotsButton = () => setIsShowSchedule(true);
+
+  const numberOfLessons = (lessons: object[]) => lessons.length;
+
+  const currentScheduleData = () => swiper ? lessonsData[swiper.activeIndex] : [];
+
+  const hideSchedule = () => setIsShowSchedule(false);
+
+  const swiperParams = {
+    slidesPerView: 'auto',
+    direction: 'horizontal',
+    centeredSlides: true,
+    centerInsufficientSlides: true,
+    roundLengths: true,
+    spaceBetween: 16,
+    setWrapperSize: true,
+    normalizeSlideIndex: true,
+    initialSlide: weekdayNumber(),
+    freeMode: false,
+  };
+
   return (
     <Page>
       <Greeting>
@@ -122,106 +190,68 @@ export const Main: React.FC = () => {
         <GreetingText>Привет, Владислав</GreetingText>
       </Greeting>
       <Tabs>
-        <Date>Воскресенье, 24 ноября</Date>
-        <Swiper {...SwiperParams}>
-          <Tab>
-            <IconsBar>
-              <Circle>
-                <CircleText>ВТ</CircleText>
-              </Circle>
-              <DotsIconPadding>
-                <DotsIcon />
-              </DotsIconPadding>
-            </IconsBar>
-            <TabContent>
-              <SideValues pb='5px'>4 пары</SideValues>
-              <PrincipalValue pb='5px'>ТВиМС</PrincipalValue>
-              <PrincipalValue pb='5px'>Программирование</PrincipalValue>
-              <SideValues>И другие</SideValues>
-            </TabContent>
-          </Tab>
-          <Tab>
-            <IconsBar>
-              <Circle>
-                <CircleText>ВТ</CircleText>
-              </Circle>
-              <DotsIconPadding>
-                <DotsIcon />
-              </DotsIconPadding>
-            </IconsBar>
-            <TabContent>
-              <SideValues pb='5px'>4 пары</SideValues>
-              <PrincipalValue pb='5px'>ТВиМС</PrincipalValue>
-              <PrincipalValue pb='5px'>Программирование</PrincipalValue>
-              <SideValues>И другие</SideValues>
-            </TabContent>
-          </Tab>
-          <Tab>
-            <IconsBar>
-              <Circle>
-                <CircleText>ВТ</CircleText>
-              </Circle>
-              <DotsIconPadding>
-                <DotsIcon />
-              </DotsIconPadding>
-            </IconsBar>
-            <TabContent>
-              <SideValues pb='5px'>4 пары</SideValues>
-              <PrincipalValue pb='5px'>ТВиМС</PrincipalValue>
-              <PrincipalValue pb='5px'>Программирование</PrincipalValue>
-              <SideValues>И другие</SideValues>
-            </TabContent>
-          </Tab>
-          <Tab>
-            <IconsBar>
-              <Circle>
-                <CircleText>ВТ</CircleText>
-              </Circle>
-              <DotsIconPadding>
-                <DotsIcon />
-              </DotsIconPadding>
-            </IconsBar>
-            <TabContent>
-              <SideValues pb='5px'>4 пары</SideValues>
-              <PrincipalValue pb='5px'>ТВиМС</PrincipalValue>
-              <PrincipalValue pb='5px'>Программирование</PrincipalValue>
-              <SideValues>И другие</SideValues>
-            </TabContent>
-          </Tab>
-          <Tab>
-            <IconsBar>
-              <Circle>
-                <CircleText>ВТ</CircleText>
-              </Circle>
-              <DotsIconPadding>
-                <DotsIcon />
-              </DotsIconPadding>
-            </IconsBar>
-            <TabContent>
-              <SideValues pb='5px'>4 пары</SideValues>
-              <PrincipalValue pb='5px'>ТВиМС</PrincipalValue>
-              <PrincipalValue pb='5px'>Программирование</PrincipalValue>
-              <SideValues>И другие</SideValues>
-            </TabContent>
-          </Tab>
-          <Tab>
-            <IconsBar>
-              <Circle>
-                <CircleText>ВТ</CircleText>
-              </Circle>
-              <DotsIconPadding>
-                <DotsIcon />
-              </DotsIconPadding>
-            </IconsBar>
-            <TabContent>
-              <SideValues pb='5px'>4 пары</SideValues>
-              <PrincipalValue pb='5px'>ТВиМС</PrincipalValue>
-              <PrincipalValue pb='5px'>Программирование</PrincipalValue>
-              <SideValues>И другие</SideValues>
-            </TabContent>
-          </Tab>
+        <DateValue>{currentDate()}</DateValue>
+        <Swiper {...swiperParams} getSwiper={setSwiper}>
+          {dayOfWeek.map((day, index) => {
+            return (
+              <CSSTransition key={index} in={touches} timeout={0} classNames="tab">
+                <Tab
+                  onTouchStart={event => touchTapStart(event)}
+                  onTouchEnd={() => touchTapEnd()}
+                  onTouchMove={event => touchMove(event)}
+                >
+                  <IconsBar>
+                    <Circle>
+                      <CircleText>{day}</CircleText>
+                    </Circle>
+                    {lessonsData[index] &&
+                      <DotsButton onClick={() => clickOnDotsButton()}>
+                        <DotsIcon />
+                      </DotsButton>
+                    }
+                  </IconsBar>
+                  <TabContent>
+                    {lessonsData[index] &&
+                      <SideValues
+                        pb='5px'
+                      >
+                        {`${numberOfLessons(lessonsData[index])} ${numberOfLessons(lessonsData[index]) > 1 ? 'пары' : 'пара'}`}
+                      </SideValues>
+                    }
+                    {lessonsData[index] &&
+                      lessonsData[index].map((lesson, index) => index < 2 ?
+                        <PrincipalValue
+                          key={index}
+                          pb='5px'
+                        >
+                          {lesson.lessonName}
+                        </PrincipalValue> : false
+                      )}
+                    {!lessonsData[index] &&
+                      <PrincipalValue
+                        key={index}
+                        pb='5px'
+                      >
+                        Занятий нет
+                      </PrincipalValue>
+                    }
+                    {lessonsData[index] && lessonsData[index].length > 2 &&
+                      <SideValues>И другие</SideValues>
+                    }
+                  </TabContent>
+                </Tab>
+              </CSSTransition>
+            );
+          })}
         </Swiper>
       </Tabs>
+      <CSSTransition in={currentScheduleData() ? isShowSchedule : false} timeout={0} classNames="schedule">
+        <Schedule
+          currentSchedule={currentScheduleData()}
+          hideSchedule={hideSchedule}
+          ref={refSchedule}
+        />
+      </CSSTransition>
     </Page>
   );
 };

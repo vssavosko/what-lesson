@@ -1,0 +1,110 @@
+export const lessonsData = [
+  [
+    {
+      id: 0,
+      time: '8:15 - 9:45',
+      lessonName: 'ТВиМС',
+      place: 'БЦ-18',
+      teacherName: 'Иванов И.И.',
+    },
+  ],
+  [
+    {
+      id: 0,
+      time: '8:15 - 9:45',
+      lessonName: 'ТВиМС',
+      place: 'БЦ-18',
+      teacherName: 'Иванов И.И.',
+    },
+    {
+      id: 1,
+      time: '8:15 - 9:45',
+      lessonName: 'ТВиМС',
+      place: 'БЦ-18',
+      teacherName: 'Иванов И.И.',
+    },
+    {
+      id: 2,
+      time: '8:15 - 9:45',
+      lessonName: 'ТВиМС',
+      place: 'БЦ-18',
+      teacherName: 'Иванов И.И.',
+    },
+  ],
+  [
+    {
+      id: 0,
+      time: '8:15 - 9:45',
+      lessonName: 'ТВиМС',
+      place: 'БЦ-18',
+      teacherName: 'Иванов И.И.',
+    },
+    {
+      id: 1,
+      time: '8:15 - 9:45',
+      lessonName: 'ТВиМС',
+      place: 'БЦ-18',
+      teacherName: 'Иванов И.И.',
+    },
+  ],
+  [
+    {
+      id: 0,
+      time: '8:15 - 9:45',
+      lessonName: 'ТВиМС',
+      place: 'БЦ-18',
+      teacherName: 'Иванов И.И.',
+    },
+    {
+      id: 1,
+      time: '8:15 - 9:45',
+      lessonName: 'ТВиМС',
+      place: 'БЦ-18',
+      teacherName: 'Иванов И.И.',
+    },
+    {
+      id: 2,
+      time: '8:15 - 9:45',
+      lessonName: 'ТВиМС',
+      place: 'БЦ-18',
+      teacherName: 'Иванов И.И.',
+    },
+    {
+      id: 3,
+      time: '8:15 - 9:45',
+      lessonName: 'ТВиМС',
+      place: 'БЦ-18',
+      teacherName: 'Иванов И.И.',
+    },
+  ],
+  [
+    {
+      id: 0,
+      time: '8:15 - 9:45',
+      lessonName: 'ТВиМС',
+      place: 'БЦ-18',
+      teacherName: 'Иванов И.И.',
+    },
+    {
+      id: 1,
+      time: '8:15 - 9:45',
+      lessonName: 'ТВиМС',
+      place: 'БЦ-18',
+      teacherName: 'Иванов И.И.',
+    },
+    {
+      id: 2,
+      time: '8:15 - 9:45',
+      lessonName: 'ТВиМС',
+      place: 'БЦ-18',
+      teacherName: 'Иванов И.И.',
+    },
+    {
+      id: 3,
+      time: '8:15 - 9:45',
+      lessonName: 'ТВиМС',
+      place: 'БЦ-18',
+      teacherName: 'Иванов И.И.',
+    },
+  ],
+];
