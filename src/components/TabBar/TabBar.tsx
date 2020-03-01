@@ -22,9 +22,13 @@ const Tab = styled.button`
   display: flex;
   width: 93.75px;
   height: 47px;
+  background-color: transparent;
+  border: 0;
   justify-content: center;
   align-items: center;
   outline: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 `;
 
 export const TabBar: React.FC<ITabBarProps> = ({ theme }) => {
@@ -41,16 +45,16 @@ export const TabBar: React.FC<ITabBarProps> = ({ theme }) => {
 
   return (
     <Bar>
-      <Tab theme={theme} className={`active-${theme}`} onClick={(event) => activeScreen(event)}>
+      <Tab theme={theme} className={`active-${theme}`} onClick={event => activeScreen(event)}>
         <HomeIcon className={`icon-${theme}`} />
       </Tab>
-      <Tab onClick={(event) => activeScreen(event)}>
+      <Tab onClick={event => activeScreen(event)}>
         <ChatIcon className={`icon-${theme}`} />
       </Tab>
-      <Tab onClick={(event) => activeScreen(event)}>
+      <Tab onClick={event => activeScreen(event)}>
         <StudentListIcon className={`icon-${theme}`} />
       </Tab>
-      <Tab onClick={(event) => activeScreen(event)}>
+      <Tab onClick={event => activeScreen(event)}>
         <SettingsIcon className={`icon-${theme}`} />
       </Tab>
     </Bar>

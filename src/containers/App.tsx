@@ -34,6 +34,12 @@ const GlobalStyles = createGlobalStyle`
       url(${fonts.SFProDisplaySemiboldTtf}) format('truetype');
   }
 
+  body {
+    position: fixed;
+    width: 100%;
+    overflow: hidden;
+  }
+
   .icon-light g {
     stroke: rgba(0,0,0,0.5);
     transition: .2s;
@@ -43,15 +49,33 @@ const GlobalStyles = createGlobalStyle`
     stroke: #000;
     transition: .2s;
   }
+
+  .tab-enter-done {
+    transform: scale(0.9);
+  }
+
+  .tab-exit-done {
+    transform: none;
+  }
+
+  .schedule-enter-done {
+    transform: translateY(0);
+  }
+
+  .schedule-exit-done {
+    transform: translateY(${window.innerHeight}px);
+  }
 `;
 const Wrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  overflow: hidden;
 `;
 
 export const App: React.FC = () => {
-  const [theme, setTheme] = useState('light');
+  const [theme] = useState('light');
 
   return (
     <Router>
