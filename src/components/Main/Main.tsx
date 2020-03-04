@@ -117,8 +117,8 @@ const PrincipalValue = styled.p<IStyledProps>`
 export const Main: React.FC = () => {
   const [swiper, setSwiper] = useState();
   const [initialPoint, setInitialPoint] = useState({ pageY: 0 });
-  const [isShowSchedule, setIsShowSchedule] = useState();
-  const [touches, setTouches] = useState();
+  const [showSchedule, setShowSchedule] = useState();
+  const [tapOnTab, setTapOnTab] = useState();
 
   const refSchedule = useRef<HTMLDivElement>(null);
 
@@ -146,29 +146,29 @@ export const Main: React.FC = () => {
   };
 
   const touchTapStart = (event: React.TouchEvent) => {
-    setTouches(true);
+    setTapOnTab(true);
     setInitialPoint(event.changedTouches[0]);
   };
 
   const touchTapEnd = () => {
-    setTouches(false);
+    setTapOnTab(false);
   };
 
   const touchMove = (event: React.TouchEvent) => {
     const swipe = initialPoint.pageY - event.touches[0].pageY;
 
     if (swipe >= 30) {
-      setIsShowSchedule(true);
+      setShowSchedule(true);
     }
   };
 
-  const clickOnDotsButton = () => setIsShowSchedule(true);
+  const clickOnDotsButton = () => setShowSchedule(true);
 
   const numberOfLessons = (lessons: object[]) => lessons.length;
 
   const currentScheduleData = () => swiper ? lessonsData[swiper.activeIndex] : [];
 
-  const hideSchedule = () => setIsShowSchedule(false);
+  const hideSchedule = () => setShowSchedule(false);
 
   const swiperParams = {
     slidesPerView: 'auto',
@@ -194,7 +194,7 @@ export const Main: React.FC = () => {
         <Swiper {...swiperParams} getSwiper={setSwiper}>
           {dayOfWeek.map((day, index) => {
             return (
-              <CSSTransition key={index} in={touches} timeout={0} classNames="tab">
+              <CSSTransition key={index} in={tapOnTab} timeout={0} classNames="tab">
                 <Tab
                   onTouchStart={event => touchTapStart(event)}
                   onTouchEnd={() => touchTapEnd()}
@@ -245,7 +245,7 @@ export const Main: React.FC = () => {
           })}
         </Swiper>
       </Tabs>
-      <CSSTransition in={currentScheduleData() ? isShowSchedule : false} timeout={0} classNames="schedule">
+      <CSSTransition in={currentScheduleData() ? showSchedule : false} timeout={0} classNames="schedule">
         <Schedule
           currentSchedule={currentScheduleData()}
           hideSchedule={hideSchedule}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -46,16 +47,24 @@ export const TabBar: React.FC<ITabBarProps> = ({ theme }) => {
   return (
     <Bar>
       <Tab theme={theme} className={`active-${theme}`} onClick={event => activeScreen(event)}>
-        <HomeIcon className={`icon-${theme}`} />
+        <Link to="/">
+          <HomeIcon className={`icon-${theme}`} />
+        </Link>
       </Tab>
       <Tab onClick={event => activeScreen(event)}>
-        <ChatIcon className={`icon-${theme}`} />
+        <Link to="/chat">
+          <ChatIcon className={`icon-${theme}`} />
+        </Link>
       </Tab>
       <Tab onClick={event => activeScreen(event)}>
-        <StudentListIcon className={`icon-${theme}`} />
+        <Link to="/student-list">
+          <StudentListIcon className={`icon-${theme}`} />
+        </Link>
       </Tab>
       <Tab onClick={event => activeScreen(event)}>
-        <SettingsIcon className={`icon-${theme}`} />
+        <Link to="/settings">
+          <SettingsIcon className={`icon-${theme}`} />
+        </Link>
       </Tab>
     </Bar>
   );
