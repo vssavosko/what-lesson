@@ -6,6 +6,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 import { HeaderBar } from '../components/HeaderBar/HeaderBar';
 import { TabBar } from '../components/TabBar/TabBar';
 import { Main } from '../components/Main/Main';
+import { Chat } from '../components/Chat/Chat';
 
 import fonts from '../assets/fonts/fonts';
 
@@ -84,6 +85,7 @@ export const App: React.FC = () => {
         <HeaderBar />
         <Switch>
           <Route path='/' exact render={() => <Main />} />
+          <Route path='/chat' render={() => <Chat />} />
         </Switch>
         <TabBar theme={theme} />
       </Wrapper>

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { IProps, IStyledProps } from './interfaces';
 
-import { ReactComponent as HideCurtainButton } from '../../assets/images/svg/hide-curtain-button.svg';
+import { ReactComponent as HideCurtainButtonIcon } from '../../assets/images/svg/hide-curtain-button-icon.svg';
 
 const Curtain = styled.div`
   position: absolute;
@@ -101,7 +101,7 @@ export const Schedule = React.forwardRef((props: IProps, ref: React.Ref<HTMLDivE
       ref={ref}
     >
       <Paddings padding="10px 0 24px 0">
-        <HideCurtainButton />
+        <HideCurtainButtonIcon />
       </Paddings>
       {currentSchedule && currentSchedule.map((lessonData, index) => {
         return (

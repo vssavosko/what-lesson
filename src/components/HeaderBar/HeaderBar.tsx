@@ -9,6 +9,7 @@ const Header = styled.div`
   background-color: #f9f9f9;
   justify-content: center;
   align-items: center;
+  z-index: 2;
 `;
 const Title = styled.p`
   font-family: SFProTextSemibold, Fallback, sans-serif;
