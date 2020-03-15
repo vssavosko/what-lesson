@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
+import io from 'socket.io-client';
+import queryString from 'query-string';
+
+import { Message } from '../Message/Message';
 
 import { ReactComponent as MessageButtonIcon } from '../../assets/images/svg/message-button-icon.svg';
 
@@ -27,54 +31,15 @@ const MessageDateSent = styled.p`
   font-family: 'SFProTextRegular';
   font-size: 12px;
   text-align: center;
-  color: rgba(0,0,0,0.5);
+  color: rgba(0, 0, 0, 0.5);
   padding: 8px 0;
-`;
-const Message = styled.div`
-  display: flex;
-  align-items: center;
-  max-width: 80%;
-  margin-bottom: 5px;
-  padding-left: 16px;
-`;
-const UserPhoto = styled.div`
-  width: 32px;
-  height: 32px;
-  background-color: purple;
-  border-radius: 50%;
-  margin-right: 10px;
-  flex-shrink: 0;
-  align-self: flex-end;
-`;
-const MessageText = styled.div`
-  position: relative;
-  display: flex;
-  width: 100%;
-  background-color: #F9F9F9;
-  font-family: 'SFProTextRegular', sans-serif;
-  font-size: 16px;
-  border: 1px solid #F3F3F3;
-  border-radius: 10px 10px 10px 0;
-  padding: 8px 8px 20px 8px;
-  word-wrap: normal;
-`;
-const MessageTimeSent = styled.span`
-  position: absolute;
-  display: flex;
-  align-items: flex-end;
-  width: 35px;
-  right: 5px;
-  bottom: 5px;
-  font-family: 'SFProTextRegular';
-  font-size: 12px;
-  color: rgba(0,0,0,0.5);
 `;
 const MessageBar = styled.form`
   position: relative;
   display: flex;
   top: 1px;
-  background-color: #F9F9F9;
-  border-top: 1px solid #F3F3F3;
+  background-color: #f9f9f9;
+  border-top: 1px solid #f3f3f3;
   border-radius: 10px 10px 0 0;
   padding: 10px 16px;
 `;
@@ -90,10 +55,10 @@ const MessageTextarea = styled.textarea`
   border-radius: 10px;
   padding: 7px 10px;
   resize: none;
-  transition: .2s;
+  transition: 0.2s;
 
   &::placeholder {
-    color: rgba(0,0,0,0.5);
+    color: rgba(0, 0, 0, 0.5);
   }
 `;
 const MessageButton = styled.button`
@@ -103,60 +68,104 @@ const MessageButton = styled.button`
   border: 0;
   padding: 0 0 0 16px;
   -webkit-appearance: none;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 `;
 
+let socket: SocketIOClient.Socket;
+
 export const Chat: React.FC = () => {
-  const [eventInfo, setEventInfo] = useState();
+  const [eventInfo, setEventInfo] = useState({});
+  // const [name, setName] = useState('');
+  // const [room, setRoom] = useState('');
+  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState<object[]>([]);
+
+  const ENDPOINT = 'localhost:5000';
 
   const refTextarea = useRef<HTMLTextAreaElement>(null);
 
   const resizeTextarea = (event: React.KeyboardEvent) => {
-    const target = event.target as HTMLElement;
+    const target = event.target as HTMLInputElement;
 
     setEventInfo({ target, keyCode: event.keyCode });
   };
 
-  useEffect(() => {
-    if (eventInfo && (eventInfo.target.clientHeight < 100 || eventInfo.keyCode === 8 || eventInfo.target.value.length === 0)) {
-      eventInfo.target.style.height = 'auto';
-      eventInfo.target.style.height = `${eventInfo.target.scrollHeight}px`;
+  const sendMessage = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+
+    if (message) {
+      socket.emit('sendMessage', message, () => setMessage(''));
     }
-  });
+
+    if (refTextarea.current) {
+      refTextarea.current.value = '';
+    }
+  };
+
+  useEffect(() => {
+    const { name, room } = queryString.parse(window.location.search) as { name: string; room: string };
+
+    socket = io(ENDPOINT);
+
+    // setName(name);
+    // setRoom(room);
+
+    socket.emit('join', { name, room }, (error: string) => {
+      if (error) {
+        throw new Error(error);
+      }
+    });
+
+    return () => {
+      socket.emit('disconnect');
+      socket.off('');
+    };
+  }, [ENDPOINT]);
+
+  useEffect(() => {
+    if (Object.keys(eventInfo).length) {
+      const { target, keyCode } = eventInfo as { target: HTMLInputElement; keyCode: number };
+
+      if (target.clientHeight < 100 || keyCode === 8 || target.value.length === 0) {
+        target.style.height = 'auto';
+        target.style.height = `${target.scrollHeight}px`;
+      }
+    }
+  }, [eventInfo]);
+
+  useEffect(() => {
+    socket.on('message', (message: object) => {
+      const hours = new Date().getHours();
+      const minutes = new Date().getMinutes();
+      const messageWithSendingTime = { ...message, sendingTime: `${hours}:${minutes}` };
+
+      setMessages([...messages, messageWithSendingTime]);
+    });
+  }, [messages]);
 
   return (
     <Page>
       <ChatWindow>
         <ChatHistory>
           <MessageDateSent>сегодня</MessageDateSent>
-          <Message>
-            <UserPhoto>
-            </UserPhoto>
-            <MessageText>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa ad quasi sunt veniam? Odio, officia obcaecati molestias temporibus quasi eos minima eius neque quibusdam quidem dolore fugit perferendis asperiores iusto?
-              <MessageTimeSent>20:23</MessageTimeSent>
-            </MessageText>
-          </Message>
-          <Message>
-            <UserPhoto>
-            </UserPhoto>
-            <MessageText>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, numquam harum velit alias excepturi
-              <MessageTimeSent>20:23</MessageTimeSent>
-            </MessageText>
-          </Message>
+          {messages.map((message, index) => (
+            <Message key={index} message={message} />
+          ))}
         </ChatHistory>
       </ChatWindow>
       <MessageBar>
         <MessageTextarea
           rows={1}
-          placeholder="Сообщение"
+          placeholder='Сообщение'
+          onChange={event => setMessage(event.target.value)}
+          onKeyPress={event => (event.key === 'Enter' ? sendMessage(event) : null)}
           onKeyUp={event => resizeTextarea(event)}
-          ref={refTextarea} />
-        <MessageButton type="submit">
+          ref={refTextarea}
+        />
+        <MessageButton onClick={event => sendMessage(event)}>
           <MessageButtonIcon />
         </MessageButton>
       </MessageBar>
     </Page>
   );
-}
+};
