@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -29,39 +29,30 @@ const Tab = styled.button`
   align-items: center;
   outline: none;
   -webkit-appearance: none;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 `;
 
 export const TabBar: React.FC<ITabBarProps> = ({ theme }) => {
-  const activeScreen = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-    const target = event.currentTarget as HTMLElement;
-    const buttons = document.querySelectorAll('button');
-
-    buttons.forEach(button => {
-      button.classList.remove(`active-${theme}`);
-    });
-
-    target.classList.add(`active-${theme}`);
-  };
+  const pathname = useLocation().pathname;
 
   return (
     <Bar>
-      <Tab theme={theme} className={`active-${theme}`} onClick={(event): void => activeScreen(event)}>
+      <Tab theme={theme} className={pathname === '/' ? `active-${theme}` : ''}>
         <Link to='/'>
           <HomeIcon className={`icon-${theme}`} />
         </Link>
       </Tab>
-      <Tab onClick={(event): void => activeScreen(event)}>
+      <Tab className={pathname === '/chat' ? `active-${theme}` : ''}>
         <Link to='/chat'>
           <ChatIcon className={`icon-${theme}`} />
         </Link>
       </Tab>
-      <Tab onClick={(event): void => activeScreen(event)}>
+      <Tab className={pathname === '/student-list' ? `active-${theme}` : ''}>
         <Link to='/student-list'>
           <StudentListIcon className={`icon-${theme}`} />
         </Link>
       </Tab>
-      <Tab onClick={(event): void => activeScreen(event)}>
+      <Tab className={pathname === '/settings' ? `active-${theme}` : ''}>
         <Link to='/settings'>
           <SettingsIcon className={`icon-${theme}`} />
         </Link>

@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
-import io from 'socket.io-client';
-import queryString from 'query-string';
 
 import { Message } from '../Message/Message';
 
-import { IEventInfo } from './interfaces';
+import { IProps, IEventInfo } from './interfaces';
 
 import { ReactComponent as MessageButtonIcon } from '../../assets/images/svg/message-button-icon.svg';
 
@@ -73,16 +71,10 @@ const MessageButton = styled.button`
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 `;
 
-let socket: SocketIOClient.Socket;
-
-export const Chat: React.FC = () => {
+export const Chat: React.FC<IProps> = ({ socket }) => {
   const [eventInfo, setEventInfo] = useState({});
-  // const [name, setName] = useState('');
-  // const [room, setRoom] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<object[]>([]);
-
-  const ENDPOINT = 'localhost:5000';
 
   const refTextarea = useRef<HTMLTextAreaElement>(null);
 
@@ -105,26 +97,6 @@ export const Chat: React.FC = () => {
   };
 
   useEffect(() => {
-    const { name, room } = queryString.parse(window.location.search) as { name: string; room: string };
-
-    socket = io(ENDPOINT);
-
-    // setName(name);
-    // setRoom(room);
-
-    socket.emit('join', { name, room }, (error: string) => {
-      if (error) {
-        throw new Error(error);
-      }
-    });
-
-    return (): void => {
-      socket.emit('disconnect');
-      socket.off('');
-    };
-  }, [ENDPOINT]);
-
-  useEffect(() => {
     if (Object.keys(eventInfo).length) {
       const { target, keyCode } = eventInfo as IEventInfo;
 
@@ -143,7 +115,11 @@ export const Chat: React.FC = () => {
 
       setMessages([...messages, messageWithSendingTime]);
     });
-  }, [messages]);
+
+    return (): void => {
+      socket.off('message');
+    };
+  }, [socket, messages]);
 
   return (
     <Page>
