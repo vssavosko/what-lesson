@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
-import io from 'socket.io-client';
-import queryString from 'query-string';
 
 import { Message } from '../Message/Message';
+
+import { IProps, IEventInfo } from './interfaces';
 
 import { ReactComponent as MessageButtonIcon } from '../../assets/images/svg/message-button-icon.svg';
 
@@ -71,18 +71,21 @@ const MessageButton = styled.button`
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 `;
 
-let socket: SocketIOClient.Socket;
+const Anchor = styled.div``;
 
-export const Chat: React.FC = () => {
+export const Chat: React.FC<IProps> = ({ socket }) => {
   const [eventInfo, setEventInfo] = useState({});
-  // const [name, setName] = useState('');
-  // const [room, setRoom] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<object[]>([]);
 
-  const ENDPOINT = 'localhost:5000';
-
+  const refAnchor = useRef<HTMLDivElement>(null);
   const refTextarea = useRef<HTMLTextAreaElement>(null);
+
+  const scrollToBottom = (): void => {
+    if (refAnchor.current) {
+      refAnchor.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const resizeTextarea = (event: React.KeyboardEvent): void => {
     const target = event.target as HTMLInputElement;
@@ -103,28 +106,8 @@ export const Chat: React.FC = () => {
   };
 
   useEffect(() => {
-    const { name, room } = queryString.parse(window.location.search) as { name: string; room: string };
-
-    socket = io(ENDPOINT);
-
-    // setName(name);
-    // setRoom(room);
-
-    socket.emit('join', { name, room }, (error: string) => {
-      if (error) {
-        throw new Error(error);
-      }
-    });
-
-    return (): void => {
-      socket.emit('disconnect');
-      socket.off('');
-    };
-  }, [ENDPOINT]);
-
-  useEffect(() => {
     if (Object.keys(eventInfo).length) {
-      const { target, keyCode } = eventInfo as { target: HTMLInputElement; keyCode: number };
+      const { target, keyCode } = eventInfo as IEventInfo;
 
       if (target.clientHeight < 100 || keyCode === 8 || target.value.length === 0) {
         target.style.height = 'auto';
@@ -141,7 +124,13 @@ export const Chat: React.FC = () => {
 
       setMessages([...messages, messageWithSendingTime]);
     });
-  }, [messages]);
+
+    return (): void => {
+      socket.off('message');
+    };
+  }, [socket, messages]);
+
+  useEffect(scrollToBottom);
 
   return (
     <Page>
@@ -151,6 +140,7 @@ export const Chat: React.FC = () => {
           {messages.map((message, index) => (
             <Message key={index} message={message} />
           ))}
+          <Anchor ref={refAnchor} />
         </ChatHistory>
       </ChatWindow>
       <MessageBar>

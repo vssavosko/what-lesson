@@ -225,8 +225,7 @@ export const Main: React.FC = () => {
                         </PrincipalValue>
                       ) : (
                         false
-                      ),
-                      )}
+                      ))}
                     {!lessonsData[index] && (
                       <PrincipalValue key={index} pb='5px'>
                         Занятий нет

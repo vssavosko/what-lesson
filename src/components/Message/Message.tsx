@@ -2,6 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { IProps, IMessage } from './interfaces';
+
 const MessageBlock = styled.div`
   display: flex;
   align-items: center;
@@ -42,12 +44,8 @@ const MessageTimeSent = styled.span`
   color: rgba(0, 0, 0, 0.5);
 `;
 
-interface IProps {
-  message: object;
-}
-
 export const Message: React.FC<IProps> = ({ message }) => {
-  const { text, sendingTime } = message as { text: string; sendingTime: string };
+  const { text, sendingTime } = message as IMessage;
 
   return (
     <MessageBlock>

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import styled, { createGlobalStyle } from 'styled-components';
+import io from 'socket.io-client';
 
 import { HeaderBar } from '../components/HeaderBar/HeaderBar';
 import { TabBar } from '../components/TabBar/TabBar';
@@ -76,7 +77,26 @@ const Wrapper = styled.div`
 `;
 
 export const App: React.FC = () => {
+  const [username, setUsername] = useState('vssavosko');
+  const [group, setGroup] = useState('PI4-1');
   const [theme] = useState('light');
+
+  const ENDPOINT = 'localhost:5000';
+
+  const socket: SocketIOClient.Socket = io(ENDPOINT);
+
+  useEffect(() => {
+    socket.emit('join', { username, group }, (error: string) => {
+      if (error) {
+        throw new Error(error);
+      }
+    });
+
+    return (): void => {
+      socket.emit('disconnect');
+      socket.off('');
+    };
+  }, [ENDPOINT, socket, username, group]);
 
   return (
     <Router>
@@ -85,7 +105,7 @@ export const App: React.FC = () => {
         <HeaderBar />
         <Switch>
           <Route path='/' exact render={(): JSX.Element => <Main />} />
-          <Route path='/chat' render={(): JSX.Element => <Chat />} />
+          <Route path='/chat' render={(): JSX.Element => <Chat socket={socket} />} />
         </Switch>
         <TabBar theme={theme} />
       </Wrapper>
