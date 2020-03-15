@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { CSSTransition } from 'react-transition-group'
+import { CSSTransition } from 'react-transition-group';
 
 import styled from 'styled-components';
 import Swiper from 'react-id-swiper';
 
 import { Schedule } from '../Schedule/Schedule';
 
-import { IStyledProps } from './interfaces';
+import { ILesson, IStyledProps } from './interfaces';
 
 import { lessonsData } from '../../mockData';
 
@@ -47,17 +47,17 @@ const DateValue = styled.p`
   margin-bottom: 5px;
   font-family: SFProTextRegular, sans-serif;
   font-size: 15px;
-  color: rgba(0,0,0,0.5);
+  color: rgba(0, 0, 0, 0.5);
 `;
 const Tab = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 274px;
   height: 330px;
-  background-color: #F9F9F9;
-  border: 1px solid #F3F3F3;
+  background-color: #f9f9f9;
+  border: 1px solid #f3f3f3;
   border-radius: 10px;
-  transition: .4s;
+  transition: 0.4s;
 `;
 const IconsBar = styled.div`
   display: flex;
@@ -86,7 +86,7 @@ const DotsButton = styled.div`
   padding-top: 7px;
   text-align: right;
   -webkit-appearance: none;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 `;
 const TabContent = styled.div`
   display: flex;
@@ -100,31 +100,31 @@ const SideValues = styled.p<IStyledProps>`
   display: flex;
   width: 100%;
   align-items: center;
-  padding-bottom: ${(props: IStyledProps) => props.pb};
+  padding-bottom: ${(props: IStyledProps): string => (props.pb ? props.pb : '')};
   font-family: 'SFProTextRegular', sans-serif;
   font-size: 15px;
-  color: rgba(0,0,0,0.5);
+  color: rgba(0, 0, 0, 0.5);
 `;
 const PrincipalValue = styled.p<IStyledProps>`
   display: flex;
   width: 100%;
   align-items: center;
-  padding-bottom: ${(props: IStyledProps) => props.pb};
+  padding-bottom: ${(props: IStyledProps): string => (props.pb ? props.pb : '')};
   font-family: 'SFProTextSemibold', sans-serif;
   font-size: 18px;
 `;
 
 export const Main: React.FC = () => {
-  const [swiper, setSwiper] = useState();
+  const [swiper, setSwiper] = useState<any>({});
   const [initialPoint, setInitialPoint] = useState({ pageY: 0 });
-  const [showSchedule, setShowSchedule] = useState();
-  const [tapOnTab, setTapOnTab] = useState();
+  const [showSchedule, setShowSchedule] = useState(false);
+  const [tapOnTab, setTapOnTab] = useState(false);
 
   const refSchedule = useRef<HTMLDivElement>(null);
 
   const dayOfWeek = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
 
-  const weekdayNumber = () => {
+  const weekdayNumber = (): number => {
     const date = new Date().getDay();
 
     if (date === 0) {
@@ -134,7 +134,7 @@ export const Main: React.FC = () => {
     return date - 1;
   };
 
-  const currentDate = () => {
+  const currentDate = (): string => {
     const date = new Date();
     const options = {
       day: 'numeric',
@@ -142,19 +142,19 @@ export const Main: React.FC = () => {
       month: 'long',
     };
 
-    return date.toLocaleString("ru", options);
+    return date.toLocaleString('ru', options);
   };
 
-  const touchTapStart = (event: React.TouchEvent) => {
+  const touchTapStart = (event: React.TouchEvent): void => {
     setTapOnTab(true);
     setInitialPoint(event.changedTouches[0]);
   };
 
-  const touchTapEnd = () => {
+  const touchTapEnd = (): void => {
     setTapOnTab(false);
   };
 
-  const touchMove = (event: React.TouchEvent) => {
+  const touchMove = (event: React.TouchEvent): void => {
     const swipe = initialPoint.pageY - event.touches[0].pageY;
 
     if (swipe >= 30) {
@@ -162,13 +162,13 @@ export const Main: React.FC = () => {
     }
   };
 
-  const clickOnDotsButton = () => setShowSchedule(true);
+  const clickOnDotsButton = (): void => setShowSchedule(true);
 
-  const numberOfLessons = (lessons: object[]) => lessons.length;
+  const numberOfLessons = (lessons: object[]): number => lessons.length;
 
-  const currentScheduleData = () => swiper ? lessonsData[swiper.activeIndex] : [];
+  const currentScheduleData = (): ILesson[] => Object.keys(swiper).length ? lessonsData[swiper.activeIndex] : [];
 
-  const hideSchedule = () => setShowSchedule(false);
+  const hideSchedule = (): void => setShowSchedule(false);
 
   const swiperParams = {
     slidesPerView: 'auto',
@@ -194,50 +194,47 @@ export const Main: React.FC = () => {
         <Swiper {...swiperParams} getSwiper={setSwiper}>
           {dayOfWeek.map((day, index) => {
             return (
-              <CSSTransition key={index} in={tapOnTab} timeout={0} classNames="tab">
+              <CSSTransition key={index} in={tapOnTab} timeout={0} classNames='tab'>
                 <Tab
-                  onTouchStart={event => touchTapStart(event)}
-                  onTouchEnd={() => touchTapEnd()}
-                  onTouchMove={event => touchMove(event)}
+                  onTouchStart={(event): void => touchTapStart(event)}
+                  onTouchEnd={(): void => touchTapEnd()}
+                  onTouchMove={(event): void => touchMove(event)}
                 >
                   <IconsBar>
                     <Circle>
                       <CircleText>{day}</CircleText>
                     </Circle>
-                    {lessonsData[index] &&
-                      <DotsButton onClick={() => clickOnDotsButton()}>
+                    {lessonsData[index] && (
+                      <DotsButton onClick={(): void => clickOnDotsButton()}>
                         <DotsIcon />
                       </DotsButton>
-                    }
+                    )}
                   </IconsBar>
                   <TabContent>
-                    {lessonsData[index] &&
-                      <SideValues
-                        pb='5px'
-                      >
-                        {`${numberOfLessons(lessonsData[index])} ${numberOfLessons(lessonsData[index]) > 1 ? 'пары' : 'пара'}`}
+                    {lessonsData[index] && (
+                      <SideValues pb='5px'>
+                        {`${numberOfLessons(lessonsData[index])} ${
+                          numberOfLessons(lessonsData[index]) > 1 ? 'пары' : 'пара'
+                        }`}
                       </SideValues>
-                    }
-                    {lessonsData[index] &&
-                      lessonsData[index].map((lesson, index) => index < 2 ?
-                        <PrincipalValue
-                          key={index}
-                          pb='5px'
-                        >
+                    )}
+                    {lessonsData[index]
+                      && lessonsData[index].map((lesson, index) => index < 2 ? (
+                        <PrincipalValue key={index} pb='5px'>
                           {lesson.lessonName}
-                        </PrincipalValue> : false
+                        </PrincipalValue>
+                      ) : (
+                        false
+                      ),
                       )}
-                    {!lessonsData[index] &&
-                      <PrincipalValue
-                        key={index}
-                        pb='5px'
-                      >
+                    {!lessonsData[index] && (
+                      <PrincipalValue key={index} pb='5px'>
                         Занятий нет
                       </PrincipalValue>
-                    }
-                    {lessonsData[index] && lessonsData[index].length > 2 &&
+                    )}
+                    {lessonsData[index] && lessonsData[index].length > 2 && (
                       <SideValues>И другие</SideValues>
-                    }
+                    )}
                   </TabContent>
                 </Tab>
               </CSSTransition>
@@ -245,7 +242,11 @@ export const Main: React.FC = () => {
           })}
         </Swiper>
       </Tabs>
-      <CSSTransition in={currentScheduleData() ? showSchedule : false} timeout={0} classNames="schedule">
+      <CSSTransition
+        in={currentScheduleData() ? showSchedule : false}
+        timeout={0}
+        classNames='schedule'
+      >
         <Schedule
           currentSchedule={currentScheduleData()}
           hideSchedule={hideSchedule}

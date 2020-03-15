@@ -33,7 +33,7 @@ const Tab = styled.button`
 `;
 
 export const TabBar: React.FC<ITabBarProps> = ({ theme }) => {
-  const activeScreen = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const activeScreen = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     const target = event.currentTarget as HTMLElement;
     const buttons = document.querySelectorAll('button');
 
@@ -46,23 +46,23 @@ export const TabBar: React.FC<ITabBarProps> = ({ theme }) => {
 
   return (
     <Bar>
-      <Tab theme={theme} className={`active-${theme}`} onClick={event => activeScreen(event)}>
-        <Link to="/">
+      <Tab theme={theme} className={`active-${theme}`} onClick={(event): void => activeScreen(event)}>
+        <Link to='/'>
           <HomeIcon className={`icon-${theme}`} />
         </Link>
       </Tab>
-      <Tab onClick={event => activeScreen(event)}>
-        <Link to="/chat">
+      <Tab onClick={(event): void => activeScreen(event)}>
+        <Link to='/chat'>
           <ChatIcon className={`icon-${theme}`} />
         </Link>
       </Tab>
-      <Tab onClick={event => activeScreen(event)}>
-        <Link to="/student-list">
+      <Tab onClick={(event): void => activeScreen(event)}>
+        <Link to='/student-list'>
           <StudentListIcon className={`icon-${theme}`} />
         </Link>
       </Tab>
-      <Tab onClick={event => activeScreen(event)}>
-        <Link to="/settings">
+      <Tab onClick={(event): void => activeScreen(event)}>
+        <Link to='/settings'>
           <SettingsIcon className={`icon-${theme}`} />
         </Link>
       </Tab>
