@@ -71,12 +71,21 @@ const MessageButton = styled.button`
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 `;
 
+const Anchor = styled.div``;
+
 export const Chat: React.FC<IProps> = ({ socket }) => {
   const [eventInfo, setEventInfo] = useState({});
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<object[]>([]);
 
+  const refAnchor = useRef<HTMLDivElement>(null);
   const refTextarea = useRef<HTMLTextAreaElement>(null);
+
+  const scrollToBottom = (): void => {
+    if (refAnchor.current) {
+      refAnchor.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const resizeTextarea = (event: React.KeyboardEvent): void => {
     const target = event.target as HTMLInputElement;
@@ -121,6 +130,8 @@ export const Chat: React.FC<IProps> = ({ socket }) => {
     };
   }, [socket, messages]);
 
+  useEffect(scrollToBottom);
+
   return (
     <Page>
       <ChatWindow>
@@ -129,6 +140,7 @@ export const Chat: React.FC<IProps> = ({ socket }) => {
           {messages.map((message, index) => (
             <Message key={index} message={message} />
           ))}
+          <Anchor ref={refAnchor} />
         </ChatHistory>
       </ChatWindow>
       <MessageBar>
