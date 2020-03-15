@@ -84,13 +84,13 @@ export const Chat: React.FC = () => {
 
   const refTextarea = useRef<HTMLTextAreaElement>(null);
 
-  const resizeTextarea = (event: React.KeyboardEvent) => {
+  const resizeTextarea = (event: React.KeyboardEvent): void => {
     const target = event.target as HTMLInputElement;
 
     setEventInfo({ target, keyCode: event.keyCode });
   };
 
-  const sendMessage = (event: React.SyntheticEvent) => {
+  const sendMessage = (event: React.SyntheticEvent): void => {
     event.preventDefault();
 
     if (message) {
@@ -116,7 +116,7 @@ export const Chat: React.FC = () => {
       }
     });
 
-    return () => {
+    return (): void => {
       socket.emit('disconnect');
       socket.off('');
     };
@@ -157,12 +157,12 @@ export const Chat: React.FC = () => {
         <MessageTextarea
           rows={1}
           placeholder='Сообщение'
-          onChange={event => setMessage(event.target.value)}
-          onKeyPress={event => (event.key === 'Enter' ? sendMessage(event) : null)}
-          onKeyUp={event => resizeTextarea(event)}
+          onChange={(event): void => setMessage(event.target.value)}
+          onKeyPress={(event): void | null => (event.key === 'Enter' ? sendMessage(event) : null)}
+          onKeyUp={(event): void => resizeTextarea(event)}
           ref={refTextarea}
         />
-        <MessageButton onClick={event => sendMessage(event)}>
+        <MessageButton onClick={(event): void => sendMessage(event)}>
           <MessageButtonIcon />
         </MessageButton>
       </MessageBar>

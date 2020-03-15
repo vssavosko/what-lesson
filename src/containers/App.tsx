@@ -84,8 +84,8 @@ export const App: React.FC = () => {
       <Wrapper>
         <HeaderBar />
         <Switch>
-          <Route path='/' exact render={() => <Main />} />
-          <Route path='/chat' render={() => <Chat />} />
+          <Route path='/' exact render={(): JSX.Element => <Main />} />
+          <Route path='/chat' render={(): JSX.Element => <Chat />} />
         </Switch>
         <TabBar theme={theme} />
       </Wrapper>

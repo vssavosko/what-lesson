@@ -12,10 +12,10 @@ const Curtain = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
-  background: #F9F9F9;
+  background: #f9f9f9;
   padding: 0 16px;
   bottom: 0;
-  border-top: 1px solid #F3F3F3;
+  border-top: 1px solid #f3f3f3;
   border-radius: 30px 30px 0 0;
   z-index: 2;
   transform: translateY(${window.innerHeight}px);
@@ -24,14 +24,14 @@ const Curtain = styled.div`
 const Lesson = styled.div<IStyledProps>`
   position: relative;
   width: 100%;
-  height: ${(props: IStyledProps) => props.height};
+  height: ${(props: IStyledProps): string => (props.height ? props.height : '')};
   padding: 0 16px;
 `;
 const Line = styled.div<IStyledProps>`
   position: absolute;
   width: 5px;
-  height: ${(props: IStyledProps) => props.height};
-  top: ${(props: IStyledProps) => props.top};
+  height: ${(props: IStyledProps): string => (props.height ? props.height : '')};
+  top: ${(props: IStyledProps): string => (props.top ? props.top : '')};
   left: 22px;
   background: #000;
 `;
@@ -59,7 +59,7 @@ const SideValues = styled.p`
   width: 100%;
   font-family: SFProTextRegular, sans-serif;
   font-size: 14px;
-  color: rgba(0,0,0,0.5);
+  color: rgba(0, 0, 0, 0.5);
 `;
 const PrincipalValue = styled.p`
   width: 100%;
@@ -74,7 +74,7 @@ const TeacherInfo = styled.div`
 `;
 
 const Paddings = styled.div<IStyledProps>`
-  padding: ${(props: IStyledProps) => props.padding};
+  padding: ${(props: IStyledProps): string => (props.padding ? props.padding : '')};
 `;
 
 export const Schedule = React.forwardRef((props: IProps, ref: React.Ref<HTMLDivElement>) => {
@@ -82,11 +82,11 @@ export const Schedule = React.forwardRef((props: IProps, ref: React.Ref<HTMLDivE
 
   const { currentSchedule, hideSchedule } = props;
 
-  const touchTapStart = (event: React.TouchEvent) => {
+  const touchTapStart = (event: React.TouchEvent): void => {
     setInitialPoint(event.changedTouches[0]);
   };
 
-  const touchMove = (event: React.TouchEvent) => {
+  const touchMove = (event: React.TouchEvent): void => {
     const slideUp = event.touches[0].pageY - initialPoint.pageY;
 
     if (slideUp >= 30) {
@@ -96,42 +96,35 @@ export const Schedule = React.forwardRef((props: IProps, ref: React.Ref<HTMLDivE
 
   return (
     <Curtain
-      onTouchStart={(event) => touchTapStart(event)}
-      onTouchMove={(event) => touchMove(event)}
+      onTouchStart={(event): void => touchTapStart(event)}
+      onTouchMove={(event): void => touchMove(event)}
       ref={ref}
     >
-      <Paddings padding="10px 0 24px 0">
+      <Paddings padding='10px 0 24px 0'>
         <HideCurtainButtonIcon />
       </Paddings>
-      {currentSchedule && currentSchedule.map((lessonData, index) => {
-        return (
-          <Lesson
-            key={index}
-            height={
-              index === currentSchedule.length - 1
-                ?
-                '126px' : '100px'}>
-            <Circle />
-            <Line
-              top={
-                index ? '0' : '33px'
-              }
-              height={
-                index || currentSchedule.length === 1 ? '100%' : '67px'
-              } />
-            <Content>
-              <LessonInfo>
-                <SideValues>{lessonData.time}</SideValues>
-                <PrincipalValue>{lessonData.lessonName}</PrincipalValue>
-                <SideValues>{lessonData.place}</SideValues>
-              </LessonInfo>
-              <TeacherInfo>
-                <PrincipalValue>{lessonData.teacherName}</PrincipalValue>
-              </TeacherInfo>
-            </Content>
-          </Lesson>
-        )
-      })}
+      {currentSchedule
+        && currentSchedule.map((lessonData, index) => {
+          return (
+            <Lesson key={index} height={index === currentSchedule.length - 1 ? '126px' : '100px'}>
+              <Circle />
+              <Line
+                top={index ? '0' : '33px'}
+                height={index || currentSchedule.length === 1 ? '100%' : '67px'}
+              />
+              <Content>
+                <LessonInfo>
+                  <SideValues>{lessonData.time}</SideValues>
+                  <PrincipalValue>{lessonData.lessonName}</PrincipalValue>
+                  <SideValues>{lessonData.place}</SideValues>
+                </LessonInfo>
+                <TeacherInfo>
+                  <PrincipalValue>{lessonData.teacherName}</PrincipalValue>
+                </TeacherInfo>
+              </Content>
+            </Lesson>
+          );
+        })}
     </Curtain>
-  )
+  );
 });
