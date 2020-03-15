@@ -6,6 +6,8 @@ import queryString from 'query-string';
 
 import { Message } from '../Message/Message';
 
+import { IEventInfo } from './interfaces';
+
 import { ReactComponent as MessageButtonIcon } from '../../assets/images/svg/message-button-icon.svg';
 
 const Page = styled.div`
@@ -124,7 +126,7 @@ export const Chat: React.FC = () => {
 
   useEffect(() => {
     if (Object.keys(eventInfo).length) {
-      const { target, keyCode } = eventInfo as { target: HTMLInputElement; keyCode: number };
+      const { target, keyCode } = eventInfo as IEventInfo;
 
       if (target.clientHeight < 100 || keyCode === 8 || target.value.length === 0) {
         target.style.height = 'auto';
