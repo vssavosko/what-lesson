@@ -2,13 +2,20 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { IProps, IMessage } from './interfaces';
+import { IStyledProps, IProps, IMessage } from './interfaces';
 
-const MessageBlock = styled.div`
+const MessageDateSent = styled.p`
+  font-family: 'SFProTextRegular';
+  font-size: 12px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.5);
+  padding: 8px 0;
+`;
+const MessageBlock = styled.div<IStyledProps>`
   display: flex;
   align-items: center;
   max-width: 80%;
-  margin-bottom: 5px;
+  margin-bottom: ${(props: IStyledProps): string | undefined => props.pb}px;
   padding-left: 16px;
 `;
 const UserPhoto = styled.div`
@@ -44,16 +51,19 @@ const MessageTimeSent = styled.span`
   color: rgba(0, 0, 0, 0.5);
 `;
 
-export const Message: React.FC<IProps> = ({ message }) => {
+export const Message: React.FC<IProps> = ({ message, lastMessage, isShowStartDate }) => {
   const { text, sendingTime } = message as IMessage;
 
   return (
-    <MessageBlock>
-      <UserPhoto />
-      <MessageText>
-        {text}
-        <MessageTimeSent>{sendingTime}</MessageTimeSent>
-      </MessageText>
-    </MessageBlock>
+    <>
+      {isShowStartDate && <MessageDateSent>сегодня</MessageDateSent>}
+      <MessageBlock pb={lastMessage ? '0' : '5'}>
+        <UserPhoto />
+        <MessageText>
+          {text}
+          <MessageTimeSent>{sendingTime}</MessageTimeSent>
+        </MessageText>
+      </MessageBlock>
+    </>
   );
 };

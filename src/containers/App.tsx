@@ -5,9 +5,9 @@ import styled, { createGlobalStyle } from 'styled-components';
 import io from 'socket.io-client';
 
 import { HeaderBar } from '../components/HeaderBar/HeaderBar';
-import { TabBar } from '../components/TabBar/TabBar';
 import { Main } from '../components/Main/Main';
 import { Chat } from '../components/Chat/Chat';
+import { TabBar } from '../components/TabBar/TabBar';
 
 import fonts from '../assets/fonts/fonts';
 

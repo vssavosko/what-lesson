@@ -24,14 +24,14 @@ const Curtain = styled.div`
 const Lesson = styled.div<IStyledProps>`
   position: relative;
   width: 100%;
-  height: ${(props: IStyledProps): string => (props.height ? props.height : '')};
+  height: ${(props: IStyledProps): string | undefined => props.height}px;
   padding: 0 16px;
 `;
 const Line = styled.div<IStyledProps>`
   position: absolute;
   width: 5px;
-  height: ${(props: IStyledProps): string => (props.height ? props.height : '')};
-  top: ${(props: IStyledProps): string => (props.top ? props.top : '')};
+  height: ${(props: IStyledProps): string | undefined => props.height};
+  top: ${(props: IStyledProps): string | undefined => props.top}px;
   left: 22px;
   background: #000;
 `;
@@ -74,7 +74,7 @@ const TeacherInfo = styled.div`
 `;
 
 const Paddings = styled.div<IStyledProps>`
-  padding: ${(props: IStyledProps): string => (props.padding ? props.padding : '')};
+  padding: ${(props: IStyledProps): string | undefined => props.padding};
 `;
 
 export const Schedule = React.forwardRef((props: IProps, ref: React.Ref<HTMLDivElement>) => {
@@ -103,13 +103,13 @@ export const Schedule = React.forwardRef((props: IProps, ref: React.Ref<HTMLDivE
       <Paddings padding='10px 0 24px 0'>
         <HideCurtainButtonIcon />
       </Paddings>
-      {currentSchedule
-        && currentSchedule.map((lessonData, index) => {
+      {currentSchedule &&
+        currentSchedule.map((lessonData, index) => {
           return (
-            <Lesson key={index} height={index === currentSchedule.length - 1 ? '126px' : '100px'}>
+            <Lesson key={index} height={index === currentSchedule.length - 1 ? '126' : '100'}>
               <Circle />
               <Line
-                top={index ? '0' : '33px'}
+                top={index ? '0' : '33'}
                 height={index || currentSchedule.length === 1 ? '100%' : '67px'}
               />
               <Content>

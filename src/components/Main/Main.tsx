@@ -100,7 +100,7 @@ const SideValues = styled.p<IStyledProps>`
   display: flex;
   width: 100%;
   align-items: center;
-  padding-bottom: ${(props: IStyledProps): string => (props.pb ? props.pb : '')};
+  padding-bottom: ${(props: IStyledProps): string | undefined => props.pb}px;
   font-family: 'SFProTextRegular', sans-serif;
   font-size: 15px;
   color: rgba(0, 0, 0, 0.5);
@@ -109,7 +109,7 @@ const PrincipalValue = styled.p<IStyledProps>`
   display: flex;
   width: 100%;
   align-items: center;
-  padding-bottom: ${(props: IStyledProps): string => (props.pb ? props.pb : '')};
+  padding-bottom: ${(props: IStyledProps): string | undefined => props.pb}px;
   font-family: 'SFProTextSemibold', sans-serif;
   font-size: 18px;
 `;
@@ -212,7 +212,7 @@ export const Main: React.FC = () => {
                   </IconsBar>
                   <TabContent>
                     {lessonsData[index] && (
-                      <SideValues pb='5px'>
+                      <SideValues pb='5'>
                         {`${numberOfLessons(lessonsData[index])} ${
                           numberOfLessons(lessonsData[index]) > 1 ? 'пары' : 'пара'
                         }`}
@@ -220,14 +220,14 @@ export const Main: React.FC = () => {
                     )}
                     {lessonsData[index]
                       && lessonsData[index].map((lesson, index) => index < 2 ? (
-                        <PrincipalValue key={index} pb='5px'>
+                        <PrincipalValue key={index} pb='5'>
                           {lesson.lessonName}
                         </PrincipalValue>
                       ) : (
                         false
                       ))}
                     {!lessonsData[index] && (
-                      <PrincipalValue key={index} pb='5px'>
+                      <PrincipalValue key={index} pb='5'>
                         Занятий нет
                       </PrincipalValue>
                     )}

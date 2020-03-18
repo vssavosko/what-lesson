@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 import styled from 'styled-components';
 
 import { Message } from '../Message/Message';
 
-import { IProps, IEventInfo } from './interfaces';
+import { IProps, IMessage, IEventInfo } from './interfaces';
+
+import { messageData } from '../../mockData';
 
 import { ReactComponent as MessageButtonIcon } from '../../assets/images/svg/message-button-icon.svg';
 
@@ -25,14 +27,7 @@ const ChatWindow = styled.div`
 const ChatHistory = styled.div`
   position: absolute;
   width: 100%;
-  padding-bottom: 16px;
-`;
-const MessageDateSent = styled.p`
-  font-family: 'SFProTextRegular';
-  font-size: 12px;
-  text-align: center;
-  color: rgba(0, 0, 0, 0.5);
-  padding: 8px 0;
+  padding: 16px 0;
 `;
 const MessageBar = styled.form`
   position: relative;
@@ -46,7 +41,7 @@ const MessageBar = styled.form`
 const MessageTextarea = styled.textarea`
   box-sizing: border-box;
   width: 100%;
-  height: 34px;
+  height: 33px;
   font-family: 'SFProTextRegular', sans-serif;
   font-size: 16px;
   color: #000;
@@ -71,21 +66,34 @@ const MessageButton = styled.button`
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 `;
 
-const Anchor = styled.div``;
-
 export const Chat: React.FC<IProps> = ({ socket }) => {
   const [eventInfo, setEventInfo] = useState({});
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<object[]>([]);
+  const [messages, setMessages] = useState<object[]>(messageData);
+  const [indexOfMessage, setIndexOfMessage] = useState(0);
+
+  const currentDate = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    new Date().getDate(),
+  ).toISOString();
 
   const refAnchor = useRef<HTMLDivElement>(null);
   const refTextarea = useRef<HTMLTextAreaElement>(null);
 
-  const scrollToBottom = (): void => {
-    if (refAnchor.current) {
-      refAnchor.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const findIndexOfMessage = useCallback((): void => {
+    let counter = 0;
+
+    messages.forEach((message, index) => {
+      const { sendingDate } = message as IMessage;
+
+      if (sendingDate === currentDate && counter === 0) {
+        counter++;
+
+        setIndexOfMessage(index);
+      }
+    });
+  }, [messages, currentDate]);
 
   const resizeTextarea = (event: React.KeyboardEvent): void => {
     const target = event.target as HTMLInputElement;
@@ -102,6 +110,13 @@ export const Chat: React.FC<IProps> = ({ socket }) => {
 
     if (refTextarea.current) {
       refTextarea.current.value = '';
+      refTextarea.current.focus();
+    }
+  };
+
+  const scrollToBottom = (): void => {
+    if (refAnchor.current) {
+      refAnchor.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -120,15 +135,23 @@ export const Chat: React.FC<IProps> = ({ socket }) => {
     socket.on('message', (message: object) => {
       const hours = new Date().getHours();
       const minutes = new Date().getMinutes();
-      const messageWithSendingTime = { ...message, sendingTime: `${hours}:${minutes}` };
+      const messageWithSendingDatetime = {
+        ...message,
+        sendingDate: currentDate,
+        sendingTime: `${hours}:${minutes}`,
+      };
 
-      setMessages([...messages, messageWithSendingTime]);
+      setMessages([...messages, messageWithSendingDatetime]);
     });
+
+    if (indexOfMessage === 0) {
+      findIndexOfMessage();
+    }
 
     return (): void => {
       socket.off('message');
     };
-  }, [socket, messages]);
+  }, [socket, messages, currentDate, indexOfMessage, findIndexOfMessage]);
 
   useEffect(scrollToBottom);
 
@@ -136,11 +159,15 @@ export const Chat: React.FC<IProps> = ({ socket }) => {
     <Page>
       <ChatWindow>
         <ChatHistory>
-          <MessageDateSent>сегодня</MessageDateSent>
           {messages.map((message, index) => (
-            <Message key={index} message={message} />
+            <Message
+              key={index}
+              message={message}
+              lastMessage={messages.length - 1 === index}
+              isShowStartDate={indexOfMessage === index}
+            />
           ))}
-          <Anchor ref={refAnchor} />
+          <div ref={refAnchor} />
         </ChatHistory>
       </ChatWindow>
       <MessageBar>
