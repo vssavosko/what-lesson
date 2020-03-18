@@ -64,6 +64,16 @@ const MessageButton = styled.button`
   padding: 0 0 0 16px;
   -webkit-appearance: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+  & svg {
+    stroke: #000;
+    transition: 0.2s;
+  }
+
+  &:active svg {
+    stroke: rgba(0, 0, 0, 0.5);
+    transition: 0.2s;
+  }
 `;
 
 export const Chat: React.FC<IProps> = ({ socket }) => {
@@ -80,6 +90,18 @@ export const Chat: React.FC<IProps> = ({ socket }) => {
 
   const refAnchor = useRef<HTMLDivElement>(null);
   const refTextarea = useRef<HTMLTextAreaElement>(null);
+
+  const timeFormatCheck = (hours: string, minutes: string): string => {
+    if (hours.length < 2) {
+      hours = `0${hours}`;
+    }
+
+    if (minutes.length < 2) {
+      minutes = `0${minutes}`;
+    }
+
+    return `${hours}:${minutes}`;
+  };
 
   const findIndexOfMessage = useCallback((): void => {
     let counter = 0;
@@ -133,12 +155,12 @@ export const Chat: React.FC<IProps> = ({ socket }) => {
 
   useEffect(() => {
     socket.on('message', (message: object) => {
-      const hours = new Date().getHours();
-      const minutes = new Date().getMinutes();
+      const hours = new Date().getHours().toString();
+      const minutes = new Date().getMinutes().toString();
       const messageWithSendingDatetime = {
         ...message,
         sendingDate: currentDate,
-        sendingTime: `${hours}:${minutes}`,
+        sendingTime: timeFormatCheck(hours, minutes),
       };
 
       setMessages([...messages, messageWithSendingDatetime]);
