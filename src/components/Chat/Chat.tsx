@@ -23,6 +23,11 @@ const ChatWindow = styled.div`
   flex-direction: column;
   flex-grow: 1;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 const ChatHistory = styled.div`
   position: absolute;
@@ -80,12 +85,12 @@ export const Chat: React.FC<IProps> = ({ socket }) => {
   const [eventInfo, setEventInfo] = useState({});
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<object[]>(messageData);
-  const [indexOfMessage, setIndexOfMessage] = useState(0);
+  const [indexOfMessage, setIndexOfMessage] = useState(-1);
 
   const currentDate = new Date(
     new Date().getFullYear(),
     new Date().getMonth(),
-    new Date().getDate(),
+    new Date().getDate()
   ).toISOString();
 
   const refAnchor = useRef<HTMLDivElement>(null);
@@ -166,7 +171,7 @@ export const Chat: React.FC<IProps> = ({ socket }) => {
       setMessages([...messages, messageWithSendingDatetime]);
     });
 
-    if (indexOfMessage === 0) {
+    if (indexOfMessage === -1) {
       findIndexOfMessage();
     }
 

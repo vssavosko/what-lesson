@@ -206,3 +206,55 @@ export const messageData = [
     sendingTime: '22:33',
   },
 ];
+export const studentsData = [
+  {
+    username: 'Иванов Иван Иванович',
+    email: 'ivanov@gmail.com',
+    phoneNumber: '+7(999)-999-99-99',
+  },
+  {
+    username: 'Иванов Иван Иванович',
+    email: 'ivanov@gmail.com',
+    phoneNumber: '+7(999)-999-99-99',
+  },
+  {
+    username: 'Иванов Иван Иванович',
+    email: 'ivanov@gmail.com',
+    phoneNumber: '+7(999)-999-99-99',
+  },
+  {
+    username: 'Иванов Иван Иванович',
+    email: 'ivanov@gmail.com',
+    phoneNumber: '+7(999)-999-99-99',
+  },
+  {
+    username: 'Иванов Иван Иванович',
+    email: 'ivanov@gmail.com',
+    phoneNumber: '+7(999)-999-99-99',
+  },
+  {
+    username: 'Иванов Иван Иванович',
+    email: 'ivanov@gmail.com',
+    phoneNumber: '+7(999)-999-99-99',
+  },
+  {
+    username: 'Иванов Иван Иванович',
+    email: 'ivanov@gmail.com',
+    phoneNumber: '+7(999)-999-99-99',
+  },
+  {
+    username: 'Иванов Иван Иванович',
+    email: 'ivanov@gmail.com',
+    phoneNumber: '+7(999)-999-99-99',
+  },
+  {
+    username: 'Иванов Иван Иванович',
+    email: 'ivanov@gmail.com',
+    phoneNumber: '+7(999)-999-99-99',
+  },
+  {
+    username: 'Иванов Иван Иванович',
+    email: 'ivanov@gmail.com',
+    phoneNumber: '+7(999)-999-99-99',
+  },
+];

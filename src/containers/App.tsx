@@ -7,6 +7,7 @@ import io from 'socket.io-client';
 import { HeaderBar } from '../components/HeaderBar/HeaderBar';
 import { Main } from '../components/Main/Main';
 import { Chat } from '../components/Chat/Chat';
+import { StudentsList } from '../components/StudentsList/StudentsList';
 import { TabBar } from '../components/TabBar/TabBar';
 
 import fonts from '../assets/fonts/fonts';
@@ -77,8 +78,8 @@ const Wrapper = styled.div`
 `;
 
 export const App: React.FC = () => {
-  const [username, setUsername] = useState('vssavosko');
-  const [group, setGroup] = useState('PI4-1');
+  const [username, setUsername] = useState('vssavosko'); //eslint-disable-line
+  const [group, setGroup] = useState('PI4-1'); //eslint-disable-line
   const [theme] = useState('light');
 
   const ENDPOINT = 'localhost:5000';
@@ -106,6 +107,7 @@ export const App: React.FC = () => {
         <Switch>
           <Route path='/' exact render={(): JSX.Element => <Main />} />
           <Route path='/chat' render={(): JSX.Element => <Chat socket={socket} />} />
+          <Route path='/students-list' render={(): JSX.Element => <StudentsList />} />
         </Switch>
         <TabBar theme={theme} />
       </Wrapper>

@@ -47,8 +47,8 @@ export const TabBar: React.FC<ITabBarProps> = ({ theme }) => {
           <ChatIcon className={`icon-${theme}`} />
         </Link>
       </Tab>
-      <Tab className={pathname === '/student-list' ? `active-${theme}` : ''}>
-        <Link to='/student-list'>
+      <Tab className={pathname === '/students-list' ? `active-${theme}` : ''}>
+        <Link to='/students-list'>
           <StudentListIcon className={`icon-${theme}`} />
         </Link>
       </Tab>
