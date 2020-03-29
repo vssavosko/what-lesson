@@ -24,14 +24,14 @@ const Curtain = styled.div`
 const Lesson = styled.div<IStyledProps>`
   position: relative;
   width: 100%;
-  height: ${(props: IStyledProps): string | undefined => props.height}px;
+  height: ${(props: IStyledProps): string | undefined => props.height};
   padding: 0 16px;
 `;
 const Line = styled.div<IStyledProps>`
   position: absolute;
   width: 5px;
   height: ${(props: IStyledProps): string | undefined => props.height};
-  top: ${(props: IStyledProps): string | undefined => props.top}px;
+  top: ${(props: IStyledProps): string | undefined => props.top};
   left: 22px;
   background: #000;
 `;
@@ -106,10 +106,10 @@ export const Schedule = React.forwardRef((props: IProps, ref: React.Ref<HTMLDivE
       {currentSchedule &&
         currentSchedule.map((lessonData, index) => {
           return (
-            <Lesson key={index} height={index === currentSchedule.length - 1 ? '126' : '100'}>
+            <Lesson key={index} height={index === currentSchedule.length - 1 ? '126px' : '100px'}>
               <Circle />
               <Line
-                top={index ? '0' : '33'}
+                top={index ? '0' : '33px'}
                 height={index || currentSchedule.length === 1 ? '100%' : '67px'}
               />
               <Content>

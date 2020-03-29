@@ -8,7 +8,10 @@ import { HeaderBar } from '../components/HeaderBar/HeaderBar';
 import { Main } from '../components/Main/Main';
 import { Chat } from '../components/Chat/Chat';
 import { StudentsList } from '../components/StudentsList/StudentsList';
+import { Settings } from '../components/Settings/Settings';
 import { TabBar } from '../components/TabBar/TabBar';
+
+import { userData } from '../mockData';
 
 import fonts from '../assets/fonts/fonts';
 
@@ -78,8 +81,7 @@ const Wrapper = styled.div`
 `;
 
 export const App: React.FC = () => {
-  const [username, setUsername] = useState('vssavosko'); //eslint-disable-line
-  const [group, setGroup] = useState('PI4-1'); //eslint-disable-line
+  const [user, setUser] = useState(userData); // eslint-disable-line
   const [theme] = useState('light');
 
   const ENDPOINT = 'localhost:5000';
@@ -87,7 +89,7 @@ export const App: React.FC = () => {
   const socket: SocketIOClient.Socket = io(ENDPOINT);
 
   useEffect(() => {
-    socket.emit('join', { username, group }, (error: string) => {
+    socket.emit('join', { username: user.username, group: user.group }, (error: string) => {
       if (error) {
         throw new Error(error);
       }
@@ -97,7 +99,7 @@ export const App: React.FC = () => {
       socket.emit('disconnect');
       socket.off('');
     };
-  }, [ENDPOINT, socket, username, group]);
+  }, [ENDPOINT, socket, user]);
 
   return (
     <Router>
@@ -105,9 +107,10 @@ export const App: React.FC = () => {
       <Wrapper>
         <HeaderBar />
         <Switch>
-          <Route path='/' exact render={(): JSX.Element => <Main />} />
+          <Route path='/' exact render={(): JSX.Element => <Main user={user} />} />
           <Route path='/chat' render={(): JSX.Element => <Chat socket={socket} />} />
           <Route path='/students-list' render={(): JSX.Element => <StudentsList />} />
+          <Route path='/settings' render={(): JSX.Element => <Settings user={user} />} />
         </Switch>
         <TabBar theme={theme} />
       </Wrapper>

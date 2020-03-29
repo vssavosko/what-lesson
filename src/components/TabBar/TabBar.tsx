@@ -33,26 +33,26 @@ const Tab = styled.button`
 `;
 
 export const TabBar: React.FC<ITabBarProps> = ({ theme }) => {
-  const pathname = useLocation().pathname;
+  const pathName = useLocation().pathname;
 
   return (
     <Bar>
-      <Tab theme={theme} className={pathname === '/' ? `active-${theme}` : ''}>
+      <Tab theme={theme} className={pathName === '/' ? `active-${theme}` : ''}>
         <Link to='/'>
           <HomeIcon className={`icon-${theme}`} />
         </Link>
       </Tab>
-      <Tab className={pathname === '/chat' ? `active-${theme}` : ''}>
+      <Tab className={pathName === '/chat' ? `active-${theme}` : ''}>
         <Link to='/chat'>
           <ChatIcon className={`icon-${theme}`} />
         </Link>
       </Tab>
-      <Tab className={pathname === '/students-list' ? `active-${theme}` : ''}>
+      <Tab className={pathName === '/students-list' ? `active-${theme}` : ''}>
         <Link to='/students-list'>
           <StudentListIcon className={`icon-${theme}`} />
         </Link>
       </Tab>
-      <Tab className={pathname === '/settings' ? `active-${theme}` : ''}>
+      <Tab className={pathName === '/settings' ? `active-${theme}` : ''}>
         <Link to='/settings'>
           <SettingsIcon className={`icon-${theme}`} />
         </Link>
