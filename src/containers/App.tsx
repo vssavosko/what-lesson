@@ -89,7 +89,7 @@ export const App: React.FC = () => {
   const socket: SocketIOClient.Socket = io(ENDPOINT);
 
   useEffect(() => {
-    socket.emit('join', { username: user.username, group: user.group }, (error: string) => {
+    socket.emit('join', { username: user.userName, group: user.group }, (error: string) => {
       if (error) {
         throw new Error(error);
       }

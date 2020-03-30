@@ -139,28 +139,28 @@ export const Settings: React.FC<IProps> = ({ user }) => {
         <UserDetails>
           <Field mb='14px'>
             <Label>Имя</Label>
-            <Input defaultValue={user.firstName} />
+            <Input name='firstName' defaultValue={user.firstName} />
           </Field>
           <Field mb='14px'>
             <Label>Фамилия</Label>
-            <Input defaultValue={user.lastName} />
+            <Input name='lastName' defaultValue={user.lastName} />
           </Field>
           <Field mb='14px'>
             <Label>E-mail</Label>
-            <Input defaultValue={user.email} />
+            <Input name='email' defaultValue={user.email} />
           </Field>
           <Field>
             <Label>Телефон</Label>
-            <Input defaultValue={user.phoneNumber} />
+            <Input name='phoneNumber' defaultValue={user.phoneNumber} />
           </Field>
           <SeparationHeader>Учебная информация</SeparationHeader>
           <Field mb='14px'>
             <Label>Группа</Label>
-            <Input defaultValue={user.group} />
+            <Input defaultValue={user.group} disabled />
           </Field>
           <Field>
             <Label>Курс</Label>
-            <Input defaultValue={user.course} />
+            <Input defaultValue={user.course} disabled />
           </Field>
           <SeparationHeader>Цветовая схема</SeparationHeader>
           <Field>
