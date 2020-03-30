@@ -6,13 +6,14 @@ import Swiper from 'react-id-swiper';
 
 import { Schedule } from '../Schedule/Schedule';
 
-import { ILesson, IStyledProps } from './interfaces';
+import { IStyledProps, IProps, ILesson } from './interfaces';
 
 import { lessonsData } from '../../mockData';
 
 import 'swiper/css/swiper.min.css';
 
-import { ReactComponent as UserIcon } from '../../assets/images/svg/user-icon.svg';
+import UserAvatar from '../../assets/images/user-avatar.png';
+import { ReactComponent as UserIconDefault } from '../../assets/images/svg/user-icon.svg';
 import { ReactComponent as DotsIcon } from '../../assets/images/svg/dots.svg';
 
 const Page = styled.div`
@@ -27,6 +28,15 @@ const Greeting = styled.div`
   width: 274px;
   height: 128px;
   margin: 0 auto;
+`;
+const UserIcon = styled.div`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+`;
+const UserIconCustom = styled.img`
+  max-width: 100%;
 `;
 const GreetingText = styled.p`
   margin-top: 34px;
@@ -100,7 +110,7 @@ const SideValues = styled.p<IStyledProps>`
   display: flex;
   width: 100%;
   align-items: center;
-  padding-bottom: ${(props: IStyledProps): string | undefined => props.pb}px;
+  padding-bottom: ${(props: IStyledProps): string | undefined => props.pb};
   font-family: 'SFProTextRegular', sans-serif;
   font-size: 15px;
   color: rgba(0, 0, 0, 0.5);
@@ -109,12 +119,12 @@ const PrincipalValue = styled.p<IStyledProps>`
   display: flex;
   width: 100%;
   align-items: center;
-  padding-bottom: ${(props: IStyledProps): string | undefined => props.pb}px;
+  padding-bottom: ${(props: IStyledProps): string | undefined => props.pb};
   font-family: 'SFProTextSemibold', sans-serif;
   font-size: 18px;
 `;
 
-export const Main: React.FC = () => {
+export const Main: React.FC<IProps> = ({ user }) => {
   const [swiper, setSwiper] = useState<any>({});
   const [initialPoint, setInitialPoint] = useState({ pageY: 0 });
   const [showSchedule, setShowSchedule] = useState(false);
@@ -166,7 +176,8 @@ export const Main: React.FC = () => {
 
   const numberOfLessons = (lessons: object[]): number => lessons.length;
 
-  const currentScheduleData = (): ILesson[] => Object.keys(swiper).length ? lessonsData[swiper.activeIndex] : [];
+  const currentScheduleData = (): ILesson[] =>
+    Object.keys(swiper).length ? lessonsData[swiper.activeIndex] : [];
 
   const hideSchedule = (): void => setShowSchedule(false);
 
@@ -186,8 +197,10 @@ export const Main: React.FC = () => {
   return (
     <Page>
       <Greeting>
-        <UserIcon />
-        <GreetingText>Привет, Владислав</GreetingText>
+        <UserIcon>
+          {UserAvatar ? <UserIconCustom src={UserAvatar} /> : <UserIconDefault />}
+        </UserIcon>
+        <GreetingText>Привет, {user.firstName}</GreetingText>
       </Greeting>
       <Tabs>
         <DateValue>{currentDate()}</DateValue>
@@ -212,22 +225,24 @@ export const Main: React.FC = () => {
                   </IconsBar>
                   <TabContent>
                     {lessonsData[index] && (
-                      <SideValues pb='5'>
+                      <SideValues pb='5px'>
                         {`${numberOfLessons(lessonsData[index])} ${
                           numberOfLessons(lessonsData[index]) > 1 ? 'пары' : 'пара'
                         }`}
                       </SideValues>
                     )}
-                    {lessonsData[index]
-                      && lessonsData[index].map((lesson, index) => index < 2 ? (
-                        <PrincipalValue key={index} pb='5'>
-                          {lesson.lessonName}
-                        </PrincipalValue>
-                      ) : (
-                        false
-                      ))}
+                    {lessonsData[index] &&
+                      lessonsData[index].map((lesson, index) =>
+                        index < 2 ? (
+                          <PrincipalValue key={index} pb='5px'>
+                            {lesson.lessonName}
+                          </PrincipalValue>
+                        ) : (
+                          false
+                        )
+                      )}
                     {!lessonsData[index] && (
-                      <PrincipalValue key={index} pb='5'>
+                      <PrincipalValue key={index} pb='5px'>
                         Занятий нет
                       </PrincipalValue>
                     )}

@@ -1,3 +1,13 @@
+export const userData = {
+  userName: 'vssavosko',
+  firstName: 'Владислав',
+  lastName: 'Савосько',
+  email: 'savosko@gmail.com',
+  phoneNumber: '+7 999 999-99-99',
+  group: 'ПИ 4-1',
+  course: '4',
+  userAvatar: 'user-avatar.png',
+};
 export const lessonsData = [
   [
     {

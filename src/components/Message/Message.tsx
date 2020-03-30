@@ -15,7 +15,7 @@ const MessageBlock = styled.div<IStyledProps>`
   display: flex;
   align-items: center;
   max-width: 80%;
-  margin-bottom: ${(props: IStyledProps): string | undefined => props.pb}px;
+  margin-bottom: ${(props: IStyledProps): string | undefined => props.pb};
   padding-left: 16px;
 `;
 const UserPhoto = styled.div`
@@ -57,7 +57,7 @@ export const Message: React.FC<IProps> = ({ message, lastMessage, isShowStartDat
   return (
     <>
       {isShowStartDate && <MessageDateSent>сегодня</MessageDateSent>}
-      <MessageBlock pb={lastMessage ? '0' : '5'}>
+      <MessageBlock pb={lastMessage ? '0' : '5px'}>
         <UserPhoto />
         <MessageText>
           {text}
