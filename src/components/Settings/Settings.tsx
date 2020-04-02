@@ -1,8 +1,11 @@
 import React, { useRef } from 'react';
 
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 
-import { IStyledProps, IProps } from './interfaces';
+import { ITheme, IMargin } from '../../globalInterfaces';
+import { IProps } from './interfaces';
+
+import { themeSelection } from '../../utils/themeSelection';
 
 import UserAvatar from '../../assets/images/user-avatar.png';
 import { ReactComponent as UserIconDefault } from '../../assets/images/svg/user-icon.svg';
@@ -12,7 +15,9 @@ const Page = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  background-color: ${(props: ITheme): string => props.theme.background};
   overflow-y: scroll;
+  transition: 0.2s;
   -webkit-overflow-scrolling: touch;
 
   &::-webkit-scrollbar {
@@ -66,113 +71,133 @@ const UserName = styled.p`
   width: 100%;
   font-family: 'SFProTextSemibold', sans-serif;
   font-size: 18px;
+  color: ${(props: ITheme): string => props.theme.mainTextColor};
   text-align: center;
   margin-bottom: 5px;
+  transition: 0.2s;
 `;
 const UserContacts = styled.p`
   width: 100%;
   font-family: 'SFProTextRegular', sans-serif;
   font-size: 12px;
+  color: ${(props: ITheme): string => props.theme.secondTextColor};
   text-align: center;
   margin-bottom: 3px;
+  transition: 0.2s;
 `;
 const UserDetails = styled.div`
   width: 100%;
   padding-top: 16px;
 `;
-const Field = styled.div<IStyledProps>`
+const Field = styled.div`
   padding: 0 16px;
-  margin-bottom: ${(props: IStyledProps): string | undefined => props.mb};
+  margin-bottom: ${(props: IMargin): string | undefined => props.mb};
+  transition: 0.2s;
 `;
 const Label = styled.div`
   padding: 0 0 3px 7px;
   font-family: 'SFProTextRegular', sans-serif;
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.5);
+  color: ${(props: ITheme): string => props.theme.secondTextColor};
+  transition: 0.2s;
 `;
 const Input = styled.input`
   box-sizing: border-box;
   width: 100%;
   font-family: 'SFProTextRegular', sans-serif;
   font-size: 16px;
-  background-color: #f9f9f9;
+  color: ${(props: ITheme): string => props.theme.mainTextColor};
+  background-color: ${(props: ITheme): string => props.theme.elementBackground};
   padding: 5px;
-  border: 1px solid #f3f3f3;
+  border: 1px solid ${(props: ITheme): string => props.theme.borderColor};
   border-radius: 10px;
+  transition: 0.2s;
+  -webkit-appearance: none;
 `;
 const SeparationHeader = styled.p`
   font-family: 'SFProTextRegular', sans-serif;
   font-size: 12px;
+  color: ${(props: ITheme): string => props.theme.mainTextColor};
   padding-left: 22px;
   margin: 14px 0;
   text-transform: uppercase;
+  transition: 0.2s;
 `;
 const Select = styled.select`
   box-sizing: border-box;
   width: 100%;
   font-family: 'SFProTextRegular', sans-serif;
   font-size: 16px;
-  background-color: #f9f9f9;
+  color: ${(props: ITheme): string => props.theme.mainTextColor};
+  background-color: ${(props: ITheme): string => props.theme.elementBackground};
   padding: 5px;
-  border: 1px solid #f3f3f3;
+  border: 1px solid ${(props: ITheme): string => props.theme.borderColor};
   border-radius: 10px;
+  transition: 0.2s;
+  -webkit-appearance: none;
 `;
 
-export const Settings: React.FC<IProps> = ({ user }) => {
+export const Settings: React.FC<IProps> = ({ user, theme, changeTheme }) => {
   const refUploadIcon = useRef<HTMLInputElement>(null);
 
   const changeUserIcon = (): void => refUploadIcon.current?.click();
 
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+    changeTheme(event.target.value);
+  };
+
   return (
-    <Page>
-      <SettingsWindow>
-        <UserInfoPreview>
-          <UserIcon onClick={changeUserIcon}>
-            {UserAvatar ? <UserIconCustom src={UserAvatar} /> : <UserIconDefault />}
-            <UserIconChangeLabel>правка</UserIconChangeLabel>
-            <UploadIcon type='file' ref={refUploadIcon} />
-          </UserIcon>
-          <UserName>{`${user.firstName} ${user.lastName}`}</UserName>
-          <UserContacts>e-mail: {user.email}</UserContacts>
-          <UserContacts>телефон: {user.phoneNumber}</UserContacts>
-        </UserInfoPreview>
-        <UserDetails>
-          <Field mb='14px'>
-            <Label>Имя</Label>
-            <Input name='firstName' defaultValue={user.firstName} />
-          </Field>
-          <Field mb='14px'>
-            <Label>Фамилия</Label>
-            <Input name='lastName' defaultValue={user.lastName} />
-          </Field>
-          <Field mb='14px'>
-            <Label>E-mail</Label>
-            <Input name='email' defaultValue={user.email} />
-          </Field>
-          <Field>
-            <Label>Телефон</Label>
-            <Input name='phoneNumber' defaultValue={user.phoneNumber} />
-          </Field>
-          <SeparationHeader>Учебная информация</SeparationHeader>
-          <Field mb='14px'>
-            <Label>Группа</Label>
-            <Input defaultValue={user.group} disabled />
-          </Field>
-          <Field>
-            <Label>Курс</Label>
-            <Input defaultValue={user.course} disabled />
-          </Field>
-          <SeparationHeader>Цветовая схема</SeparationHeader>
-          <Field>
-            <Label>Тема</Label>
-            <Select>
-              <option>Light</option>
-              <option>Dark</option>
-              <option>Night Blue</option>
-            </Select>
-          </Field>
-        </UserDetails>
-      </SettingsWindow>
-    </Page>
+    <ThemeProvider theme={themeSelection(theme)}>
+      <Page>
+        <SettingsWindow>
+          <UserInfoPreview>
+            <UserIcon onClick={changeUserIcon}>
+              {UserAvatar ? <UserIconCustom src={UserAvatar} /> : <UserIconDefault />}
+              <UserIconChangeLabel>правка</UserIconChangeLabel>
+              <UploadIcon type='file' ref={refUploadIcon} />
+            </UserIcon>
+            <UserName>{`${user.firstName} ${user.lastName}`}</UserName>
+            <UserContacts>e-mail: {user.email}</UserContacts>
+            <UserContacts>телефон: {user.phoneNumber}</UserContacts>
+          </UserInfoPreview>
+          <UserDetails>
+            <Field mb='14px'>
+              <Label>Имя</Label>
+              <Input name='firstName' defaultValue={user.firstName} />
+            </Field>
+            <Field mb='14px'>
+              <Label>Фамилия</Label>
+              <Input name='lastName' defaultValue={user.lastName} />
+            </Field>
+            <Field mb='14px'>
+              <Label>E-mail</Label>
+              <Input name='email' defaultValue={user.email} />
+            </Field>
+            <Field>
+              <Label>Телефон</Label>
+              <Input name='phoneNumber' defaultValue={user.phoneNumber} />
+            </Field>
+            <SeparationHeader>Учебная информация</SeparationHeader>
+            <Field mb='14px'>
+              <Label>Группа</Label>
+              <Input defaultValue={user.group} readOnly />
+            </Field>
+            <Field>
+              <Label>Курс</Label>
+              <Input defaultValue={user.course} readOnly />
+            </Field>
+            <SeparationHeader>Цветовая схема</SeparationHeader>
+            <Field>
+              <Label>Тема</Label>
+              <Select value={theme} onChange={(event): void => handleChange(event)}>
+                <option value='light'>Light</option>
+                <option value='dark'>Dark</option>
+                <option value='night-blue'>Night Blue</option>
+              </Select>
+            </Field>
+          </UserDetails>
+        </SettingsWindow>
+      </Page>
+    </ThemeProvider>
   );
 };

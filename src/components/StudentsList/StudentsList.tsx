@@ -1,15 +1,18 @@
 import React from 'react';
 
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 
-import { IStyledProps } from './interfaces';
+import { ITheme } from '../../globalInterfaces';
+import { IStyledProps, IProps } from './interfaces';
 
-import { studentsData } from '../../mockData';
+import { themeSelection } from '../../utils/themeSelection';
+import { studentsData } from '../../utils/mockData';
 
 const Page = styled.div`
   display: flex;
   flex-grow: 1;
   flex-direction: column;
+  background-color: ${(props: ITheme): string => props.theme.background};
   padding: 0 16px;
 `;
 const StudentsWindow = styled.div`
@@ -33,9 +36,9 @@ const User = styled.div`
   box-sizing: border-box;
   display: flex;
   height: 90px;
-  background-color: #f9f9f9;
+  background-color: ${(props: ITheme): string => props.theme.elementBackground};
   padding: 15px;
-  border: 1px solid #f3f3f3;
+  border: 1px solid ${(props: ITheme): string => props.theme.borderColor};
   border-radius: 10px;
   margin-bottom: 16px;
 
@@ -55,28 +58,31 @@ const UserInfo = styled.div`
   flex-direction: column;
   justify-content: space-between;
 `;
-const UserText = styled.p<IStyledProps>`
+const UserText = styled.p`
   font-family: ${(props: IStyledProps): string | undefined => `'${props.ff}'`}, sans-serif;
   font-size: 15px;
+  color: ${(props: ITheme): string => props.theme.mainTextColor};
 `;
 
-export const StudentsList: React.FC = () => {
+export const StudentsList: React.FC<IProps> = ({ theme }) => {
   return (
-    <Page>
-      <StudentsWindow>
-        <List>
-          {studentsData.map((student, index) => (
-            <User key={index}>
-              <UserIcon />
-              <UserInfo>
-                <UserText ff='SFProTextSemibold'>{student.username}</UserText>
-                <UserText ff='SFProTextRegular'>{student.email}</UserText>
-                <UserText ff='SFProTextRegular'>{student.phoneNumber}</UserText>
-              </UserInfo>
-            </User>
-          ))}
-        </List>
-      </StudentsWindow>
-    </Page>
+    <ThemeProvider theme={themeSelection(theme)}>
+      <Page>
+        <StudentsWindow>
+          <List>
+            {studentsData.map((student, index) => (
+              <User key={index}>
+                <UserIcon />
+                <UserInfo>
+                  <UserText ff='SFProTextSemibold'>{student.username}</UserText>
+                  <UserText ff='SFProTextRegular'>{student.email}</UserText>
+                  <UserText ff='SFProTextRegular'>{student.phoneNumber}</UserText>
+                </UserInfo>
+              </User>
+            ))}
+          </List>
+        </StudentsWindow>
+      </Page>
+    </ThemeProvider>
   );
 };

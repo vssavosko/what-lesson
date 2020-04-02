@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 
-import { ITabBarProps } from './interfaces';
+import { ITheme } from '../../globalInterfaces';
+import { IProps } from './interfaces';
+
+import { themeSelection } from '../../utils/themeSelection';
 
 import { ReactComponent as HomeIcon } from '../../assets/images/svg/home.svg';
 import { ReactComponent as ChatIcon } from '../../assets/images/svg/chat.svg';
@@ -15,9 +18,10 @@ const Bar = styled.div`
   flex-shrink: 0;
   height: 47px;
   padding: 0 16px;
-  border-top: 1px solid #f3f3f3;
-  background-color: #f9f9f9;
+  border-top: 1px solid ${(props: ITheme): string => props.theme.borderColor};
+  background-color: ${(props: ITheme): string => props.theme.elementBackground};
   justify-content: space-between;
+  transition: 0.2s;
 `;
 const Tab = styled.button`
   display: flex;
@@ -32,31 +36,33 @@ const Tab = styled.button`
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 `;
 
-export const TabBar: React.FC<ITabBarProps> = ({ theme }) => {
+export const TabBar: React.FC<IProps> = ({ theme }) => {
   const pathName = useLocation().pathname;
 
   return (
-    <Bar>
-      <Tab theme={theme} className={pathName === '/' ? `active-${theme}` : ''}>
-        <Link to='/'>
-          <HomeIcon className={`icon-${theme}`} />
-        </Link>
-      </Tab>
-      <Tab className={pathName === '/chat' ? `active-${theme}` : ''}>
-        <Link to='/chat'>
-          <ChatIcon className={`icon-${theme}`} />
-        </Link>
-      </Tab>
-      <Tab className={pathName === '/students-list' ? `active-${theme}` : ''}>
-        <Link to='/students-list'>
-          <StudentListIcon className={`icon-${theme}`} />
-        </Link>
-      </Tab>
-      <Tab className={pathName === '/settings' ? `active-${theme}` : ''}>
-        <Link to='/settings'>
-          <SettingsIcon className={`icon-${theme}`} />
-        </Link>
-      </Tab>
-    </Bar>
+    <ThemeProvider theme={themeSelection(theme)}>
+      <Bar>
+        <Tab className={pathName === '/' ? `active-${theme}` : `icon-${theme}`}>
+          <Link to='/'>
+            <HomeIcon />
+          </Link>
+        </Tab>
+        <Tab className={pathName === '/chat' ? `active-${theme}` : `icon-${theme}`}>
+          <Link to='/chat'>
+            <ChatIcon />
+          </Link>
+        </Tab>
+        <Tab className={pathName === '/students-list' ? `active-${theme}` : `icon-${theme}`}>
+          <Link to='/students-list'>
+            <StudentListIcon />
+          </Link>
+        </Tab>
+        <Tab className={pathName === '/settings' ? `active-${theme}` : `icon-${theme}`}>
+          <Link to='/settings'>
+            <SettingsIcon />
+          </Link>
+        </Tab>
+      </Bar>
+    </ThemeProvider>
   );
 };

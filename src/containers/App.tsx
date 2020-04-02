@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import styled, { createGlobalStyle } from 'styled-components';
-import io from 'socket.io-client';
 
 import { HeaderBar } from '../components/HeaderBar/HeaderBar';
 import { Main } from '../components/Main/Main';
@@ -11,7 +10,8 @@ import { StudentsList } from '../components/StudentsList/StudentsList';
 import { Settings } from '../components/Settings/Settings';
 import { TabBar } from '../components/TabBar/TabBar';
 
-import { userData } from '../mockData';
+import { socket } from '../utils/socketConnection';
+import { userData } from '../utils/mockData';
 
 import fonts from '../assets/fonts/fonts';
 
@@ -51,8 +51,28 @@ const GlobalStyles = createGlobalStyle`
     transition: .2s;
   }
 
+  .icon-dark g {
+    stroke: #c0c0c0;
+    transition: .2s;
+  }
+
+  .icon-night-blue g {
+    stroke: #abafb4;
+    transition: .2s;
+  }
+
   .active-light g {
     stroke: #000;
+    transition: .2s;
+  }
+
+  .active-dark g {
+    stroke: #fefefe;
+    transition: .2s;
+  }
+
+  .active-night-blue g {
+    stroke: #5488ba;
     transition: .2s;
   }
 
@@ -81,14 +101,16 @@ const Wrapper = styled.div`
 `;
 
 export const App: React.FC = () => {
-  const [user, setUser] = useState(userData); // eslint-disable-line
-  const [theme] = useState('light');
+  const [user] = useState(userData);
+  const [theme, setTheme] = useState('');
 
-  const ENDPOINT = 'localhost:5000';
-
-  const socket: SocketIOClient.Socket = io(ENDPOINT);
+  const changeTheme = (theme: string): void => setTheme(theme);
 
   useEffect(() => {
+    const theme = localStorage.getItem('theme');
+
+    setTheme(theme !== null ? theme : 'light');
+
     socket.emit('join', { username: user.userName, group: user.group }, (error: string) => {
       if (error) {
         throw new Error(error);
@@ -99,18 +121,27 @@ export const App: React.FC = () => {
       socket.emit('disconnect');
       socket.off('');
     };
-  }, [ENDPOINT, socket, user]);
+  }, [user]);
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   return (
     <Router>
       <GlobalStyles />
       <Wrapper>
-        <HeaderBar />
+        <HeaderBar theme={theme} />
         <Switch>
-          <Route path='/' exact render={(): JSX.Element => <Main user={user} />} />
-          <Route path='/chat' render={(): JSX.Element => <Chat socket={socket} />} />
-          <Route path='/students-list' render={(): JSX.Element => <StudentsList />} />
-          <Route path='/settings' render={(): JSX.Element => <Settings user={user} />} />
+          <Route path='/' exact render={(): JSX.Element => <Main user={user} theme={theme} />} />
+          <Route path='/chat' render={(): JSX.Element => <Chat theme={theme} />} />
+          <Route path='/students-list' render={(): JSX.Element => <StudentsList theme={theme} />} />
+          <Route
+            path='/settings'
+            render={(): JSX.Element => (
+              <Settings user={user} theme={theme} changeTheme={changeTheme} />
+            )}
+          />
         </Switch>
         <TabBar theme={theme} />
       </Wrapper>
