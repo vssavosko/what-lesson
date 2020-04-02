@@ -9,10 +9,5 @@ type Lesson = {
 export interface IProps {
   currentSchedule?: Array<Lesson>;
   hideSchedule: () => void;
-}
-
-export interface IStyledProps {
-  padding?: string;
-  top?: string;
-  height?: string;
+  theme: string;
 }

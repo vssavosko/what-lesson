@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 
 import { Message } from '../Message/Message';
 
+import { ITheme } from '../../globalInterfaces';
 import { IProps, IMessage, IEventInfo } from './interfaces';
 
-import { messageData } from '../../mockData';
+import { socket } from '../../utils/socketConnection';
+import { themeSelection } from '../../utils/themeSelection';
+import { messageData } from '../../utils/mockData';
 
 import { ReactComponent as MessageButtonIcon } from '../../assets/images/svg/message-button-icon.svg';
 
@@ -15,6 +18,7 @@ const Page = styled.div`
   flex-grow: 1;
   flex-direction: column;
   justify-content: flex-end;
+  background-color: ${(props: ITheme): string => props.theme.background};
 `;
 const ChatWindow = styled.div`
   position: relative;
@@ -38,8 +42,8 @@ const MessageBar = styled.form`
   position: relative;
   display: flex;
   top: 1px;
-  background-color: #f9f9f9;
-  border-top: 1px solid #f3f3f3;
+  background-color: ${(props: ITheme): string => props.theme.elementBackground};
+  border-top: 1px solid ${(props: ITheme): string => props.theme.borderColor};
   border-radius: 10px 10px 0 0;
   padding: 10px 16px;
 `;
@@ -49,8 +53,8 @@ const MessageTextarea = styled.textarea`
   height: 33px;
   font-family: 'SFProTextRegular', sans-serif;
   font-size: 16px;
-  color: #000;
-  background-color: #fff;
+  color: ${(props: ITheme): string => props.theme.mainTextColor};
+  background-color: ${(props: ITheme): string => props.theme.background};
   border: 0;
   border-radius: 10px;
   padding: 7px 10px;
@@ -58,7 +62,7 @@ const MessageTextarea = styled.textarea`
   transition: 0.2s;
 
   &::placeholder {
-    color: rgba(0, 0, 0, 0.5);
+    color: ${(props: ITheme): string => props.theme.secondTextColor};
   }
 `;
 const MessageButton = styled.button`
@@ -71,17 +75,17 @@ const MessageButton = styled.button`
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
   & svg {
-    stroke: #000;
+    stroke: ${(props: ITheme): string => props.theme.mainTextColor};
     transition: 0.2s;
   }
 
   &:active svg {
-    stroke: rgba(0, 0, 0, 0.5);
+    stroke: ${(props: ITheme): string => props.theme.secondTextColor};
     transition: 0.2s;
   }
 `;
 
-export const Chat: React.FC<IProps> = ({ socket }) => {
+export const Chat: React.FC<IProps> = ({ theme }) => {
   const [eventInfo, setEventInfo] = useState({});
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<object[]>(messageData);
@@ -178,38 +182,41 @@ export const Chat: React.FC<IProps> = ({ socket }) => {
     return (): void => {
       socket.off('message');
     };
-  }, [socket, messages, currentDate, indexOfMessage, findIndexOfMessage]);
+  }, [messages, currentDate, indexOfMessage, findIndexOfMessage]);
 
   useEffect(scrollToBottom);
 
   return (
-    <Page>
-      <ChatWindow>
-        <ChatHistory>
-          {messages.map((message, index) => (
-            <Message
-              key={index}
-              message={message}
-              lastMessage={messages.length - 1 === index}
-              isShowStartDate={indexOfMessage === index}
-            />
-          ))}
-          <div ref={refAnchor} />
-        </ChatHistory>
-      </ChatWindow>
-      <MessageBar>
-        <MessageTextarea
-          rows={1}
-          placeholder='Сообщение'
-          onChange={(event): void => setMessage(event.target.value)}
-          onKeyPress={(event): void | null => (event.key === 'Enter' ? sendMessage(event) : null)}
-          onKeyUp={(event): void => resizeTextarea(event)}
-          ref={refTextarea}
-        />
-        <MessageButton onClick={(event): void => sendMessage(event)}>
-          <MessageButtonIcon />
-        </MessageButton>
-      </MessageBar>
-    </Page>
+    <ThemeProvider theme={themeSelection(theme)}>
+      <Page>
+        <ChatWindow>
+          <ChatHistory>
+            {messages.map((message, index) => (
+              <Message
+                key={index}
+                message={message}
+                lastMessage={messages.length - 1 === index}
+                isShowStartDate={indexOfMessage === index}
+                theme={theme}
+              />
+            ))}
+            <div ref={refAnchor} />
+          </ChatHistory>
+        </ChatWindow>
+        <MessageBar>
+          <MessageTextarea
+            rows={1}
+            placeholder='Сообщение'
+            onChange={(event): void => setMessage(event.target.value)}
+            onKeyPress={(event): void | null => (event.key === 'Enter' ? sendMessage(event) : null)}
+            onKeyUp={(event): void => resizeTextarea(event)}
+            ref={refTextarea}
+          />
+          <MessageButton onClick={(event): void => sendMessage(event)}>
+            <MessageButtonIcon />
+          </MessageButton>
+        </MessageBar>
+      </Page>
+    </ThemeProvider>
   );
 };

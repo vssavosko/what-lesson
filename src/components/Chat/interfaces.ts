@@ -1,5 +1,5 @@
 export interface IProps {
-  socket: SocketIOClient.Socket;
+  theme: string;
 }
 
 export interface IMessage {

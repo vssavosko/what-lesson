@@ -1,14 +1,16 @@
 import React, { useState, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import Swiper from 'react-id-swiper';
 
 import { Schedule } from '../Schedule/Schedule';
 
-import { IStyledProps, IProps, ILesson } from './interfaces';
+import { ITheme, IPadding } from '../../globalInterfaces';
+import { IProps, ILesson } from './interfaces';
 
-import { lessonsData } from '../../mockData';
+import { themeSelection } from '../../utils/themeSelection';
+import { lessonsData } from '../../utils/mockData';
 
 import 'swiper/css/swiper.min.css';
 
@@ -20,9 +22,10 @@ const Page = styled.div`
   display: flex;
   flex-wrap: wrap;
   flex-grow: 1;
-  padding-bottom: 16px;
   justify-content: center;
   align-items: flex-end;
+  background-color: ${(props: ITheme): string => props.theme.background};
+  padding-bottom: 16px;
 `;
 const Greeting = styled.div`
   width: 274px;
@@ -42,7 +45,7 @@ const GreetingText = styled.p`
   margin-top: 34px;
   font-family: SFProTextSemibold, sans-serif;
   font-size: 25px;
-  color: #000;
+  color: ${(props: ITheme): string => props.theme.mainTextColor};
 `;
 const Tabs = styled.div`
   display: flex;
@@ -57,15 +60,15 @@ const DateValue = styled.p`
   margin-bottom: 5px;
   font-family: SFProTextRegular, sans-serif;
   font-size: 15px;
-  color: rgba(0, 0, 0, 0.5);
+  color: ${(props: ITheme): string => props.theme.secondTextColor};
 `;
 const Tab = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 274px;
   height: 330px;
-  background-color: #f9f9f9;
-  border: 1px solid #f3f3f3;
+  background-color: ${(props: ITheme): string => props.theme.elementBackground};
+  border: 1px solid ${(props: ITheme): string => props.theme.borderColor};
   border-radius: 10px;
   transition: 0.4s;
 `;
@@ -81,7 +84,7 @@ const Circle = styled.div`
   display: flex;
   width: 40px;
   height: 40px;
-  border: 1px solid #000;
+  border: 1px solid ${(props: ITheme): string => props.theme.elementsColor};
   border-radius: 50%;
   justify-content: center;
   align-items: center;
@@ -89,12 +92,14 @@ const Circle = styled.div`
 const CircleText = styled.p`
   font-family: SFProDisplayRegular, sans-serif;
   font-size: 15px;
+  color: ${(props: ITheme): string => props.theme.elementsColor};
 `;
 const DotsButton = styled.div`
   width: 20px;
   height: 20px;
-  padding-top: 7px;
+  fill: ${(props: ITheme): string => props.theme.elementsColor};
   text-align: right;
+  padding-top: 7px;
   -webkit-appearance: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 `;
@@ -106,25 +111,26 @@ const TabContent = styled.div`
   padding: 16px;
   align-self: flex-end;
 `;
-const SideValues = styled.p<IStyledProps>`
+const SideValues = styled.p`
   display: flex;
-  width: 100%;
   align-items: center;
-  padding-bottom: ${(props: IStyledProps): string | undefined => props.pb};
+  width: 100%;
   font-family: 'SFProTextRegular', sans-serif;
   font-size: 15px;
-  color: rgba(0, 0, 0, 0.5);
+  padding-bottom: ${(props: IPadding): string | undefined => props.pb};
+  color: ${(props: ITheme): string => props.theme.secondTextColor};
 `;
-const PrincipalValue = styled.p<IStyledProps>`
+const PrincipalValue = styled.p`
   display: flex;
-  width: 100%;
   align-items: center;
-  padding-bottom: ${(props: IStyledProps): string | undefined => props.pb};
+  width: 100%;
   font-family: 'SFProTextSemibold', sans-serif;
   font-size: 18px;
+  padding-bottom: ${(props: IPadding): string | undefined => props.pb};
+  color: ${(props: ITheme): string => props.theme.mainTextColor};
 `;
 
-export const Main: React.FC<IProps> = ({ user }) => {
+export const Main: React.FC<IProps> = ({ user, theme }) => {
   const [swiper, setSwiper] = useState<any>({});
   const [initialPoint, setInitialPoint] = useState({ pageY: 0 });
   const [showSchedule, setShowSchedule] = useState(false);
@@ -195,78 +201,81 @@ export const Main: React.FC<IProps> = ({ user }) => {
   };
 
   return (
-    <Page>
-      <Greeting>
-        <UserIcon>
-          {UserAvatar ? <UserIconCustom src={UserAvatar} /> : <UserIconDefault />}
-        </UserIcon>
-        <GreetingText>Привет, {user.firstName}</GreetingText>
-      </Greeting>
-      <Tabs>
-        <DateValue>{currentDate()}</DateValue>
-        <Swiper {...swiperParams} getSwiper={setSwiper}>
-          {dayOfWeek.map((day, index) => {
-            return (
-              <CSSTransition key={index} in={tapOnTab} timeout={0} classNames='tab'>
-                <Tab
-                  onTouchStart={(event): void => touchTapStart(event)}
-                  onTouchEnd={(): void => touchTapEnd()}
-                  onTouchMove={(event): void => touchMove(event)}
-                >
-                  <IconsBar>
-                    <Circle>
-                      <CircleText>{day}</CircleText>
-                    </Circle>
-                    {lessonsData[index] && (
-                      <DotsButton onClick={(): void => clickOnDotsButton()}>
-                        <DotsIcon />
-                      </DotsButton>
-                    )}
-                  </IconsBar>
-                  <TabContent>
-                    {lessonsData[index] && (
-                      <SideValues pb='5px'>
-                        {`${numberOfLessons(lessonsData[index])} ${
-                          numberOfLessons(lessonsData[index]) > 1 ? 'пары' : 'пара'
-                        }`}
-                      </SideValues>
-                    )}
-                    {lessonsData[index] &&
-                      lessonsData[index].map((lesson, index) =>
-                        index < 2 ? (
-                          <PrincipalValue key={index} pb='5px'>
-                            {lesson.lessonName}
-                          </PrincipalValue>
-                        ) : (
-                          false
-                        )
+    <ThemeProvider theme={themeSelection(theme)}>
+      <Page>
+        <Greeting>
+          <UserIcon>
+            {UserAvatar ? <UserIconCustom src={UserAvatar} /> : <UserIconDefault />}
+          </UserIcon>
+          <GreetingText>Привет, {user.firstName}</GreetingText>
+        </Greeting>
+        <Tabs>
+          <DateValue>{currentDate()}</DateValue>
+          <Swiper {...swiperParams} getSwiper={setSwiper}>
+            {dayOfWeek.map((day, index) => {
+              return (
+                <CSSTransition key={index} in={tapOnTab} timeout={0} classNames='tab'>
+                  <Tab
+                    onTouchStart={(event): void => touchTapStart(event)}
+                    onTouchEnd={(): void => touchTapEnd()}
+                    onTouchMove={(event): void => touchMove(event)}
+                  >
+                    <IconsBar>
+                      <Circle>
+                        <CircleText>{day}</CircleText>
+                      </Circle>
+                      {lessonsData[index] && (
+                        <DotsButton onClick={(): void => clickOnDotsButton()}>
+                          <DotsIcon />
+                        </DotsButton>
                       )}
-                    {!lessonsData[index] && (
-                      <PrincipalValue key={index} pb='5px'>
-                        Занятий нет
-                      </PrincipalValue>
-                    )}
-                    {lessonsData[index] && lessonsData[index].length > 2 && (
-                      <SideValues>И другие</SideValues>
-                    )}
-                  </TabContent>
-                </Tab>
-              </CSSTransition>
-            );
-          })}
-        </Swiper>
-      </Tabs>
-      <CSSTransition
-        in={currentScheduleData() ? showSchedule : false}
-        timeout={0}
-        classNames='schedule'
-      >
-        <Schedule
-          currentSchedule={currentScheduleData()}
-          hideSchedule={hideSchedule}
-          ref={refSchedule}
-        />
-      </CSSTransition>
-    </Page>
+                    </IconsBar>
+                    <TabContent>
+                      {lessonsData[index] && (
+                        <SideValues pb='5px'>
+                          {`${numberOfLessons(lessonsData[index])} ${
+                            numberOfLessons(lessonsData[index]) > 1 ? 'пары' : 'пара'
+                          }`}
+                        </SideValues>
+                      )}
+                      {lessonsData[index] &&
+                        lessonsData[index].map((lesson, index) =>
+                          index < 2 ? (
+                            <PrincipalValue key={index} pb='5px'>
+                              {lesson.lessonName}
+                            </PrincipalValue>
+                          ) : (
+                            false
+                          )
+                        )}
+                      {!lessonsData[index] && (
+                        <PrincipalValue key={index} pb='5px'>
+                          Занятий нет
+                        </PrincipalValue>
+                      )}
+                      {lessonsData[index] && lessonsData[index].length > 2 && (
+                        <SideValues>И другие</SideValues>
+                      )}
+                    </TabContent>
+                  </Tab>
+                </CSSTransition>
+              );
+            })}
+          </Swiper>
+        </Tabs>
+        <CSSTransition
+          in={currentScheduleData() ? showSchedule : false}
+          timeout={0}
+          classNames='schedule'
+        >
+          <Schedule
+            currentSchedule={currentScheduleData()}
+            hideSchedule={hideSchedule}
+            theme={theme}
+            ref={refSchedule}
+          />
+        </CSSTransition>
+      </Page>
+    </ThemeProvider>
   );
 };
