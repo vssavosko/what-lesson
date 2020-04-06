@@ -11,6 +11,7 @@ import { Settings } from '../components/Settings/Settings';
 import { TabBar } from '../components/TabBar/TabBar';
 
 import { socket } from '../utils/socketConnection';
+import { changingStatusBarColor } from '../utils/changingStatusBarColor';
 import { userData } from '../utils/mockData';
 
 import fonts from '../assets/fonts/fonts';
@@ -109,7 +110,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     const theme = localStorage.getItem('theme');
 
-    setTheme(theme !== null ? theme : 'light');
+    setTheme(theme || 'light');
 
     socket.emit('join', { username: user.userName, group: user.group }, (error: string) => {
       if (error) {
@@ -124,6 +125,8 @@ export const App: React.FC = () => {
   }, [user]);
 
   useEffect(() => {
+    changingStatusBarColor(theme || 'light');
+
     localStorage.setItem('theme', theme);
   }, [theme]);
 
