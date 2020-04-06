@@ -1,64 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="App schedule of classes for students" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="What Lesson" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" sizes="48x48" href="%PUBLIC_URL%/icon-48.png" />
+    <link rel="icon" sizes="96x96" href="%PUBLIC_URL%/icon-96.png" />
+    <link rel="icon" sizes="144x144" href="%PUBLIC_URL%/icon-144.png" />
+    <link rel="icon" sizes="192x192" href="%PUBLIC_URL%/icon-192.png" />
+    <link rel="icon" sizes="256x256" href="%PUBLIC_URL%/icon-256.png" />
+    <link rel="icon" sizes="384x384" href="%PUBLIC_URL%/icon-384.png" />
+    <link rel="icon" sizes="512x512" href="%PUBLIC_URL%/icon-512.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="%PUBLIC_URL%/apple-touch-icon-57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="%PUBLIC_URL%/apple-touch-icon-60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="%PUBLIC_URL%/apple-touch-icon-72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="%PUBLIC_URL%/apple-touch-icon-76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="%PUBLIC_URL%/apple-touch-icon-114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="%PUBLIC_URL%/apple-touch-icon-120.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="%PUBLIC_URL%/apple-touch-icon-152.png" />
+    <link rel="apple-touch-icon" sizes="167x167" href="%PUBLIC_URL%/apple-touch-icon-167.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon-180.png" />
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"
+      href="%PUBLIC_URL%/apple-launch-1242x2688.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
+      href="%PUBLIC_URL%/apple-launch-828x1792.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+      href="%PUBLIC_URL%/apple-launch-1125x2436.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)"
+      href="%PUBLIC_URL%/apple-launch-1242x2208.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+      href="%PUBLIC_URL%/apple-launch-750x1334.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+      href="%PUBLIC_URL%/apple-launch-2048x2732.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)"
+      href="%PUBLIC_URL%/apple-launch-1668x2388.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+      href="%PUBLIC_URL%/apple-launch-1668x2224.png"
+    />
+    <link
+      rel="apple-touch-startup-image"
+      media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
+      href="%PUBLIC_URL%/apple-launch-1536x2048.png"
+    />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <meta name="msapplication-config" content="%PUBLIC_URL%/browserconfig.xml" />
+    <link rel="stylesheet" href="%PUBLIC_URL%/reset.css" />
+    <title>What Lesson</title>
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="description" content="App schedule of classes for students" />
-  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-  <link rel="icon" sizes="48x48" href="%PUBLIC_URL%/icon-48.png">
-  <link rel="icon" sizes="96x96" href="%PUBLIC_URL%/icon-96.png">
-  <link rel="icon" sizes="144x144" href="%PUBLIC_URL%/icon-144.png">
-  <link rel="icon" sizes="192x192" href="%PUBLIC_URL%/icon-192.png">
-  <link rel="icon" sizes="256x256" href="%PUBLIC_URL%/icon-256.png">
-  <link rel="icon" sizes="384x384" href="%PUBLIC_URL%/icon-384.png">
-  <link rel="icon" sizes="512x512" href="%PUBLIC_URL%/icon-512.png">
-  <link rel="apple-touch-icon" sizes="57x57" href="%PUBLIC_URL%/apple-touch-icon-57.png">
-  <link rel="apple-touch-icon" sizes="60x60" href="%PUBLIC_URL%/apple-touch-icon-60.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="%PUBLIC_URL%/apple-touch-icon-72.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="%PUBLIC_URL%/apple-touch-icon-76.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="%PUBLIC_URL%/apple-touch-icon-114.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="%PUBLIC_URL%/apple-touch-icon-120.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="%PUBLIC_URL%/apple-touch-icon-152.png">
-  <link rel="apple-touch-icon" sizes="167x167" href="%PUBLIC_URL%/apple-touch-icon-167.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon-180.png">
-  <link rel="apple-touch-startup-image"
-    media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"
-    href="%PUBLIC_URL%/apple-launch-1242x2688.png">
-  <link rel="apple-touch-startup-image"
-    media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
-    href="%PUBLIC_URL%/apple-launch-828x1792.png">
-  <link rel="apple-touch-startup-image"
-    media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
-    href="%PUBLIC_URL%/apple-launch-1125x2436.png">
-  <link rel="apple-touch-startup-image"
-    media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)"
-    href="%PUBLIC_URL%/apple-launch-1242x2208.png">
-  <link rel="apple-touch-startup-image"
-    media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
-    href="%PUBLIC_URL%/apple-launch-750x1334.png">
-  <link rel="apple-touch-startup-image"
-    media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
-    href="%PUBLIC_URL%/apple-launch-2048x2732.png">
-  <link rel="apple-touch-startup-image"
-    media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)"
-    href="%PUBLIC_URL%/apple-launch-1668x2388.png">
-  <link rel="apple-touch-startup-image"
-    media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
-    href="%PUBLIC_URL%/apple-launch-1668x2224.png">
-  <link rel="apple-touch-startup-image"
-    media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
-    href="%PUBLIC_URL%/apple-launch-1536x2048.png">
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  <meta name="msapplication-config" content="%PUBLIC_URL%/browserconfig.xml" />
-  <link rel="stylesheet" href="%PUBLIC_URL%/reset.css">
-  <title>What Lesson</title>
-</head>
-
-<body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
-</body>
-
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
 </html>
