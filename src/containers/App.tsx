@@ -10,7 +10,10 @@ import { StudentsList } from '../components/StudentsList/StudentsList';
 import { Settings } from '../components/Settings/Settings';
 import { TabBar } from '../components/TabBar/TabBar';
 
+import { ITheme } from '../globalInterfaces';
+
 import { socket } from '../utils/socketConnection';
+import { themeSelection } from '../utils/themeSelection';
 import { changingStatusBarColor } from '../utils/changingStatusBarColor';
 import { userData } from '../utils/mockData';
 
@@ -45,6 +48,7 @@ const GlobalStyles = createGlobalStyle`
     position: fixed;
     width: 100%;
     overflow: hidden;
+    transition: 0.2s;
   }
 
   .icon-light g {
@@ -94,11 +98,20 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 const Wrapper = styled.div`
+  box-sizing: border-box;
   position: relative;
   display: flex;
   flex-direction: column;
+  max-width: 1200px;
   min-height: 100vh;
+  margin: 0 auto;
   overflow: hidden;
+  transition: 0.2s;
+
+  @media (min-width: 1000px) {
+    border-radius: 25px;
+    box-shadow: 0 0 20px 5px ${(props: ITheme): string => props.theme.background};
+  }
 `;
 
 export const App: React.FC = () => {
@@ -133,14 +146,14 @@ export const App: React.FC = () => {
   return (
     <Router>
       <GlobalStyles />
-      <Wrapper>
+      <Wrapper theme={theme === 'light' ? '' : themeSelection(theme)}>
         <HeaderBar theme={theme} />
         <Switch>
-          <Route path='/' exact render={(): JSX.Element => <Main user={user} theme={theme} />} />
-          <Route path='/chat' render={(): JSX.Element => <Chat theme={theme} />} />
-          <Route path='/students-list' render={(): JSX.Element => <StudentsList theme={theme} />} />
+          <Route path="/" exact render={(): JSX.Element => <Main user={user} theme={theme} />} />
+          <Route path="/chat" render={(): JSX.Element => <Chat theme={theme} />} />
+          <Route path="/students-list" render={(): JSX.Element => <StudentsList theme={theme} />} />
           <Route
-            path='/settings'
+            path="/settings"
             render={(): JSX.Element => (
               <Settings user={user} theme={theme} changeTheme={changeTheme} />
             )}

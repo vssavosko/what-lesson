@@ -41,6 +41,7 @@ const User = styled.div`
   border: 1px solid ${(props: ITheme): string => props.theme.borderColor};
   border-radius: 10px;
   margin-bottom: 16px;
+  cursor: pointer;
 
   &:last-child {
     margin-bottom: 0;
@@ -74,9 +75,9 @@ export const StudentsList: React.FC<IProps> = ({ theme }) => {
               <User key={index}>
                 <UserIcon />
                 <UserInfo>
-                  <UserText ff='SFProTextSemibold'>{student.username}</UserText>
-                  <UserText ff='SFProTextRegular'>{student.email}</UserText>
-                  <UserText ff='SFProTextRegular'>{student.phoneNumber}</UserText>
+                  <UserText ff="SFProTextSemibold">{student.username}</UserText>
+                  <UserText ff="SFProTextRegular">{student.email}</UserText>
+                  <UserText ff="SFProTextRegular">{student.phoneNumber}</UserText>
                 </UserInfo>
               </User>
             ))}

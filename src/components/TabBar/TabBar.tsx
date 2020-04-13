@@ -34,31 +34,39 @@ const Tab = styled.button`
   outline: none;
   -webkit-appearance: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+  &:hover svg g {
+    stroke: ${(props: ITheme): string => props.theme.elementsColor};
+  }
 `;
 
 export const TabBar: React.FC<IProps> = ({ theme }) => {
   const pathName = useLocation().pathname;
+  const linkStyles = {
+    width: '100%',
+    height: '100%',
+  };
 
   return (
     <ThemeProvider theme={themeSelection(theme)}>
       <Bar>
         <Tab className={pathName === '/' ? `active-${theme}` : `icon-${theme}`}>
-          <Link to='/'>
+          <Link to="/" style={linkStyles}>
             <HomeIcon />
           </Link>
         </Tab>
         <Tab className={pathName === '/chat' ? `active-${theme}` : `icon-${theme}`}>
-          <Link to='/chat'>
+          <Link to="/chat" style={linkStyles}>
             <ChatIcon />
           </Link>
         </Tab>
         <Tab className={pathName === '/students-list' ? `active-${theme}` : `icon-${theme}`}>
-          <Link to='/students-list'>
+          <Link to="/students-list" style={linkStyles}>
             <StudentListIcon />
           </Link>
         </Tab>
         <Tab className={pathName === '/settings' ? `active-${theme}` : `icon-${theme}`}>
-          <Link to='/settings'>
+          <Link to="/settings" style={linkStyles}>
             <SettingsIcon />
           </Link>
         </Tab>

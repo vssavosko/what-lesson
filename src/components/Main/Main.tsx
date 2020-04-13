@@ -29,8 +29,11 @@ const Page = styled.div`
 `;
 const Greeting = styled.div`
   width: 274px;
-  height: 128px;
   margin: 0 auto;
+
+  @media (max-width: 321px) {
+    width: 220px;
+  }
 `;
 const UserIcon = styled.div`
   width: 60px;
@@ -46,6 +49,10 @@ const GreetingText = styled.p`
   font-family: SFProTextSemibold, sans-serif;
   font-size: 25px;
   color: ${(props: ITheme): string => props.theme.mainTextColor};
+
+  @media (max-width: 321px) {
+    margin-top: 28px;
+  }
 `;
 const Tabs = styled.div`
   display: flex;
@@ -54,6 +61,10 @@ const Tabs = styled.div`
   height: 355px;
   justify-content: center;
   align-items: flex-end;
+
+  @media (max-width: 321px) {
+    height: 274px;
+  }
 `;
 const DateValue = styled.p`
   width: 274px;
@@ -61,6 +72,10 @@ const DateValue = styled.p`
   font-family: SFProTextRegular, sans-serif;
   font-size: 15px;
   color: ${(props: ITheme): string => props.theme.secondTextColor};
+
+  @media (max-width: 321px) {
+    width: 220px;
+  }
 `;
 const Tab = styled.div`
   display: flex;
@@ -71,8 +86,14 @@ const Tab = styled.div`
   border: 1px solid ${(props: ITheme): string => props.theme.borderColor};
   border-radius: 10px;
   transition: 0.4s;
+
+  @media (max-width: 321px) {
+    width: 220px;
+    height: 250px;
+  }
 `;
 const IconsBar = styled.div`
+  position: relative;
   display: flex;
   width: 100%;
   height: 42px;
@@ -95,11 +116,14 @@ const CircleText = styled.p`
   color: ${(props: ITheme): string => props.theme.elementsColor};
 `;
 const DotsButton = styled.div`
-  width: 20px;
+  position: absolute;
+  width: 37px;
   height: 20px;
+  right: 0;
   fill: ${(props: ITheme): string => props.theme.elementsColor};
-  text-align: right;
+  text-align: center;
   padding-top: 7px;
+  cursor: pointer;
   -webkit-appearance: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 `;
@@ -161,6 +185,21 @@ export const Main: React.FC<IProps> = ({ user, theme }) => {
     return date.toLocaleString('ru', options);
   };
 
+  const mouseDown = (event: React.MouseEvent): void => {
+    setTapOnTab(true);
+    setInitialPoint({ pageY: event.clientY });
+  };
+
+  const mouseUp = (event: React.MouseEvent): void => {
+    const move = initialPoint.pageY - event.clientY;
+
+    setTapOnTab(false);
+
+    if (move >= 15) {
+      setShowSchedule(true);
+    }
+  };
+
   const touchTapStart = (event: React.TouchEvent): void => {
     setTapOnTab(true);
     setInitialPoint(event.changedTouches[0]);
@@ -214,8 +253,10 @@ export const Main: React.FC<IProps> = ({ user, theme }) => {
           <Swiper {...swiperParams} getSwiper={setSwiper}>
             {dayOfWeek.map((day, index) => {
               return (
-                <CSSTransition key={index} in={tapOnTab} timeout={0} classNames='tab'>
+                <CSSTransition key={index} in={tapOnTab} timeout={0} classNames="tab">
                   <Tab
+                    onMouseDown={(event): void => mouseDown(event)}
+                    onMouseUp={(event): void => mouseUp(event)}
                     onTouchStart={(event): void => touchTapStart(event)}
                     onTouchEnd={(): void => touchTapEnd()}
                     onTouchMove={(event): void => touchMove(event)}
@@ -232,7 +273,7 @@ export const Main: React.FC<IProps> = ({ user, theme }) => {
                     </IconsBar>
                     <TabContent>
                       {lessonsData[index] && (
-                        <SideValues pb='5px'>
+                        <SideValues pb="5px">
                           {`${numberOfLessons(lessonsData[index])} ${
                             numberOfLessons(lessonsData[index]) > 1 ? 'пары' : 'пара'
                           }`}
@@ -241,15 +282,15 @@ export const Main: React.FC<IProps> = ({ user, theme }) => {
                       {lessonsData[index] &&
                         lessonsData[index].map((lesson, index) =>
                           index < 2 ? (
-                            <PrincipalValue key={index} pb='5px'>
+                            <PrincipalValue key={index} pb="5px">
                               {lesson.lessonName}
                             </PrincipalValue>
                           ) : (
                             false
-                          )
+                          ),
                         )}
                       {!lessonsData[index] && (
-                        <PrincipalValue key={index} pb='5px'>
+                        <PrincipalValue key={index} pb="5px">
                           Занятий нет
                         </PrincipalValue>
                       )}
@@ -266,7 +307,7 @@ export const Main: React.FC<IProps> = ({ user, theme }) => {
         <CSSTransition
           in={currentScheduleData() ? showSchedule : false}
           timeout={0}
-          classNames='schedule'
+          classNames="schedule"
         >
           <Schedule
             currentSchedule={currentScheduleData()}

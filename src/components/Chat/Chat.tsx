@@ -83,6 +83,10 @@ const MessageButton = styled.button`
     stroke: ${(props: ITheme): string => props.theme.secondTextColor};
     transition: 0.2s;
   }
+
+  &:hover svg {
+    stroke: ${(props: ITheme): string => props.theme.elementsColorHover};
+  }
 `;
 
 export const Chat: React.FC<IProps> = ({ theme }) => {
@@ -94,7 +98,7 @@ export const Chat: React.FC<IProps> = ({ theme }) => {
   const currentDate = new Date(
     new Date().getFullYear(),
     new Date().getMonth(),
-    new Date().getDate()
+    new Date().getDate(),
   ).toISOString();
 
   const refAnchor = useRef<HTMLDivElement>(null);
@@ -119,7 +123,7 @@ export const Chat: React.FC<IProps> = ({ theme }) => {
       const { sendingDate } = message as IMessage;
 
       if (sendingDate === currentDate && counter === 0) {
-        counter++;
+        counter += 1;
 
         setIndexOfMessage(index);
       }
@@ -179,12 +183,12 @@ export const Chat: React.FC<IProps> = ({ theme }) => {
       findIndexOfMessage();
     }
 
+    scrollToBottom();
+
     return (): void => {
       socket.off('message');
     };
   }, [messages, currentDate, indexOfMessage, findIndexOfMessage]);
-
-  useEffect(scrollToBottom);
 
   return (
     <ThemeProvider theme={themeSelection(theme)}>
@@ -206,7 +210,7 @@ export const Chat: React.FC<IProps> = ({ theme }) => {
         <MessageBar>
           <MessageTextarea
             rows={1}
-            placeholder='Сообщение'
+            placeholder="Сообщение"
             onChange={(event): void => setMessage(event.target.value)}
             onKeyPress={(event): void | null => (event.key === 'Enter' ? sendMessage(event) : null)}
             onKeyUp={(event): void => resizeTextarea(event)}
