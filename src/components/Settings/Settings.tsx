@@ -41,6 +41,7 @@ const UserIcon = styled.div`
   border-radius: 50%;
   margin-bottom: 16px;
   overflow: hidden;
+  cursor: pointer;
 `;
 const UserIconCustom = styled.img`
   position: relative;
@@ -154,31 +155,31 @@ export const Settings: React.FC<IProps> = ({ user, theme, changeTheme }) => {
             <UserIcon onClick={changeUserIcon}>
               {UserAvatar ? <UserIconCustom src={UserAvatar} /> : <UserIconDefault />}
               <UserIconChangeLabel>правка</UserIconChangeLabel>
-              <UploadIcon type='file' ref={refUploadIcon} />
+              <UploadIcon type="file" ref={refUploadIcon} />
             </UserIcon>
             <UserName>{`${user.firstName} ${user.lastName}`}</UserName>
             <UserContacts>e-mail: {user.email}</UserContacts>
             <UserContacts>телефон: {user.phoneNumber}</UserContacts>
           </UserInfoPreview>
           <UserDetails>
-            <Field mb='14px'>
+            <Field mb="14px">
               <Label>Имя</Label>
-              <Input name='firstName' defaultValue={user.firstName} />
+              <Input name="firstName" defaultValue={user.firstName} />
             </Field>
-            <Field mb='14px'>
+            <Field mb="14px">
               <Label>Фамилия</Label>
-              <Input name='lastName' defaultValue={user.lastName} />
+              <Input name="lastName" defaultValue={user.lastName} />
             </Field>
-            <Field mb='14px'>
+            <Field mb="14px">
               <Label>E-mail</Label>
-              <Input name='email' defaultValue={user.email} />
+              <Input name="email" defaultValue={user.email} />
             </Field>
             <Field>
               <Label>Телефон</Label>
-              <Input name='phoneNumber' defaultValue={user.phoneNumber} />
+              <Input name="phoneNumber" defaultValue={user.phoneNumber} />
             </Field>
             <SeparationHeader>Учебная информация</SeparationHeader>
-            <Field mb='14px'>
+            <Field mb="14px">
               <Label>Группа</Label>
               <Input defaultValue={user.group} readOnly />
             </Field>
@@ -190,9 +191,9 @@ export const Settings: React.FC<IProps> = ({ user, theme, changeTheme }) => {
             <Field>
               <Label>Тема</Label>
               <Select value={theme} onChange={(event): void => handleChange(event)}>
-                <option value='light'>Light</option>
-                <option value='dark'>Dark</option>
-                <option value='night-blue'>Night Blue</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="night-blue">Night Blue</option>
               </Select>
             </Field>
           </UserDetails>

@@ -16,4 +16,5 @@ export type ThemesType = {
   elementBackground: string;
   borderColor: string;
   elementsColor: string;
+  elementsColorHover: string;
 };

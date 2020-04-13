@@ -21,6 +21,7 @@ const Curtain = styled.div`
   border-top: 1px solid ${(props: ITheme): string => props.theme.elementBackground};
   border-radius: 30px 30px 0 0;
   z-index: 2;
+  cursor: pointer;
   transform: translateY(${window.innerHeight}px);
   transition: 0.8s;
 `;
@@ -54,6 +55,7 @@ const Content = styled.div`
   display: flex;
   width: 100%;
   height: 72px;
+  user-select: none;
 `;
 const LessonInfo = styled.div`
   display: flex;
@@ -87,6 +89,18 @@ export const Schedule = React.forwardRef((props: IProps, ref: React.Ref<HTMLDivE
 
   const { currentSchedule, hideSchedule, theme } = props;
 
+  const mouseDown = (event: React.MouseEvent): void => {
+    setInitialPoint({ pageY: event.clientY });
+  };
+
+  const mouseUp = (event: React.MouseEvent): void => {
+    const moveUp = event.clientY - initialPoint.pageY;
+
+    if (moveUp >= 15) {
+      hideSchedule();
+    }
+  };
+
   const touchTapStart = (event: React.TouchEvent): void => {
     setInitialPoint(event.changedTouches[0]);
   };
@@ -102,6 +116,8 @@ export const Schedule = React.forwardRef((props: IProps, ref: React.Ref<HTMLDivE
   return (
     <ThemeProvider theme={themeSelection(theme)}>
       <Curtain
+        onMouseDown={(event): void => mouseDown(event)}
+        onMouseUp={(event): void => mouseUp(event)}
         onTouchStart={(event): void => touchTapStart(event)}
         onTouchMove={(event): void => touchMove(event)}
         ref={ref}
