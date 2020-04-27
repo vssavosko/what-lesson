@@ -5,6 +5,7 @@ export type UserData = {
   email: string;
   phoneNumber: string;
   group: string;
+  groupCode: string;
   course: string;
   userAvatar: string;
 };

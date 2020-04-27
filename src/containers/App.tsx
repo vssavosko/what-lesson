@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import styled, { createGlobalStyle } from 'styled-components';
 
+import { LogInScreen } from '../components/Login/Login';
+import { Install } from '../components/Install/Install';
 import { HeaderBar } from '../components/HeaderBar/HeaderBar';
 import { Main } from '../components/Main/Main';
 import { Chat } from '../components/Chat/Chat';
@@ -13,6 +15,7 @@ import { TabBar } from '../components/TabBar/TabBar';
 import { ITheme } from '../globalInterfaces';
 
 import { socket } from '../utils/socketConnection';
+import { subscriptionRequest } from '../utils/push-notification';
 import { themeSelection } from '../utils/themeSelection';
 import { changingStatusBarColor } from '../utils/changingStatusBarColor';
 import { userData } from '../utils/mockData';
@@ -115,17 +118,42 @@ const Wrapper = styled.div`
 `;
 
 export const App: React.FC = () => {
+  const [isLogin, setIsLogin] = useState(false);
+  const [appInstallation, setAppInstallation] = useState(false);
   const [user] = useState(userData);
+  const [userToken, setUserToken] = useState('');
   const [theme, setTheme] = useState('');
+
+  const authorization = (authorizationStatus: boolean): void => {
+    if (authorizationStatus) {
+      setIsLogin(authorizationStatus);
+    }
+  };
+
+  const isIos = (): boolean => {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+
+    return /iphone|ipad|ipod/.test(userAgent);
+  };
+
+  const isInStandaloneMode = (): boolean => {
+    return (
+      'standalone' in window.navigator && window.matchMedia('(display-mode: standalone)').matches
+    );
+  };
+
+  const closeInstall = (): void => setAppInstallation(false);
 
   const changeTheme = (theme: string): void => setTheme(theme);
 
   useEffect(() => {
-    const theme = localStorage.getItem('theme');
+    if (isIos() && !isInStandaloneMode()) setAppInstallation(true);
 
-    setTheme(theme || 'light');
+    subscriptionRequest().then((token) => setUserToken(token || ''));
 
-    socket.emit('join', { username: user.userName, group: user.group }, (error: string) => {
+    setTheme(localStorage.getItem('theme') || 'light');
+
+    socket.emit('join', { username: user.userName, group: user.groupCode }, (error: string) => {
       if (error) {
         throw new Error(error);
       }
@@ -147,19 +175,43 @@ export const App: React.FC = () => {
     <Router>
       <GlobalStyles />
       <Wrapper theme={theme === 'light' ? '' : themeSelection(theme)}>
-        <HeaderBar theme={theme} />
-        <Switch>
-          <Route path="/" exact render={(): JSX.Element => <Main user={user} theme={theme} />} />
-          <Route path="/chat" render={(): JSX.Element => <Chat theme={theme} />} />
-          <Route path="/students-list" render={(): JSX.Element => <StudentsList theme={theme} />} />
-          <Route
-            path="/settings"
-            render={(): JSX.Element => (
-              <Settings user={user} theme={theme} changeTheme={changeTheme} />
-            )}
+        {!isLogin && (
+          <LogInScreen
+            checkingLogIn={(authorizationStatus: boolean): void => {
+              authorization(authorizationStatus);
+            }}
           />
-        </Switch>
-        <TabBar theme={theme} />
+        )}
+        {appInstallation && isLogin && <Install close={closeInstall} />}
+        {isLogin && (
+          <>
+            <HeaderBar theme={theme} />
+            <Switch>
+              <Route
+                path="/"
+                exact
+                render={(): JSX.Element => <Main user={user} theme={theme} />}
+              />
+              <Route path="/chat" render={(): JSX.Element => <Chat user={user} theme={theme} />} />
+              <Route
+                path="/students-list"
+                render={(): JSX.Element => <StudentsList theme={theme} />}
+              />
+              <Route
+                path="/settings"
+                render={(): JSX.Element => (
+                  <Settings
+                    user={user}
+                    userToken={userToken}
+                    theme={theme}
+                    changeTheme={changeTheme}
+                  />
+                )}
+              />
+            </Switch>
+            <TabBar theme={theme} />
+          </>
+        )}
       </Wrapper>
     </Router>
   );

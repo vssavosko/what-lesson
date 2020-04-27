@@ -8,10 +8,10 @@ import { IProps } from './interfaces';
 
 import { themeSelection } from '../../utils/themeSelection';
 
-import { ReactComponent as HomeIcon } from '../../assets/images/svg/home.svg';
-import { ReactComponent as ChatIcon } from '../../assets/images/svg/chat.svg';
-import { ReactComponent as StudentListIcon } from '../../assets/images/svg/student-list.svg';
-import { ReactComponent as SettingsIcon } from '../../assets/images/svg/settings.svg';
+import { ReactComponent as HomeIcon } from '../../assets/images/svg/home-icon.svg';
+import { ReactComponent as ChatIcon } from '../../assets/images/svg/chat-icon.svg';
+import { ReactComponent as StudentListIcon } from '../../assets/images/svg/student-list-icon.svg';
+import { ReactComponent as SettingsIcon } from '../../assets/images/svg/settings-icon.svg';
 
 const Bar = styled.div`
   display: flex;

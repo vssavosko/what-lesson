@@ -89,7 +89,7 @@ const MessageButton = styled.button`
   }
 `;
 
-export const Chat: React.FC<IProps> = ({ theme }) => {
+export const Chat: React.FC<IProps> = ({ user, theme }) => {
   const [eventInfo, setEventInfo] = useState({});
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<object[]>(messageData);
@@ -140,7 +140,24 @@ export const Chat: React.FC<IProps> = ({ theme }) => {
     event.preventDefault();
 
     if (message) {
+      const data = {
+        notification: {
+          title: 'What Lesson',
+          body: message,
+          click_action: 'http://localhost:3000/chat',
+          icon: 'http://localhost:3000/icon-96.png',
+        },
+        to: `/topics/${user.groupCode}`,
+      };
+
       socket.emit('sendMessage', message, () => setMessage(''));
+
+      fetch(`http://localhost:5000/sendMessage`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }).catch((error) => {
+        throw new Error(error);
+      });
     }
 
     if (refTextarea.current) {
