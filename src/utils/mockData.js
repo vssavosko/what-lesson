@@ -5,6 +5,7 @@ export const userData = {
   email: 'savosko@gmail.com',
   phoneNumber: '+7 999 999-99-99',
   group: 'ПИ 4-1',
+  groupCode: 'pi4-1',
   course: '4',
   userAvatar: 'user-avatar.png',
 };

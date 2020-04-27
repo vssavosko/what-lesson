@@ -8,7 +8,7 @@ import { IProps, IMessage } from './interfaces';
 import { themeSelection } from '../../utils/themeSelection';
 
 const MessageDateSent = styled.p`
-  font-family: 'SFProTextRegular';
+  font-family: 'SFProTextRegular', sans-serif;
   font-size: 12px;
   text-align: center;
   color: ${(props: ITheme): string => props.theme.secondTextColor};
@@ -50,7 +50,7 @@ const MessageTimeSent = styled.span`
   width: 35px;
   right: 5px;
   bottom: 5px;
-  font-family: 'SFProTextRegular';
+  font-family: 'SFProTextRegular', sans-serif;
   font-size: 12px;
   color: ${(props: ITheme): string => props.theme.secondTextColor};
 `;

@@ -16,7 +16,7 @@ import 'swiper/css/swiper.min.css';
 
 import UserAvatar from '../../assets/images/user-avatar.png';
 import { ReactComponent as UserIconDefault } from '../../assets/images/svg/user-icon.svg';
-import { ReactComponent as DotsIcon } from '../../assets/images/svg/dots.svg';
+import { ReactComponent as DotsIcon } from '../../assets/images/svg/dots-icon.svg';
 
 const Page = styled.div`
   display: flex;

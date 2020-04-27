@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import styled, { ThemeProvider } from 'styled-components';
 
@@ -137,8 +137,28 @@ const Select = styled.select`
   transition: 0.2s;
   -webkit-appearance: none;
 `;
+const SubscriptionButton = styled.button`
+  box-sizing: border-box;
+  width: 100%;
+  font-family: 'SFProTextRegular', sans-serif;
+  font-size: 16px;
+  color: ${(props: ITheme): string => props.theme.mainTextColor};
+  background-color: ${(props: ITheme): string => props.theme.elementBackground};
+  padding: 5px;
+  border: 1px solid ${(props: ITheme): string => props.theme.borderColor};
+  border-radius: 10px;
+  transition: 0.2s;
+  -webkit-appearance: none;
 
-export const Settings: React.FC<IProps> = ({ user, theme, changeTheme }) => {
+  @media (min-width: 415px) {
+    width: 200px;
+  }
+`;
+
+export const Settings: React.FC<IProps> = ({ user, userToken, theme, changeTheme }) => {
+  const [userData] = useState({ userToken, groupCode: user.groupCode });
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
   const refUploadIcon = useRef<HTMLInputElement>(null);
 
   const changeUserIcon = (): void => refUploadIcon.current?.click();
@@ -146,6 +166,40 @@ export const Settings: React.FC<IProps> = ({ user, theme, changeTheme }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     changeTheme(event.target.value);
   };
+
+  const subscribe = (): void => {
+    fetch(`http://localhost:5000/subscribe`, {
+      method: 'POST',
+      body: JSON.stringify(userData),
+    })
+      .then(() => {
+        localStorage.setItem('isSubscribed', userToken);
+
+        setIsSubscribed(true);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  };
+
+  const unsubscribe = (): void => {
+    fetch(`http://localhost:5000/unsubscribe`, {
+      method: 'POST',
+      body: JSON.stringify(userData),
+    })
+      .then(() => {
+        localStorage.removeItem('isSubscribed');
+
+        setIsSubscribed(false);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  };
+
+  useEffect(() => {
+    setIsSubscribed(!!localStorage.getItem('isSubscribed') || false);
+  }, [user]);
 
   return (
     <ThemeProvider theme={themeSelection(theme)}>
@@ -195,6 +249,18 @@ export const Settings: React.FC<IProps> = ({ user, theme, changeTheme }) => {
                 <option value="dark">Dark</option>
                 <option value="night-blue">Night Blue</option>
               </Select>
+            </Field>
+            <SeparationHeader>Подписка на уведомления</SeparationHeader>
+            <Field>
+              {!isSubscribed ? (
+                <SubscriptionButton type="button" onClick={subscribe}>
+                  Подписаться
+                </SubscriptionButton>
+              ) : (
+                <SubscriptionButton type="button" onClick={unsubscribe}>
+                  Отписаться
+                </SubscriptionButton>
+              )}
             </Field>
           </UserDetails>
         </SettingsWindow>
