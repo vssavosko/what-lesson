@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
+
+import { Loader } from '../Loader/Loader';
 
 import { IMargin } from '../../globalInterfaces';
 import { IProps } from './interfaces';
@@ -16,7 +18,7 @@ const Page = styled.div`
   background: linear-gradient(-25deg, #000, #3f435f);
 `;
 const LoginForm = styled.form`
-  width: 250px;
+  width: 265px;
 `;
 const Field = styled.input`
   box-sizing: border-box;
@@ -35,6 +37,60 @@ const Field = styled.input`
     color: #7394bf;
   }
 `;
+const ErrorMessage = styled.p`
+  font-family: 'SFProTextRegular', sans-serif;
+  color: #ed4956;
+`;
+const RememberMeBlock = styled.div`
+  display: flex;
+  align-items: center;
+  height: 50px;
+`;
+const RememberMeLabel = styled.p`
+  font-family: 'SFProTextRegular', sans-serif;
+  color: #7394bf;
+  margin-right: 10px;
+  cursor: pointer;
+`;
+const RememberMeCheckbox = styled.div`
+  position: relative;
+  width: 15px;
+  height: 15px;
+  background: transparent;
+  border: 1px solid #7394bf;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 5px;
+    top: 6px;
+    right: 9px;
+    background: #7394bf;
+    transform: rotate(-42deg)
+      ${(props: { checkboxState: boolean }): string =>
+        props.checkboxState ? 'scale(1)' : 'scale(0.5)'};
+    opacity: ${(props: { checkboxState: boolean }): string => (props.checkboxState ? '1' : '0')};
+    transition: 0.3s;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 9px;
+    top: 3px;
+    right: 5px;
+    background: #7394bf;
+    transform: rotate(42deg)
+      ${(props: { checkboxState: boolean }): string =>
+        props.checkboxState ? 'scale(1)' : 'scale(0.1)'};
+    opacity: ${(props: { checkboxState: boolean }): string => (props.checkboxState ? '1' : '0')};
+    transition: 0.3s;
+  }
+`;
 const SubmitButton = styled.button`
   width: 100%;
   height: 40px;
@@ -47,23 +103,119 @@ const SubmitButton = styled.button`
   -webkit-appearance: none;
 `;
 
-export const LogInScreen: React.FC<IProps> = ({ checkingLogIn }) => {
+export const LogInScreen: React.FC<IProps> = ({ loggedIn, changeUserData }) => {
+  const [authorizationAttempt, setAuthorizationAttempt] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+
+  const refEmail = useRef<HTMLInputElement>(null);
+  const refPassword = useRef<HTMLInputElement>(null);
+
   const authorization = (event: React.MouseEvent): void => {
     event.preventDefault();
 
-    checkingLogIn(true);
+    setAuthorizationAttempt(true);
   };
+
+  const toggleCheckbox = (): void => setIsChecked(!isChecked);
+
+  useEffect(() => {
+    if (authorizationAttempt) {
+      const payload = {
+        email: refEmail?.current?.value,
+        password: refPassword?.current?.value,
+      };
+
+      fetch('http://localhost:5000/login', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          const user = res;
+
+          if (user.authorization) {
+            const {
+              course,
+              email,
+              firstName,
+              group,
+              groupCode,
+              lastName,
+              phoneNumber,
+              userAvatar,
+              userName,
+            } = user;
+
+            if (isChecked && !user.fingerprint.length) {
+              const payload = {
+                key: user.key,
+                email: user.email,
+                token: btoa(`${user.email} ${user.key} ${window.navigator.userAgent}`),
+              };
+
+              fetch(`http://localhost:5000/generating_fingerprint`, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+              })
+                .then((res): Promise<{ fingerprint: string }> => res.json())
+                .then((res): void => {
+                  const payload = {
+                    key: user.key,
+                    fingerprint: res.fingerprint,
+                  };
+
+                  fetch(`http://localhost:5000/update_user_profile`, {
+                    method: 'POST',
+                    body: JSON.stringify(payload),
+                  }).then(() => {
+                    document.cookie = `fingerprint=${res.fingerprint}`;
+                  });
+                });
+            } else if (isChecked && user.fingerprint.length) {
+              document.cookie = `fingerprint=${user.fingerprint}`;
+            }
+
+            loggedIn();
+            changeUserData({
+              course,
+              email,
+              firstName,
+              group,
+              groupCode,
+              lastName,
+              phoneNumber,
+              userAvatar,
+              userName,
+            });
+          } else {
+            setAuthorizationAttempt(false);
+            setIsError(true);
+          }
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    }
+  }, [authorizationAttempt, isChecked, loggedIn, changeUserData]);
+
   return (
     <Page>
       <CapIcon />
       <LoginForm>
-        <Field mt="30px" mb="20px" placeholder="Логин" />
-        <Field mb="20px" placeholder="Пароль" type="password" />
+        <Field mt="30px" mb="20px" type="email" placeholder="E-mail" ref={refEmail} />
+        <Field mb={isError ? '20px' : ''} type="password" placeholder="Пароль" ref={refPassword} />
+        {isError && <ErrorMessage>Неправильный Email или Пароль.</ErrorMessage>}
+        <RememberMeBlock>
+          <RememberMeLabel onClick={toggleCheckbox}>Запомнить меня</RememberMeLabel>
+          <RememberMeCheckbox checkboxState={isChecked} onClick={toggleCheckbox} />
+        </RememberMeBlock>
         <SubmitButton
           onClick={(event: React.MouseEvent): void => authorization(event)}
           type="submit"
+          disabled={authorizationAttempt}
         >
-          войти
+          {authorizationAttempt ? <Loader customTheme="#181a24" /> : 'войти'}
         </SubmitButton>
       </LoginForm>
     </Page>

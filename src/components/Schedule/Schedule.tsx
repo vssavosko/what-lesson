@@ -10,6 +10,7 @@ import { themeSelection } from '../../utils/themeSelection';
 import { ReactComponent as HideCurtainButtonIcon } from '../../assets/images/svg/hide-curtain-button-icon.svg';
 
 const Curtain = styled.div`
+  box-sizing: border-box;
   position: absolute;
   display: flex;
   flex-wrap: wrap;
@@ -19,7 +20,7 @@ const Curtain = styled.div`
   padding: 0 16px;
   bottom: 0;
   border-top: 1px solid ${(props: ITheme): string => props.theme.elementBackground};
-  border-radius: 30px 30px 0 0;
+  border-radius: 10px 10px 0 0;
   z-index: 2;
   cursor: pointer;
   transform: translateY(${window.innerHeight}px);
@@ -33,14 +34,13 @@ const Lesson = styled.div`
   position: relative;
   width: 100%;
   height: ${(props: ISizes): string | undefined => props.height};
-  padding: 0 16px;
 `;
 const Line = styled.div<{ top: string; height: string }>`
   position: absolute;
   width: 5px;
   top: ${(props): string | undefined => props.top};
   height: ${(props): string | undefined => props.height};
-  left: 22px;
+  left: 6px;
   background: ${(props: ITheme): string => props.theme.elementsColor};
 `;
 const Circle = styled.div`

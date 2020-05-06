@@ -1,9 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 
 import styled, { ThemeProvider } from 'styled-components';
 
 import { ITheme, IMargin } from '../../globalInterfaces';
 import { IProps } from './interfaces';
+
+import { Loader } from '../Loader/Loader';
 
 import { themeSelection } from '../../utils/themeSelection';
 
@@ -156,8 +158,11 @@ const SubscriptionButton = styled.button`
 `;
 
 export const Settings: React.FC<IProps> = ({ user, userToken, theme, changeTheme }) => {
+  const initialSubscribe = (): boolean => !!localStorage.getItem('isSubscribed');
+
   const [userData] = useState({ userToken, groupCode: user.groupCode });
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(initialSubscribe);
+  const [isLoading, setIsLoading] = useState(false);
 
   const refUploadIcon = useRef<HTMLInputElement>(null);
 
@@ -168,6 +173,8 @@ export const Settings: React.FC<IProps> = ({ user, userToken, theme, changeTheme
   };
 
   const subscribe = (): void => {
+    setIsLoading(true);
+
     fetch(`http://localhost:5000/subscribe`, {
       method: 'POST',
       body: JSON.stringify(userData),
@@ -176,6 +183,7 @@ export const Settings: React.FC<IProps> = ({ user, userToken, theme, changeTheme
         localStorage.setItem('isSubscribed', userToken);
 
         setIsSubscribed(true);
+        setIsLoading(false);
       })
       .catch((error) => {
         throw new Error(error);
@@ -183,6 +191,8 @@ export const Settings: React.FC<IProps> = ({ user, userToken, theme, changeTheme
   };
 
   const unsubscribe = (): void => {
+    setIsLoading(true);
+
     fetch(`http://localhost:5000/unsubscribe`, {
       method: 'POST',
       body: JSON.stringify(userData),
@@ -191,15 +201,12 @@ export const Settings: React.FC<IProps> = ({ user, userToken, theme, changeTheme
         localStorage.removeItem('isSubscribed');
 
         setIsSubscribed(false);
+        setIsLoading(false);
       })
       .catch((error) => {
         throw new Error(error);
       });
   };
-
-  useEffect(() => {
-    setIsSubscribed(!!localStorage.getItem('isSubscribed') || false);
-  }, [user]);
 
   return (
     <ThemeProvider theme={themeSelection(theme)}>
@@ -253,12 +260,20 @@ export const Settings: React.FC<IProps> = ({ user, userToken, theme, changeTheme
             <SeparationHeader>Подписка на уведомления</SeparationHeader>
             <Field>
               {!isSubscribed ? (
-                <SubscriptionButton type="button" onClick={subscribe}>
-                  Подписаться
+                <SubscriptionButton type="button" onClick={subscribe} disabled={isLoading}>
+                  {isLoading ? (
+                    <Loader width="17px" theme={themeSelection(theme) || {}} />
+                  ) : (
+                    'Подписаться'
+                  )}
                 </SubscriptionButton>
               ) : (
-                <SubscriptionButton type="button" onClick={unsubscribe}>
-                  Отписаться
+                <SubscriptionButton type="button" onClick={unsubscribe} disabled={isLoading}>
+                  {isLoading ? (
+                    <Loader width="17px" theme={themeSelection(theme) || {}} />
+                  ) : (
+                    'Отписаться'
+                  )}
                 </SubscriptionButton>
               )}
             </Field>

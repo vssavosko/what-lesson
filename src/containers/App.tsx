@@ -3,8 +3,9 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import styled, { createGlobalStyle } from 'styled-components';
 
-import { LogInScreen } from '../components/Login/Login';
+import { LoaderScreen } from '../components/LoaderScreen/LoaderScreen';
 import { Install } from '../components/Install/Install';
+import { LogInScreen } from '../components/Login/Login';
 import { HeaderBar } from '../components/HeaderBar/HeaderBar';
 import { Main } from '../components/Main/Main';
 import { Chat } from '../components/Chat/Chat';
@@ -12,13 +13,13 @@ import { StudentsList } from '../components/StudentsList/StudentsList';
 import { Settings } from '../components/Settings/Settings';
 import { TabBar } from '../components/TabBar/TabBar';
 
+import { UserData } from '../globalTypes';
 import { ITheme } from '../globalInterfaces';
 
 import { socket } from '../utils/socketConnection';
 import { subscriptionRequest } from '../utils/push-notification';
 import { themeSelection } from '../utils/themeSelection';
 import { changingStatusBarColor } from '../utils/changingStatusBarColor';
-import { userData } from '../utils/mockData';
 
 import fonts from '../assets/fonts/fonts';
 
@@ -118,17 +119,27 @@ const Wrapper = styled.div`
 `;
 
 export const App: React.FC = () => {
-  const [isLogin, setIsLogin] = useState(false);
-  const [appInstallation, setAppInstallation] = useState(false);
-  const [user] = useState(userData);
-  const [userToken, setUserToken] = useState('');
-  const [theme, setTheme] = useState('');
+  const initialUser = (): UserData => ({
+    userName: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    group: '',
+    groupCode: '',
+    course: '',
+    userAvatar: '',
+  });
+  const initialTheme = (): string => localStorage.getItem('theme') || 'light';
 
-  const authorization = (authorizationStatus: boolean): void => {
-    if (authorizationStatus) {
-      setIsLogin(authorizationStatus);
-    }
-  };
+  const [isLoading, setIsLoading] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [appInstallation, setAppInstallation] = useState(false);
+  const [user, setUser] = useState(initialUser);
+  const [userName, setUserName] = useState('');
+  const [groupCode, setGroupCode] = useState('');
+  const [userToken, setUserToken] = useState('');
+  const [theme, setTheme] = useState(initialTheme);
 
   const isIos = (): boolean => {
     const userAgent = window.navigator.userAgent.toLowerCase();
@@ -142,31 +153,42 @@ export const App: React.FC = () => {
     );
   };
 
+  const authorization = (): void => setLoggedIn(true);
+
+  const changeUserData = (userData: UserData): void => setUser(userData);
+
+  const stopLoading = (): void => setIsLoading(false);
+
   const closeInstall = (): void => setAppInstallation(false);
 
   const changeTheme = (theme: string): void => setTheme(theme);
+
+  useEffect(() => {
+    setUserName(user.userName);
+    setGroupCode(user.groupCode);
+  }, [user]);
 
   useEffect(() => {
     if (isIos() && !isInStandaloneMode()) setAppInstallation(true);
 
     subscriptionRequest().then((token) => setUserToken(token || ''));
 
-    setTheme(localStorage.getItem('theme') || 'light');
-
-    socket.emit('join', { username: user.userName, group: user.groupCode }, (error: string) => {
-      if (error) {
-        throw new Error(error);
-      }
-    });
+    if (userName?.length && groupCode?.length) {
+      socket.emit('join', { username: userName, group: groupCode }, (error: string) => {
+        if (error) {
+          throw new Error(error);
+        }
+      });
+    }
 
     return (): void => {
       socket.emit('disconnect');
       socket.off('');
     };
-  }, [user]);
+  }, [userName, groupCode]);
 
   useEffect(() => {
-    changingStatusBarColor(theme || 'light');
+    changingStatusBarColor(theme);
 
     localStorage.setItem('theme', theme);
   }, [theme]);
@@ -175,15 +197,21 @@ export const App: React.FC = () => {
     <Router>
       <GlobalStyles />
       <Wrapper theme={theme === 'light' ? '' : themeSelection(theme)}>
-        {!isLogin && (
-          <LogInScreen
-            checkingLogIn={(authorizationStatus: boolean): void => {
-              authorization(authorizationStatus);
-            }}
+        {isLoading && (
+          <LoaderScreen
+            loggedIn={authorization}
+            changeUserData={(userData: UserData): void => changeUserData(userData)}
+            stopLoading={stopLoading}
           />
         )}
-        {appInstallation && isLogin && <Install close={closeInstall} />}
-        {isLogin && (
+        {appInstallation && !isLoading && <Install close={closeInstall} />}
+        {!loggedIn && !isLoading && (
+          <LogInScreen
+            loggedIn={authorization}
+            changeUserData={(userData: UserData): void => changeUserData(userData)}
+          />
+        )}
+        {loggedIn && !isLoading && (
           <>
             <HeaderBar theme={theme} />
             <Switch>
