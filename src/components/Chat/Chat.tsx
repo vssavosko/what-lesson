@@ -84,8 +84,10 @@ const MessageButton = styled.button`
     transition: 0.2s;
   }
 
-  &:hover svg {
-    stroke: ${(props: ITheme): string => props.theme.elementsColorHover};
+  @media (min-width: 770px) {
+    &:hover svg {
+      stroke: ${(props: ITheme): string => props.theme.elementsColorHover};
+    }
   }
 `;
 
