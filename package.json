@@ -1,6 +1,6 @@
 {
   "name": "what-lesson",
-  "version": "0.16.0",
+  "version": "0.16.1",
   "private": true,
   "dependencies": {
     "@styled-icons/entypo": "^10.0.0",

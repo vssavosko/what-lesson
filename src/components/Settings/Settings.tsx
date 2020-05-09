@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 
 import styled, { ThemeProvider } from 'styled-components';
 
@@ -6,6 +6,8 @@ import { ITheme, IMargin } from '../../globalInterfaces';
 import { IProps } from './interfaces';
 
 import { Loader } from '../Loader/Loader';
+
+import { Context } from '../../containers/app/appContext';
 
 import { themeSelection } from '../../utils/themeSelection';
 
@@ -157,19 +159,17 @@ const SubscriptionButton = styled.button`
   }
 `;
 
-export const Settings: React.FC<IProps> = ({ user, userToken, theme, changeTheme }) => {
-  const initialSubscribe = (): boolean => !!localStorage.getItem('isSubscribed');
+export const Settings: React.FC<IProps> = ({ user, userToken, isSubscribed, theme }) => {
+  const { dispatch } = useContext(Context);
 
-  const [userData] = useState({ userToken, groupCode: user.groupCode });
-  const [isSubscribed, setIsSubscribed] = useState(initialSubscribe);
   const [isLoading, setIsLoading] = useState(false);
 
   const refUploadIcon = useRef<HTMLInputElement>(null);
 
   const changeUserIcon = (): void => refUploadIcon.current?.click();
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
-    changeTheme(event.target.value);
+  const changeTheme = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+    dispatch({ type: 'theme', payload: event.target.value });
   };
 
   const subscribe = (): void => {
@@ -177,12 +177,16 @@ export const Settings: React.FC<IProps> = ({ user, userToken, theme, changeTheme
 
     fetch(`http://localhost:5000/subscribe`, {
       method: 'POST',
-      body: JSON.stringify(userData),
+      body: JSON.stringify({
+        userToken,
+        userGroup: user.groupCode,
+      }),
     })
       .then(() => {
         localStorage.setItem('isSubscribed', userToken);
 
-        setIsSubscribed(true);
+        dispatch({ type: 'isSubscribed', payload: true });
+
         setIsLoading(false);
       })
       .catch((error) => {
@@ -195,12 +199,16 @@ export const Settings: React.FC<IProps> = ({ user, userToken, theme, changeTheme
 
     fetch(`http://localhost:5000/unsubscribe`, {
       method: 'POST',
-      body: JSON.stringify(userData),
+      body: JSON.stringify({
+        userToken,
+        userGroup: user.groupCode,
+      }),
     })
       .then(() => {
         localStorage.removeItem('isSubscribed');
 
-        setIsSubscribed(false);
+        dispatch({ type: 'isSubscribed', payload: false });
+
         setIsLoading(false);
       })
       .catch((error) => {
@@ -251,7 +259,7 @@ export const Settings: React.FC<IProps> = ({ user, userToken, theme, changeTheme
             <SeparationHeader>Цветовая схема</SeparationHeader>
             <Field>
               <Label>Тема</Label>
-              <Select value={theme} onChange={(event): void => handleChange(event)}>
+              <Select value={theme} onChange={(event): void => changeTheme(event)}>
                 <option value="light">Light</option>
                 <option value="dark">Dark</option>
                 <option value="night-blue">Night Blue</option>

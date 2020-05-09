@@ -1,4 +1,61 @@
-import { ThemesType } from './globalTypes';
+import { UserDataType, ThemesType } from './globalTypes';
+
+export interface IState {
+  isLoading: boolean;
+  isLoggedIn: boolean;
+  isInstall: boolean;
+  user: UserDataType;
+  userName: string;
+  groupCode: string;
+  userToken: string;
+  isSubscribed: boolean;
+  theme: string;
+}
+
+export interface ILoadingAction {
+  type: 'isLoading';
+  payload: boolean;
+}
+
+export interface ILoggedInAction {
+  type: 'isLoggedIn';
+  payload: boolean;
+}
+
+export interface IInstallAction {
+  type: 'isInstall';
+  payload: boolean;
+}
+
+export interface IUserAction {
+  type: 'user';
+  payload: UserDataType;
+}
+
+export interface IUserNameAction {
+  type: 'userName';
+  payload: string;
+}
+
+export interface IGroupCodeAction {
+  type: 'groupCode';
+  payload: string;
+}
+
+export interface IUserTokenAction {
+  type: 'userToken';
+  payload: string;
+}
+
+export interface ISubscribedAction {
+  type: 'isSubscribed';
+  payload: boolean;
+}
+
+export interface IThemeAction {
+  type: 'theme';
+  payload: string;
+}
 
 export interface ISizes {
   width?: string;

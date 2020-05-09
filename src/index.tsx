@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { App } from './containers/App';
-import { initializeFirebase } from './utils/push-notification';
+import { App } from './containers/app/App';
+import { initializeFirebase } from './utils/initializeFirebase';
 
 import * as serviceWorker from './serviceWorker';
 

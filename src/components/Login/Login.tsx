@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
 import { Loader } from '../Loader/Loader';
 
 import { IMargin } from '../../globalInterfaces';
-import { IProps } from './interfaces';
+
+import { Context } from '../../containers/app/appContext';
 
 import { ReactComponent as CapIcon } from '../../assets/images/svg/cap-icon.svg';
 
@@ -103,7 +104,9 @@ const SubmitButton = styled.button`
   -webkit-appearance: none;
 `;
 
-export const LogInScreen: React.FC<IProps> = ({ loggedIn, changeUserData }) => {
+export const LogInScreen: React.FC = () => {
+  const { dispatch } = useContext(Context);
+
   const [authorizationAttempt, setAuthorizationAttempt] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -176,17 +179,23 @@ export const LogInScreen: React.FC<IProps> = ({ loggedIn, changeUserData }) => {
               document.cookie = `fingerprint=${user.fingerprint}`;
             }
 
-            loggedIn();
-            changeUserData({
-              course,
-              email,
-              firstName,
-              group,
-              groupCode,
-              lastName,
-              phoneNumber,
-              userAvatar,
-              userName,
+            dispatch({
+              type: 'isLoggedIn',
+              payload: true,
+            });
+            dispatch({
+              type: 'user',
+              payload: {
+                course,
+                email,
+                firstName,
+                group,
+                groupCode,
+                lastName,
+                phoneNumber,
+                userAvatar,
+                userName,
+              },
             });
           } else {
             setAuthorizationAttempt(false);
@@ -197,7 +206,7 @@ export const LogInScreen: React.FC<IProps> = ({ loggedIn, changeUserData }) => {
           throw new Error(error);
         });
     }
-  }, [authorizationAttempt, isChecked, loggedIn, changeUserData]);
+  }, [authorizationAttempt, isChecked, dispatch]);
 
   return (
     <Page>
