@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import styled from 'styled-components';
 import { ShareAlternative } from '@styled-icons/entypo/ShareAlternative';
 import { PlusSquare } from '@styled-icons/evaicons-solid/PlusSquare';
 import { CloseOutline } from '@styled-icons/evaicons-outline/CloseOutline';
 
-import { IProps } from './interfaces';
+import { Context } from '../../containers/app/appContext';
 
 import WLIcon from '../../assets/images/app-icon.png';
 
@@ -60,7 +60,11 @@ const CloseIcon = styled(CloseOutline)`
   cursor: pointer;
 `;
 
-export const Install: React.FC<IProps> = ({ close }) => {
+export const Install: React.FC = () => {
+  const { dispatch } = useContext(Context);
+
+  const close = (): void => dispatch({ type: 'isInstall', payload: false });
+
   return (
     <Wrapper>
       <InstallBlock>

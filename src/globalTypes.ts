@@ -1,4 +1,27 @@
-export type UserData = {
+import {
+  ILoadingAction,
+  ILoggedInAction,
+  IInstallAction,
+  IUserAction,
+  IUserNameAction,
+  IGroupCodeAction,
+  IUserTokenAction,
+  ISubscribedAction,
+  IThemeAction,
+} from './globalInterfaces';
+
+export type ActionType =
+  | ILoadingAction
+  | ILoggedInAction
+  | IInstallAction
+  | IUserAction
+  | IUserNameAction
+  | IGroupCodeAction
+  | IUserTokenAction
+  | ISubscribedAction
+  | IThemeAction;
+
+export type UserDataType = {
   userName: string;
   firstName: string;
   lastName: string;

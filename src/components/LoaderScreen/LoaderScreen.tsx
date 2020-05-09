@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import styled from 'styled-components';
 
 import { Loader } from '../Loader/Loader';
 
-import { IProps } from './interfaces';
+import { Context } from '../../containers/app/appContext';
 
 import { ReactComponent as CapIcon } from '../../assets/images/svg/cap-icon.svg';
 
@@ -17,14 +17,16 @@ const Page = styled.div`
   background: linear-gradient(-25deg, #000, #3f435f);
 `;
 
-export const LoaderScreen: React.FC<IProps> = ({ loggedIn, changeUserData, stopLoading }) => {
+export const LoaderScreen: React.FC = () => {
+  const { dispatch } = useContext(Context);
+
   const checkingFingerprint = (): string | null => {
     const match = document.cookie.match(new RegExp('(^| )fingerprint=([^;]+)'));
 
     return match ? decodeURIComponent(match[2]) : null;
   };
 
-  const [fingerprint] = useState(checkingFingerprint);
+  const fingerprint = checkingFingerprint();
 
   useEffect(() => {
     fetch('http://localhost:5000/checking_remember_me', {
@@ -50,23 +52,32 @@ export const LoaderScreen: React.FC<IProps> = ({ loggedIn, changeUserData, stopL
         if (authorization) {
           document.cookie = `fingerprint=${fingerprint}`;
 
-          loggedIn();
-          changeUserData({
-            course,
-            email,
-            firstName,
-            group,
-            groupCode,
-            lastName,
-            phoneNumber,
-            userAvatar,
-            userName,
+          dispatch({
+            type: 'isLoggedIn',
+            payload: true,
+          });
+          dispatch({
+            type: 'user',
+            payload: {
+              course,
+              email,
+              firstName,
+              group,
+              groupCode,
+              lastName,
+              phoneNumber,
+              userAvatar,
+              userName,
+            },
           });
         }
 
-        stopLoading();
+        dispatch({
+          type: 'isLoading',
+          payload: false,
+        });
       });
-  }, [fingerprint]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [fingerprint, dispatch]);
 
   return (
     <Page>

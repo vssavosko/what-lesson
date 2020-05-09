@@ -1,8 +1,8 @@
-import { UserData } from '../../globalTypes';
+import { UserDataType } from '../../globalTypes';
 
 export interface IProps {
-  user: UserData;
+  user: UserDataType;
   userToken: string;
+  isSubscribed: boolean;
   theme: string;
-  changeTheme: (theme: string) => void;
 }
