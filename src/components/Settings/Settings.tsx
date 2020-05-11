@@ -3,7 +3,7 @@ import React, { useContext, useState, useRef } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
 import { ITheme, IMargin } from '../../globalInterfaces';
-import { IProps } from './interfaces';
+import { IProps, ICheckUserData } from './interfaces';
 
 import { Loader } from '../Loader/Loader';
 
@@ -159,7 +159,13 @@ const SubscriptionButton = styled.button`
   }
 `;
 
-export const Settings: React.FC<IProps> = ({ user, userToken, isSubscribed, theme }) => {
+export const Settings: React.FC<IProps> = ({
+  user,
+  userRegistrationData,
+  userToken,
+  isSubscribed,
+  theme,
+}) => {
   const { dispatch } = useContext(Context);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -179,7 +185,7 @@ export const Settings: React.FC<IProps> = ({ user, userToken, isSubscribed, them
       method: 'POST',
       body: JSON.stringify({
         userToken,
-        userGroup: user.groupCode,
+        userGroup: userRegistrationData.groupCode,
       }),
     })
       .then(() => {
@@ -201,7 +207,7 @@ export const Settings: React.FC<IProps> = ({ user, userToken, isSubscribed, them
       method: 'POST',
       body: JSON.stringify({
         userToken,
-        userGroup: user.groupCode,
+        userGroup: userRegistrationData.groupCode,
       }),
     })
       .then(() => {
@@ -214,6 +220,30 @@ export const Settings: React.FC<IProps> = ({ user, userToken, isSubscribed, them
       .catch((error) => {
         throw new Error(error);
       });
+  };
+
+  const changeUserData = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    const target = event.currentTarget;
+    const [checkUserData] = [user].filter(
+      (userData: ICheckUserData) => userData[target.name] === target.value,
+    );
+
+    if (event.key === 'Enter' && !checkUserData) {
+      const payload = {
+        key: user.key,
+        name: target.name,
+        value: target.value,
+      };
+
+      fetch(`http://localhost:5000/update_user_profile`, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }).then(() => {
+        const payload = { ...user, [target.name]: target.value };
+
+        dispatch({ type: 'user', payload });
+      });
+    }
   };
 
   return (
@@ -233,19 +263,35 @@ export const Settings: React.FC<IProps> = ({ user, userToken, isSubscribed, them
           <UserDetails>
             <Field mb="14px">
               <Label>Имя</Label>
-              <Input name="firstName" defaultValue={user.firstName} />
+              <Input
+                name="firstName"
+                defaultValue={user.firstName}
+                onKeyUp={(event): void => changeUserData(event)}
+              />
             </Field>
             <Field mb="14px">
               <Label>Фамилия</Label>
-              <Input name="lastName" defaultValue={user.lastName} />
+              <Input
+                name="lastName"
+                defaultValue={user.lastName}
+                onKeyUp={(event): void => changeUserData(event)}
+              />
             </Field>
             <Field mb="14px">
               <Label>E-mail</Label>
-              <Input name="email" defaultValue={user.email} />
+              <Input
+                name="email"
+                defaultValue={user.email}
+                onKeyUp={(event): void => changeUserData(event)}
+              />
             </Field>
             <Field>
               <Label>Телефон</Label>
-              <Input name="phoneNumber" defaultValue={user.phoneNumber} />
+              <Input
+                name="phoneNumber"
+                defaultValue={user.phoneNumber}
+                onKeyUp={(event): void => changeUserData(event)}
+              />
             </Field>
             <SeparationHeader>Учебная информация</SeparationHeader>
             <Field mb="14px">
