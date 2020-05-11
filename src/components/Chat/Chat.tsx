@@ -91,7 +91,7 @@ const MessageButton = styled.button`
   }
 `;
 
-export const Chat: React.FC<IProps> = ({ user, theme }) => {
+export const Chat: React.FC<IProps> = ({ userRegistrationData, theme }) => {
   const [eventInfo, setEventInfo] = useState({});
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<object[]>(messageData);
@@ -132,8 +132,8 @@ export const Chat: React.FC<IProps> = ({ user, theme }) => {
     });
   }, [messages, currentDate]);
 
-  const resizeTextarea = (event: React.KeyboardEvent): void => {
-    const target = event.target as HTMLInputElement;
+  const resizeTextarea = (event: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    const { target } = event;
 
     setEventInfo({ target, keyCode: event.keyCode });
   };
@@ -149,7 +149,7 @@ export const Chat: React.FC<IProps> = ({ user, theme }) => {
           click_action: 'http://localhost:3000/chat',
           icon: 'http://localhost:3000/icon-96.png',
         },
-        to: `/topics/${user.groupCode}`,
+        to: `/topics/${userRegistrationData.groupCode}`,
       };
 
       socket.emit('sendMessage', message, () => setMessage(''));

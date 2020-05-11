@@ -3,9 +3,8 @@ import {
   ILoggedInAction,
   IInstallAction,
   IUserAction,
-  IUserNameAction,
-  IGroupCodeAction,
-  IUserTokenAction,
+  IUserRegistrationAction,
+  ITokenAction,
   ISubscribedAction,
   IThemeAction,
 } from './globalInterfaces';
@@ -15,22 +14,25 @@ export type ActionType =
   | ILoggedInAction
   | IInstallAction
   | IUserAction
-  | IUserNameAction
-  | IGroupCodeAction
-  | IUserTokenAction
+  | IUserRegistrationAction
+  | ITokenAction
   | ISubscribedAction
   | IThemeAction;
 
 export type UserDataType = {
-  userName: string;
+  key: string;
   firstName: string;
   lastName: string;
   email: string;
   phoneNumber: string;
   group: string;
-  groupCode: string;
   course: string;
   userAvatar: string;
+};
+
+export type UserRegistrationDataType = {
+  userName: string;
+  groupCode: string;
 };
 
 export type ThemesType = {

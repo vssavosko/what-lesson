@@ -23,20 +23,15 @@ export const appReducer = (state: IState, action: ActionType): IState => {
         ...state,
         user: action.payload,
       };
-    case 'userName':
+    case 'userRegistrationData':
       return {
         ...state,
-        userName: action.payload,
+        userRegistrationData: action.payload,
       };
-    case 'groupCode':
+    case 'token':
       return {
         ...state,
-        groupCode: action.payload,
-      };
-    case 'userToken':
-      return {
-        ...state,
-        userToken: action.payload,
+        token: action.payload,
       };
     case 'isSubscribed':
       return {

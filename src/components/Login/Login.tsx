@@ -139,6 +139,7 @@ export const LogInScreen: React.FC = () => {
 
           if (user.authorization) {
             const {
+              key,
               course,
               email,
               firstName,
@@ -148,13 +149,14 @@ export const LogInScreen: React.FC = () => {
               phoneNumber,
               userAvatar,
               userName,
+              fingerprint,
             } = user;
 
-            if (isChecked && !user.fingerprint.length) {
+            if (isChecked && !fingerprint.length) {
               const payload = {
-                key: user.key,
-                email: user.email,
-                token: btoa(`${user.email} ${user.key} ${window.navigator.userAgent}`),
+                key,
+                email,
+                token: btoa(`${email} ${key} ${window.navigator.userAgent}`),
               };
 
               fetch(`http://localhost:5000/generating_fingerprint`, {
@@ -164,8 +166,9 @@ export const LogInScreen: React.FC = () => {
                 .then((res): Promise<{ fingerprint: string }> => res.json())
                 .then((res): void => {
                   const payload = {
-                    key: user.key,
-                    fingerprint: res.fingerprint,
+                    key,
+                    name: 'fingerprint',
+                    value: res.fingerprint,
                   };
 
                   fetch(`http://localhost:5000/update_user_profile`, {
@@ -175,27 +178,30 @@ export const LogInScreen: React.FC = () => {
                     document.cookie = `fingerprint=${res.fingerprint}`;
                   });
                 });
-            } else if (isChecked && user.fingerprint.length) {
-              document.cookie = `fingerprint=${user.fingerprint}`;
+            } else if (isChecked && fingerprint.length) {
+              document.cookie = `fingerprint=${fingerprint}`;
             }
 
             dispatch({
-              type: 'isLoggedIn',
-              payload: true,
+              type: 'userRegistrationData',
+              payload: { userName, groupCode },
             });
             dispatch({
               type: 'user',
               payload: {
+                key,
                 course,
                 email,
                 firstName,
                 group,
-                groupCode,
                 lastName,
                 phoneNumber,
                 userAvatar,
-                userName,
               },
+            });
+            dispatch({
+              type: 'isLoggedIn',
+              payload: true,
             });
           } else {
             setAuthorizationAttempt(false);

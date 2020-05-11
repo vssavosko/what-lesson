@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 
 import styled, { ThemeProvider } from 'styled-components';
 
@@ -26,7 +26,7 @@ const Curtain = styled.div`
   transform: translateY(${window.innerHeight}px);
   transition: 0.8s;
 `;
-const HideCurtainButton = styled.div`
+const HideCurtainButton = styled(HideCurtainButtonIcon)`
   fill: ${(props: ITheme): string => props.theme.elementsColor};
   padding: 10px 0 24px 0;
 `;
@@ -84,7 +84,7 @@ const TeacherInfo = styled.div`
   color: ${(props: ITheme): string => props.theme.mainTextColor};
 `;
 
-export const Schedule = React.forwardRef((props: IProps, ref: React.Ref<HTMLDivElement>) => {
+export const Schedule = forwardRef((props: IProps, ref: React.Ref<HTMLDivElement>) => {
   const [initialPoint, setInitialPoint] = useState({ pageY: 0 });
 
   const { currentSchedule, hideSchedule, theme } = props;
@@ -122,9 +122,7 @@ export const Schedule = React.forwardRef((props: IProps, ref: React.Ref<HTMLDivE
         onTouchMove={(event): void => touchMove(event)}
         ref={ref}
       >
-        <HideCurtainButton>
-          <HideCurtainButtonIcon />
-        </HideCurtainButton>
+        <HideCurtainButton />
         {currentSchedule &&
           currentSchedule.map((lessonData, index) => {
             return (

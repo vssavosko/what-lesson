@@ -1,13 +1,12 @@
-import { UserDataType, ThemesType } from './globalTypes';
+import { UserDataType, UserRegistrationDataType, ThemesType } from './globalTypes';
 
 export interface IState {
   isLoading: boolean;
   isLoggedIn: boolean;
   isInstall: boolean;
   user: UserDataType;
-  userName: string;
-  groupCode: string;
-  userToken: string;
+  userRegistrationData: UserRegistrationDataType;
+  token: string;
   isSubscribed: boolean;
   theme: string;
 }
@@ -32,18 +31,13 @@ export interface IUserAction {
   payload: UserDataType;
 }
 
-export interface IUserNameAction {
-  type: 'userName';
-  payload: string;
+export interface IUserRegistrationAction {
+  type: 'userRegistrationData';
+  payload: UserRegistrationDataType;
 }
 
-export interface IGroupCodeAction {
-  type: 'groupCode';
-  payload: string;
-}
-
-export interface IUserTokenAction {
-  type: 'userToken';
+export interface ITokenAction {
+  type: 'token';
   payload: string;
 }
 

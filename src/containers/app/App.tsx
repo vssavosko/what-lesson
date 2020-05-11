@@ -13,7 +13,7 @@ import { StudentsList } from '../../components/StudentsList/StudentsList';
 import { Settings } from '../../components/Settings/Settings';
 import { TabBar } from '../../components/TabBar/TabBar';
 
-import { UserDataType } from '../../globalTypes';
+import { UserDataType, UserRegistrationDataType } from '../../globalTypes';
 import { ITheme } from '../../globalInterfaces';
 
 import { Context } from './appContext';
@@ -123,15 +123,18 @@ const Wrapper = styled.div`
 
 export const App: React.FC = () => {
   const initialUser: UserDataType = {
-    userName: '',
+    key: '',
     firstName: '',
     lastName: '',
     email: '',
     phoneNumber: '',
     group: '',
-    groupCode: '',
     course: '',
     userAvatar: '',
+  };
+  const initialUserRegistrationData: UserRegistrationDataType = {
+    userName: '',
+    groupCode: '',
   };
   const initialSubscribe = (): boolean => !!localStorage.getItem('isSubscribed');
   const initialTheme = (): string => localStorage.getItem('theme') || 'light';
@@ -140,9 +143,8 @@ export const App: React.FC = () => {
     isLoggedIn: false,
     isInstall: false,
     user: initialUser,
-    userName: '',
-    groupCode: '',
-    userToken: '',
+    userRegistrationData: initialUserRegistrationData,
+    token: '',
     isSubscribed: initialSubscribe(),
     theme: initialTheme(),
   };
@@ -162,28 +164,38 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch({ type: 'userName', payload: state.user.userName });
-    dispatch({ type: 'groupCode', payload: state.user.groupCode });
-  }, [state.user]);
+    if (
+      state.userRegistrationData?.userName?.length &&
+      state.userRegistrationData?.groupCode?.length
+    ) {
+      if (isIos() && !isInStandaloneMode()) dispatch({ type: 'isInstall', payload: true });
 
-  useEffect(() => {
-    if (isIos() && !isInStandaloneMode()) dispatch({ type: 'isInstall', payload: true });
+      getUserToken().then((token) =>
+        dispatch({
+          type: 'token',
+          payload: token,
+        }),
+      );
 
-    getUserToken().then((token) => dispatch({ type: 'userToken', payload: token }));
-
-    if (state.userName?.length && state.groupCode?.length) {
-      socket.emit('join', { username: state.userName, group: state.groupCode }, (error: string) => {
-        if (error) {
-          throw new Error(error);
-        }
-      });
+      socket.emit(
+        'join',
+        {
+          username: state.userRegistrationData?.userName,
+          group: state.userRegistrationData?.groupCode,
+        },
+        (error: string) => {
+          if (error) {
+            throw new Error(error);
+          }
+        },
+      );
     }
 
     return (): void => {
       socket.emit('disconnect');
       socket.off('');
     };
-  }, [state.userName, state.groupCode]);
+  }, [state.userRegistrationData]);
 
   useEffect(() => {
     changingStatusBarColor(state.theme);
@@ -210,7 +222,9 @@ export const App: React.FC = () => {
                 />
                 <Route
                   path="/chat"
-                  render={(): JSX.Element => <Chat user={state.user} theme={state.theme} />}
+                  render={(): JSX.Element => (
+                    <Chat userRegistrationData={state.userRegistrationData} theme={state.theme} />
+                  )}
                 />
                 <Route
                   path="/students-list"
@@ -221,7 +235,8 @@ export const App: React.FC = () => {
                   render={(): JSX.Element => (
                     <Settings
                       user={state.user}
-                      userToken={state.userToken}
+                      userRegistrationData={state.userRegistrationData}
+                      userToken={state.token}
                       isSubscribed={state.isSubscribed}
                       theme={state.theme}
                     />

@@ -36,6 +36,7 @@ export const LoaderScreen: React.FC = () => {
       .then((res) => res.json())
       .then((res) => {
         const {
+          key,
           course,
           email,
           firstName,
@@ -53,22 +54,25 @@ export const LoaderScreen: React.FC = () => {
           document.cookie = `fingerprint=${fingerprint}`;
 
           dispatch({
-            type: 'isLoggedIn',
-            payload: true,
+            type: 'userRegistrationData',
+            payload: { userName, groupCode },
           });
           dispatch({
             type: 'user',
             payload: {
+              key,
               course,
               email,
               firstName,
               group,
-              groupCode,
               lastName,
               phoneNumber,
               userAvatar,
-              userName,
             },
+          });
+          dispatch({
+            type: 'isLoggedIn',
+            payload: true,
           });
         }
 
