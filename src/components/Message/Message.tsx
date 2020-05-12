@@ -21,7 +21,7 @@ const MessageBlock = styled.div`
   margin-bottom: ${(props: IPadding): string | undefined => props.pb};
   padding-left: 16px;
 `;
-const UserPhoto = styled.div`
+const UserAvatar = styled.div`
   width: 32px;
   height: 32px;
   background-color: purple;
@@ -62,7 +62,7 @@ export const Message: React.FC<IProps> = ({ message, lastMessage, isShowStartDat
     <ThemeProvider theme={themeSelection(theme)}>
       {isShowStartDate && <MessageDateSent>сегодня</MessageDateSent>}
       <MessageBlock pb={lastMessage ? '0' : '5px'}>
-        <UserPhoto />
+        <UserAvatar />
         <MessageText>
           {text}
           <MessageTimeSent>{sendingTime}</MessageTimeSent>

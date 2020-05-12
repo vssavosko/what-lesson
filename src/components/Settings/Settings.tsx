@@ -5,14 +5,12 @@ import styled, { ThemeProvider } from 'styled-components';
 import { ITheme, IMargin } from '../../globalInterfaces';
 import { IProps, ICheckUserData } from './interfaces';
 
+import { UserAvatarDefault } from '../UserAvatarDefault/UserAvatarDefault';
 import { Loader } from '../Loader/Loader';
 
 import { Context } from '../../containers/app/appContext';
 
 import { themeSelection } from '../../utils/themeSelection';
-
-import UserAvatar from '../../assets/images/user-avatar.png';
-import { ReactComponent as UserIconDefault } from '../../assets/images/svg/user-icon.svg';
 
 const Page = styled.div`
   position: relative;
@@ -38,7 +36,7 @@ const UserInfoPreview = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const UserIcon = styled.div`
+const UserAvatar = styled.div`
   position: relative;
   width: 60px;
   height: 60px;
@@ -47,12 +45,10 @@ const UserIcon = styled.div`
   overflow: hidden;
   cursor: pointer;
 `;
-const UserIconCustom = styled.img`
-  position: relative;
-  max-width: 100%;
-  z-index: 2;
+const UserAvatarCustom = styled.img`
+  width: 100%;
 `;
-const UserIconChangeLabel = styled.div`
+const UserAvatarChangeLabel = styled.div`
   position: absolute;
   display: flex;
   justify-content: center;
@@ -66,11 +62,11 @@ const UserIconChangeLabel = styled.div`
   padding-top: 3px;
   z-index: 3;
 `;
-const UploadIcon = styled.input`
+const UploadAvatar = styled.input`
   position: absolute;
   width: 100%;
   height: 100%;
-  left: 0;
+  visibility: hidden;
 `;
 const UserName = styled.p`
   width: 100%;
@@ -170,9 +166,75 @@ export const Settings: React.FC<IProps> = ({
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const refUploadIcon = useRef<HTMLInputElement>(null);
+  const refUploadAvatar = useRef<HTMLInputElement>(null);
 
-  const changeUserIcon = (): void => refUploadIcon.current?.click();
+  const clickUserAvatar = (): void => refUploadAvatar.current?.click();
+
+  const changeUserAvatar = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    event.persist();
+
+    const { files } = event.target;
+
+    if (files?.length) {
+      const formData = new FormData();
+
+      formData.append('user-avatar', files[0], user.key);
+
+      fetch(`http://localhost:5000/upload_user_avatar`, {
+        method: 'POST',
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.upload) {
+            const payload = {
+              key: user.key,
+              name: 'userAvatar',
+              value: res.path,
+            };
+
+            fetch(`http://localhost:5000/update_user_profile`, {
+              method: 'POST',
+              body: JSON.stringify(payload),
+            }).then(() => {
+              const payload = { ...user, userAvatar: `http://localhost:5000/${res.path}` };
+
+              dispatch({ type: 'user', payload });
+            });
+          }
+        })
+        .catch((error) => {
+          throw new Error(error);
+        })
+        .finally(() => {
+          event.target.value = '';
+        });
+    }
+  };
+
+  const changeUserData = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    const target = event.currentTarget;
+    const [checkUserData] = [user].filter(
+      (userData: ICheckUserData) => userData[target.name] === target.value,
+    );
+
+    if (event.key === 'Enter' && !checkUserData) {
+      const payload = {
+        key: user.key,
+        name: target.name,
+        value: target.value,
+      };
+
+      fetch(`http://localhost:5000/update_user_profile`, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }).then(() => {
+        const payload = { ...user, [target.name]: target.value };
+
+        dispatch({ type: 'user', payload });
+      });
+    }
+  };
 
   const changeTheme = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     dispatch({ type: 'theme', payload: event.target.value });
@@ -222,40 +284,25 @@ export const Settings: React.FC<IProps> = ({
       });
   };
 
-  const changeUserData = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-    const target = event.currentTarget;
-    const [checkUserData] = [user].filter(
-      (userData: ICheckUserData) => userData[target.name] === target.value,
-    );
-
-    if (event.key === 'Enter' && !checkUserData) {
-      const payload = {
-        key: user.key,
-        name: target.name,
-        value: target.value,
-      };
-
-      fetch(`http://localhost:5000/update_user_profile`, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      }).then(() => {
-        const payload = { ...user, [target.name]: target.value };
-
-        dispatch({ type: 'user', payload });
-      });
-    }
-  };
-
   return (
     <ThemeProvider theme={themeSelection(theme)}>
       <Page>
         <SettingsWindow>
           <UserInfoPreview>
-            <UserIcon onClick={changeUserIcon}>
-              {UserAvatar ? <UserIconCustom src={UserAvatar} /> : <UserIconDefault />}
-              <UserIconChangeLabel>правка</UserIconChangeLabel>
-              <UploadIcon type="file" ref={refUploadIcon} />
-            </UserIcon>
+            <UserAvatar onClick={clickUserAvatar}>
+              {user.userAvatar.length ? (
+                <UserAvatarCustom src={user.userAvatar} />
+              ) : (
+                <UserAvatarDefault theme={theme} />
+              )}
+              <UserAvatarChangeLabel>правка</UserAvatarChangeLabel>
+              <UploadAvatar
+                type="file"
+                name="user-avatar"
+                onChange={(event): void => changeUserAvatar(event)}
+                ref={refUploadAvatar}
+              />
+            </UserAvatar>
             <UserName>{`${user.firstName} ${user.lastName}`}</UserName>
             <UserContacts>e-mail: {user.email}</UserContacts>
             <UserContacts>телефон: {user.phoneNumber}</UserContacts>
