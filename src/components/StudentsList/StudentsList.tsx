@@ -47,7 +47,7 @@ const User = styled.div`
     margin-bottom: 0;
   }
 `;
-const UserIcon = styled.div`
+const UserAvatar = styled.div`
   width: 60px;
   height: 60px;
   background-color: purple;
@@ -73,7 +73,7 @@ export const StudentsList: React.FC<IProps> = ({ theme }) => {
           <List>
             {studentsData.map((student, index) => (
               <User key={index}>
-                <UserIcon />
+                <UserAvatar />
                 <UserInfo>
                   <UserText ff="SFProTextSemibold">{student.username}</UserText>
                   <UserText ff="SFProTextRegular">{student.email}</UserText>

@@ -4,6 +4,7 @@ import { CSSTransition } from 'react-transition-group';
 import styled, { ThemeProvider } from 'styled-components';
 import Swiper from 'react-id-swiper';
 
+import { UserAvatarDefault } from '../UserAvatarDefault/UserAvatarDefault';
 import { Schedule } from '../Schedule/Schedule';
 
 import { ITheme, IPadding } from '../../globalInterfaces';
@@ -14,8 +15,6 @@ import { lessonsData } from '../../utils/mockData';
 
 import 'swiper/css/swiper.min.css';
 
-import UserAvatar from '../../assets/images/user-avatar.png';
-import { ReactComponent as UserIconDefault } from '../../assets/images/svg/user-icon.svg';
 import { ReactComponent as DotsIcon } from '../../assets/images/svg/dots-icon.svg';
 
 const Page = styled.div`
@@ -35,14 +34,14 @@ const Greeting = styled.div`
     width: 220px;
   }
 `;
-const UserIcon = styled.div`
+const UserAvatar = styled.div`
   width: 60px;
   height: 60px;
   border-radius: 50%;
   overflow: hidden;
 `;
-const UserIconCustom = styled.img`
-  max-width: 100%;
+const UserAvatarCustom = styled.img`
+  width: 100%;
 `;
 const GreetingText = styled.p`
   margin-top: 34px;
@@ -243,9 +242,13 @@ export const Main: React.FC<IProps> = ({ user, theme }) => {
     <ThemeProvider theme={themeSelection(theme)}>
       <Page>
         <Greeting>
-          <UserIcon>
-            {UserAvatar ? <UserIconCustom src={UserAvatar} /> : <UserIconDefault />}
-          </UserIcon>
+          <UserAvatar>
+            {user.userAvatar.length ? (
+              <UserAvatarCustom src={user.userAvatar} />
+            ) : (
+              <UserAvatarDefault theme={theme} />
+            )}
+          </UserAvatar>
           <GreetingText>Привет, {user.firstName}</GreetingText>
         </Greeting>
         <Tabs>
