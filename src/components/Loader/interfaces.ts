@@ -1,15 +1,15 @@
-import { ThemesType } from '../../globalTypes';
+import { ThemeType } from '../../globalTypes';
 
 export interface IStyledProps {
   width: string;
-  theme: ThemesType;
+  theme: ThemeType;
   customTheme: string;
   indents: string;
 }
 
 export interface IProps {
   width?: string;
-  theme?: ThemesType | object;
+  theme?: ThemeType | object;
   customTheme?: string;
   indents?: string;
 }

@@ -1,13 +1,14 @@
-import { UserDataType, UserRegistrationDataType, ThemesType } from './globalTypes';
+import { UserRegistrationType, UserType, ScheduleType, ThemeType } from './globalTypes';
 
 export interface IState {
   isLoading: boolean;
   isLoggedIn: boolean;
   isInstall: boolean;
-  user: UserDataType;
-  userRegistrationData: UserRegistrationDataType;
-  token: string;
   isSubscribed: boolean;
+  token: string;
+  userRegistrationData: UserRegistrationType;
+  user: UserType;
+  schedule: ScheduleType[][];
   theme: string;
 }
 
@@ -26,14 +27,9 @@ export interface IInstallAction {
   payload: boolean;
 }
 
-export interface IUserAction {
-  type: 'user';
-  payload: UserDataType;
-}
-
-export interface IUserRegistrationAction {
-  type: 'userRegistrationData';
-  payload: UserRegistrationDataType;
+export interface ISubscribedAction {
+  type: 'isSubscribed';
+  payload: boolean;
 }
 
 export interface ITokenAction {
@@ -41,9 +37,19 @@ export interface ITokenAction {
   payload: string;
 }
 
-export interface ISubscribedAction {
-  type: 'isSubscribed';
-  payload: boolean;
+export interface IUserRegistrationAction {
+  type: 'userRegistrationData';
+  payload: UserRegistrationType;
+}
+
+export interface IUserAction {
+  type: 'user';
+  payload: UserType;
+}
+
+export interface IScheduleAction {
+  type: 'schedule';
+  payload: ScheduleType[][];
 }
 
 export interface IThemeAction {
@@ -80,5 +86,5 @@ export interface IMargin {
 }
 
 export interface ITheme {
-  theme: ThemesType;
+  theme: ThemeType;
 }

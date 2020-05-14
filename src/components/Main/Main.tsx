@@ -7,11 +7,11 @@ import Swiper from 'react-id-swiper';
 import { UserAvatarDefault } from '../UserAvatarDefault/UserAvatarDefault';
 import { Schedule } from '../Schedule/Schedule';
 
+import { ScheduleType } from '../../globalTypes';
 import { ITheme, IPadding } from '../../globalInterfaces';
-import { IProps, ILesson } from './interfaces';
+import { IProps } from './interfaces';
 
 import { themeSelection } from '../../utils/themeSelection';
-import { lessonsData } from '../../utils/mockData';
 
 import 'swiper/css/swiper.min.css';
 
@@ -153,7 +153,7 @@ const PrincipalValue = styled.p`
   color: ${(props: ITheme): string => props.theme.mainTextColor};
 `;
 
-export const Main: React.FC<IProps> = ({ user, theme }) => {
+export const Main: React.FC<IProps> = ({ user, schedule, theme }) => {
   const [swiper, setSwiper] = useState<any>({});
   const [initialPoint, setInitialPoint] = useState({ pageY: 0 });
   const [showSchedule, setShowSchedule] = useState(false);
@@ -220,8 +220,8 @@ export const Main: React.FC<IProps> = ({ user, theme }) => {
 
   const numberOfLessons = (lessons: object[]): number => lessons.length;
 
-  const currentScheduleData = (): ILesson[] =>
-    Object.keys(swiper).length ? lessonsData[swiper.activeIndex] : [];
+  const currentScheduleData = (): ScheduleType[] =>
+    Object.keys(swiper).length ? schedule[swiper.activeIndex] : [];
 
   const hideSchedule = (): void => setShowSchedule(false);
 
@@ -268,22 +268,22 @@ export const Main: React.FC<IProps> = ({ user, theme }) => {
                       <Circle>
                         <CircleText>{day}</CircleText>
                       </Circle>
-                      {lessonsData[index] && (
+                      {schedule[index] && (
                         <DotsButton onClick={(): void => clickOnDotsButton()}>
                           <DotsIcon />
                         </DotsButton>
                       )}
                     </IconsBar>
                     <TabContent>
-                      {lessonsData[index] && (
+                      {schedule[index] && (
                         <SideValues pb="5px">
-                          {`${numberOfLessons(lessonsData[index])} ${
-                            numberOfLessons(lessonsData[index]) > 1 ? 'пары' : 'пара'
+                          {`${numberOfLessons(schedule[index])} ${
+                            numberOfLessons(schedule[index]) > 1 ? 'пары' : 'пара'
                           }`}
                         </SideValues>
                       )}
-                      {lessonsData[index] &&
-                        lessonsData[index].map((lesson, index) =>
+                      {schedule[index] &&
+                        schedule[index].map((lesson, index) =>
                           index < 2 ? (
                             <PrincipalValue key={index} pb="5px">
                               {lesson.lessonName}
@@ -292,12 +292,12 @@ export const Main: React.FC<IProps> = ({ user, theme }) => {
                             false
                           ),
                         )}
-                      {!lessonsData[index] && (
+                      {!schedule[index] && (
                         <PrincipalValue key={index} pb="5px">
                           Занятий нет
                         </PrincipalValue>
                       )}
-                      {lessonsData[index] && lessonsData[index].length > 2 && (
+                      {schedule[index] && schedule[index].length > 2 && (
                         <SideValues>И другие</SideValues>
                       )}
                     </TabContent>

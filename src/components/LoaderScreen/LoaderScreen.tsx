@@ -36,18 +36,19 @@ export const LoaderScreen: React.FC = () => {
       .then((res) => res.json())
       .then((res) => {
         const {
+          authorization,
           key,
-          course,
-          email,
+          userName,
+          userAvatar,
           firstName,
+          lastName,
+          email,
+          phoneNumber,
+          course,
           group,
           groupCode,
-          lastName,
-          phoneNumber,
-          userAvatar,
-          userName,
+          schedule,
           fingerprint,
-          authorization,
         } = res;
 
         if (authorization) {
@@ -61,14 +62,18 @@ export const LoaderScreen: React.FC = () => {
             type: 'user',
             payload: {
               key,
-              course,
-              email,
-              firstName,
-              group,
-              lastName,
-              phoneNumber,
               userAvatar,
+              firstName,
+              lastName,
+              email,
+              phoneNumber,
+              course,
+              group,
             },
+          });
+          dispatch({
+            type: 'schedule',
+            payload: schedule,
           });
           dispatch({
             type: 'isLoggedIn',
