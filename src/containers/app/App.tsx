@@ -13,7 +13,7 @@ import { StudentsList } from '../../components/StudentsList/StudentsList';
 import { Settings } from '../../components/Settings/Settings';
 import { TabBar } from '../../components/TabBar/TabBar';
 
-import { UserDataType, UserRegistrationDataType } from '../../globalTypes';
+import { UserRegistrationType, UserType, ScheduleType } from '../../globalTypes';
 import { ITheme } from '../../globalInterfaces';
 
 import { Context } from './appContext';
@@ -122,30 +122,42 @@ const Wrapper = styled.div`
 `;
 
 export const App: React.FC = () => {
-  const initialUser: UserDataType = {
+  const initialSubscribe = (): boolean => !!localStorage.getItem('isSubscribed');
+  const initialUserRegistrationData: UserRegistrationType = {
+    userName: '',
+    groupCode: '',
+  };
+  const initialUser: UserType = {
     key: '',
+    userAvatar: '',
     firstName: '',
     lastName: '',
     email: '',
     phoneNumber: '',
-    group: '',
     course: '',
-    userAvatar: '',
+    group: '',
   };
-  const initialUserRegistrationData: UserRegistrationDataType = {
-    userName: '',
-    groupCode: '',
-  };
-  const initialSubscribe = (): boolean => !!localStorage.getItem('isSubscribed');
+  const initialSchedule: ScheduleType[][] = [
+    [
+      {
+        id: 0,
+        time: '',
+        lessonName: '',
+        place: '',
+        teacherName: '',
+      },
+    ],
+  ];
   const initialTheme = (): string => localStorage.getItem('theme') || 'light';
   const initialState = {
     isLoading: true,
     isLoggedIn: false,
     isInstall: false,
-    user: initialUser,
-    userRegistrationData: initialUserRegistrationData,
-    token: '',
     isSubscribed: initialSubscribe(),
+    token: '',
+    userRegistrationData: initialUserRegistrationData,
+    user: initialUser,
+    schedule: initialSchedule,
     theme: initialTheme(),
   };
 
@@ -164,12 +176,12 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
+    if (isIos() && !isInStandaloneMode()) dispatch({ type: 'isInstall', payload: true });
+
     if (
       state.userRegistrationData?.userName?.length &&
       state.userRegistrationData?.groupCode?.length
     ) {
-      if (isIos() && !isInStandaloneMode()) dispatch({ type: 'isInstall', payload: true });
-
       getUserToken().then((token) =>
         dispatch({
           type: 'token',
@@ -218,7 +230,9 @@ export const App: React.FC = () => {
                 <Route
                   path="/"
                   exact
-                  render={(): JSX.Element => <Main user={state.user} theme={state.theme} />}
+                  render={(): JSX.Element => (
+                    <Main user={state.user} schedule={state.schedule} theme={state.theme} />
+                  )}
                 />
                 <Route
                   path="/chat"
@@ -234,10 +248,10 @@ export const App: React.FC = () => {
                   path="/settings"
                   render={(): JSX.Element => (
                     <Settings
-                      user={state.user}
-                      userRegistrationData={state.userRegistrationData}
-                      userToken={state.token}
                       isSubscribed={state.isSubscribed}
+                      userToken={state.token}
+                      userRegistrationData={state.userRegistrationData}
+                      user={state.user}
                       theme={state.theme}
                     />
                   )}

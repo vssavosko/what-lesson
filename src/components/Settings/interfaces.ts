@@ -1,13 +1,13 @@
-import { UserDataType, UserRegistrationDataType } from '../../globalTypes';
+import { UserRegistrationType, UserType, ScheduleType } from '../../globalTypes';
 
 export interface IProps {
-  user: UserDataType;
-  userRegistrationData: UserRegistrationDataType;
-  userToken: string;
   isSubscribed: boolean;
+  userToken: string;
+  userRegistrationData: UserRegistrationType;
+  user: UserType;
   theme: string;
 }
 
 export interface ICheckUserData {
-  [key: string]: string | boolean | number;
+  [key: string]: string | boolean | number | ScheduleType[][];
 }

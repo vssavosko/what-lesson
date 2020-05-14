@@ -66,6 +66,7 @@ const UploadAvatar = styled.input`
   position: absolute;
   width: 100%;
   height: 100%;
+  left: 0;
   visibility: hidden;
 `;
 const UserName = styled.p`
@@ -156,10 +157,10 @@ const SubscriptionButton = styled.button`
 `;
 
 export const Settings: React.FC<IProps> = ({
-  user,
-  userRegistrationData,
-  userToken,
   isSubscribed,
+  userToken,
+  userRegistrationData,
+  user,
   theme,
 }) => {
   const { dispatch } = useContext(Context);
@@ -251,7 +252,7 @@ export const Settings: React.FC<IProps> = ({
       }),
     })
       .then(() => {
-        localStorage.setItem('isSubscribed', userToken);
+        localStorage.setItem('isSubscribed', 'true');
 
         dispatch({ type: 'isSubscribed', payload: true });
 

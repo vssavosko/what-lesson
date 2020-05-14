@@ -1,13 +1,7 @@
-import { UserDataType } from '../../globalTypes';
+import { UserType, ScheduleType } from '../../globalTypes';
 
 export interface IProps {
-  user: UserDataType;
+  user: UserType;
+  schedule: ScheduleType[][];
   theme: string;
-}
-export interface ILesson {
-  id: number;
-  time: string;
-  lessonName: string;
-  place: string;
-  teacherName: string;
 }

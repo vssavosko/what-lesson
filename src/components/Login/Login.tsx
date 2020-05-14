@@ -107,8 +107,8 @@ const SubmitButton = styled.button`
 export const LogInScreen: React.FC = () => {
   const { dispatch } = useContext(Context);
 
-  const [authorizationAttempt, setAuthorizationAttempt] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [isAuthorizationAttempt, setIsAuthorizationAttempt] = useState(false);
+  const [error, setError] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
 
   const refEmail = useRef<HTMLInputElement>(null);
@@ -117,13 +117,13 @@ export const LogInScreen: React.FC = () => {
   const authorization = (event: React.MouseEvent): void => {
     event.preventDefault();
 
-    setAuthorizationAttempt(true);
+    setIsAuthorizationAttempt(true);
   };
 
   const toggleCheckbox = (): void => setIsChecked(!isChecked);
 
   useEffect(() => {
-    if (authorizationAttempt) {
+    if (isAuthorizationAttempt) {
       const payload = {
         email: refEmail?.current?.value,
         password: refPassword?.current?.value,
@@ -135,22 +135,21 @@ export const LogInScreen: React.FC = () => {
       })
         .then((res) => res.json())
         .then((res) => {
-          const user = res;
-
-          if (user.authorization) {
+          if (res.authorization && !res.error) {
             const {
               key,
-              course,
-              email,
+              userName,
+              userAvatar,
               firstName,
+              lastName,
+              email,
+              phoneNumber,
+              course,
               group,
               groupCode,
-              lastName,
-              phoneNumber,
-              userAvatar,
-              userName,
+              schedule,
               fingerprint,
-            } = user;
+            } = res;
 
             if (isChecked && !fingerprint.length) {
               const payload = {
@@ -190,37 +189,41 @@ export const LogInScreen: React.FC = () => {
               type: 'user',
               payload: {
                 key,
-                course,
-                email,
-                firstName,
-                group,
-                lastName,
-                phoneNumber,
                 userAvatar,
+                firstName,
+                lastName,
+                email,
+                phoneNumber,
+                course,
+                group,
               },
+            });
+            dispatch({
+              type: 'schedule',
+              payload: schedule,
             });
             dispatch({
               type: 'isLoggedIn',
               payload: true,
             });
           } else {
-            setAuthorizationAttempt(false);
-            setIsError(true);
+            setIsAuthorizationAttempt(false);
+            setError(res.error);
           }
         })
         .catch((error) => {
           throw new Error(error);
         });
     }
-  }, [authorizationAttempt, isChecked, dispatch]);
+  }, [isAuthorizationAttempt, isChecked, dispatch]);
 
   return (
     <Page>
       <CapIcon />
       <LoginForm>
         <Field mt="30px" mb="20px" type="email" placeholder="E-mail" ref={refEmail} />
-        <Field mb={isError ? '20px' : ''} type="password" placeholder="Пароль" ref={refPassword} />
-        {isError && <ErrorMessage>Неправильный Email или Пароль.</ErrorMessage>}
+        <Field mb={error ? '20px' : ''} type="password" placeholder="Пароль" ref={refPassword} />
+        {error && <ErrorMessage>{error}</ErrorMessage>}
         <RememberMeBlock>
           <RememberMeLabel onClick={toggleCheckbox}>Запомнить меня</RememberMeLabel>
           <RememberMeCheckbox checkboxState={isChecked} onClick={toggleCheckbox} />
@@ -228,9 +231,9 @@ export const LogInScreen: React.FC = () => {
         <SubmitButton
           onClick={(event: React.MouseEvent): void => authorization(event)}
           type="submit"
-          disabled={authorizationAttempt}
+          disabled={isAuthorizationAttempt}
         >
-          {authorizationAttempt ? <Loader customTheme="#181a24" /> : 'войти'}
+          {isAuthorizationAttempt ? <Loader customTheme="#181a24" /> : 'войти'}
         </SubmitButton>
       </LoginForm>
     </Page>

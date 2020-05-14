@@ -18,25 +18,30 @@ export const appReducer = (state: IState, action: ActionType): IState => {
         ...state,
         isInstall: action.payload,
       };
-    case 'user':
+    case 'isSubscribed':
       return {
         ...state,
-        user: action.payload,
-      };
-    case 'userRegistrationData':
-      return {
-        ...state,
-        userRegistrationData: action.payload,
+        isSubscribed: action.payload,
       };
     case 'token':
       return {
         ...state,
         token: action.payload,
       };
-    case 'isSubscribed':
+    case 'userRegistrationData':
       return {
         ...state,
-        isSubscribed: action.payload,
+        userRegistrationData: action.payload,
+      };
+    case 'user':
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case 'schedule':
+      return {
+        ...state,
+        schedule: action.payload,
       };
     case 'theme':
       return {

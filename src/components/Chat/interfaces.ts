@@ -1,7 +1,7 @@
-import { UserRegistrationDataType } from '../../globalTypes';
+import { UserRegistrationType } from '../../globalTypes';
 
 export interface IProps {
-  userRegistrationData: UserRegistrationDataType;
+  userRegistrationData: UserRegistrationType;
   theme: string;
 }
 
