@@ -148,6 +148,7 @@ export const LogInScreen: React.FC = () => {
               group,
               groupCode,
               schedule,
+              listOfStudents,
               fingerprint,
             } = res;
 
@@ -201,6 +202,10 @@ export const LogInScreen: React.FC = () => {
             dispatch({
               type: 'schedule',
               payload: schedule,
+            });
+            dispatch({
+              type: 'listOfStudents',
+              payload: listOfStudents,
             });
             dispatch({
               type: 'isLoggedIn',

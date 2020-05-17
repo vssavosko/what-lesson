@@ -2,7 +2,6 @@ import { UserRegistrationType } from '../../globalTypes';
 
 export interface IProps {
   userRegistrationData: UserRegistrationType;
-  theme: string;
 }
 
 export interface IMessage {

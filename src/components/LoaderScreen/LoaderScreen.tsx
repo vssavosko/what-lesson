@@ -48,6 +48,7 @@ export const LoaderScreen: React.FC = () => {
           group,
           groupCode,
           schedule,
+          listOfStudents,
           fingerprint,
         } = res;
 
@@ -76,6 +77,10 @@ export const LoaderScreen: React.FC = () => {
             payload: schedule,
           });
           dispatch({
+            type: 'listOfStudents',
+            payload: listOfStudents,
+          });
+          dispatch({
             type: 'isLoggedIn',
             payload: true,
           });
@@ -91,7 +96,7 @@ export const LoaderScreen: React.FC = () => {
   return (
     <Page>
       <CapIcon />
-      <Loader indents="50px 0 0 0" />
+      <Loader customTheme="#7394bf" indents="50px 0 0 0" />
     </Page>
   );
 };

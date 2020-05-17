@@ -1,4 +1,10 @@
-import { UserRegistrationType, UserType, ScheduleType, ThemeType } from './globalTypes';
+import {
+  UserRegistrationType,
+  UserType,
+  ScheduleType,
+  StudentsType,
+  ThemeType,
+} from './globalTypes';
 
 export interface IState {
   isLoading: boolean;
@@ -9,6 +15,7 @@ export interface IState {
   userRegistrationData: UserRegistrationType;
   user: UserType;
   schedule: ScheduleType[][];
+  listOfStudents: StudentsType[];
   theme: string;
 }
 
@@ -50,6 +57,11 @@ export interface IUserAction {
 export interface IScheduleAction {
   type: 'schedule';
   payload: ScheduleType[][];
+}
+
+export interface IStudentsAction {
+  type: 'listOfStudents';
+  payload: StudentsType[];
 }
 
 export interface IThemeAction {

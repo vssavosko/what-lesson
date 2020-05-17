@@ -43,6 +43,11 @@ export const appReducer = (state: IState, action: ActionType): IState => {
         ...state,
         schedule: action.payload,
       };
+    case 'listOfStudents':
+      return {
+        ...state,
+        listOfStudents: action.payload,
+      };
     case 'theme':
       return {
         ...state,

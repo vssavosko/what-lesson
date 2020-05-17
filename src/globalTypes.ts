@@ -7,6 +7,7 @@ import {
   IUserRegistrationAction,
   IUserAction,
   IScheduleAction,
+  IStudentsAction,
   IThemeAction,
 } from './globalInterfaces';
 
@@ -19,6 +20,7 @@ export type ActionType =
   | IUserRegistrationAction
   | IUserAction
   | IScheduleAction
+  | IStudentsAction
   | IThemeAction;
 
 export type UserRegistrationType = {
@@ -45,6 +47,14 @@ export type ScheduleType = {
   teacherName: string;
 };
 
+export type StudentsType = {
+  userAvatar: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+};
+
 export type ThemeType = {
   mainTextColor: string;
   secondTextColor: string;
@@ -53,4 +63,12 @@ export type ThemeType = {
   borderColor: string;
   elementsColor: string;
   elementsColorHover: string;
+};
+
+export type LessonType = {
+  id: number;
+  time: string;
+  lessonName: string;
+  place: string;
+  teacherName: string;
 };

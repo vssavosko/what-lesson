@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 
 import { LoaderScreen } from '../../components/LoaderScreen/LoaderScreen';
 import { Install } from '../../components/Install/Install';
@@ -9,11 +9,10 @@ import { LogInScreen } from '../../components/Login/Login';
 import { HeaderBar } from '../../components/HeaderBar/HeaderBar';
 import { Main } from '../../components/Main/Main';
 import { Chat } from '../../components/Chat/Chat';
-import { StudentsList } from '../../components/StudentsList/StudentsList';
+import { ListOfStudents } from '../../components/ListOfStudents/ListOfStudents';
 import { Settings } from '../../components/Settings/Settings';
 import { TabBar } from '../../components/TabBar/TabBar';
 
-import { UserRegistrationType, UserType, ScheduleType } from '../../globalTypes';
 import { ITheme } from '../../globalInterfaces';
 
 import { Context } from './appContext';
@@ -21,8 +20,9 @@ import { appReducer } from './appReducer';
 
 import { socket } from '../../utils/socketConnection';
 import { getUserToken } from '../../utils/pushNotification';
-import { themeSelection } from '../../utils/themeSelection';
+import { initialState } from '../../utils/initialData';
 import { changingStatusBarColor } from '../../utils/changingStatusBarColor';
+import { themeSelection } from '../../utils/themeSelection';
 
 import fonts from '../../assets/fonts/fonts';
 
@@ -122,45 +122,6 @@ const Wrapper = styled.div`
 `;
 
 export const App: React.FC = () => {
-  const initialSubscribe = (): boolean => !!localStorage.getItem('isSubscribed');
-  const initialUserRegistrationData: UserRegistrationType = {
-    userName: '',
-    groupCode: '',
-  };
-  const initialUser: UserType = {
-    key: '',
-    userAvatar: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    course: '',
-    group: '',
-  };
-  const initialSchedule: ScheduleType[][] = [
-    [
-      {
-        id: 0,
-        time: '',
-        lessonName: '',
-        place: '',
-        teacherName: '',
-      },
-    ],
-  ];
-  const initialTheme = (): string => localStorage.getItem('theme') || 'light';
-  const initialState = {
-    isLoading: true,
-    isLoggedIn: false,
-    isInstall: false,
-    isSubscribed: initialSubscribe(),
-    token: '',
-    userRegistrationData: initialUserRegistrationData,
-    user: initialUser,
-    schedule: initialSchedule,
-    theme: initialTheme(),
-  };
-
   const [state, dispatch] = useReducer(appReducer, initialState);
 
   const isIos = (): boolean => {
@@ -218,49 +179,49 @@ export const App: React.FC = () => {
   return (
     <Router>
       <Context.Provider value={{ dispatch }}>
-        <GlobalStyles />
-        <Wrapper theme={state.theme === 'light' ? '' : themeSelection(state.theme)}>
-          {state.isLoading && <LoaderScreen />}
-          {state.isInstall && !state.isLoading && <Install />}
-          {!state.isLoggedIn && !state.isLoading && <LogInScreen />}
-          {state.isLoggedIn && !state.isLoading && (
-            <>
-              <HeaderBar theme={state.theme} />
-              <Switch>
-                <Route
-                  path="/"
-                  exact
-                  render={(): JSX.Element => (
-                    <Main user={state.user} schedule={state.schedule} theme={state.theme} />
-                  )}
-                />
-                <Route
-                  path="/chat"
-                  render={(): JSX.Element => (
-                    <Chat userRegistrationData={state.userRegistrationData} theme={state.theme} />
-                  )}
-                />
-                <Route
-                  path="/students-list"
-                  render={(): JSX.Element => <StudentsList theme={state.theme} />}
-                />
-                <Route
-                  path="/settings"
-                  render={(): JSX.Element => (
-                    <Settings
-                      isSubscribed={state.isSubscribed}
-                      userToken={state.token}
-                      userRegistrationData={state.userRegistrationData}
-                      user={state.user}
-                      theme={state.theme}
-                    />
-                  )}
-                />
-              </Switch>
-              <TabBar theme={state.theme} />
-            </>
-          )}
-        </Wrapper>
+        <ThemeProvider theme={themeSelection(state.theme)}>
+          <GlobalStyles />
+          <Wrapper theme={state.theme === 'light' ? '' : themeSelection(state.theme)}>
+            {state.isLoading && <LoaderScreen />}
+            {state.isInstall && !state.isLoading && <Install />}
+            {!state.isLoggedIn && !state.isLoading && <LogInScreen />}
+            {state.isLoggedIn && !state.isLoading && (
+              <>
+                <HeaderBar />
+                <Switch>
+                  <Route
+                    path="/"
+                    exact
+                    render={(): JSX.Element => <Main user={state.user} schedule={state.schedule} />}
+                  />
+                  <Route
+                    path="/chat"
+                    render={(): JSX.Element => (
+                      <Chat userRegistrationData={state.userRegistrationData} />
+                    )}
+                  />
+                  <Route
+                    path="/students-list"
+                    render={(): JSX.Element => <ListOfStudents students={state.listOfStudents} />}
+                  />
+                  <Route
+                    path="/settings"
+                    render={(): JSX.Element => (
+                      <Settings
+                        isSubscribed={state.isSubscribed}
+                        userToken={state.token}
+                        userRegistrationData={state.userRegistrationData}
+                        user={state.user}
+                        theme={state.theme}
+                      />
+                    )}
+                  />
+                </Switch>
+                <TabBar theme={state.theme} />
+              </>
+            )}
+          </Wrapper>
+        </ThemeProvider>
       </Context.Provider>
     </Router>
   );

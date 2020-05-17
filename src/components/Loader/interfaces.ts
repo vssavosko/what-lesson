@@ -9,7 +9,6 @@ export interface IStyledProps {
 
 export interface IProps {
   width?: string;
-  theme?: ThemeType | object;
   customTheme?: string;
   indents?: string;
 }

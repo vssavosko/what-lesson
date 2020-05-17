@@ -1,12 +1,10 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 
 import { ITheme } from '../../globalInterfaces';
 import { IProps } from './interfaces';
-
-import { themeSelection } from '../../utils/themeSelection';
 
 import { ReactComponent as HomeIcon } from '../../assets/images/svg/home-icon.svg';
 import { ReactComponent as ChatIcon } from '../../assets/images/svg/chat-icon.svg';
@@ -48,29 +46,27 @@ export const TabBar: React.FC<IProps> = ({ theme }) => {
   };
 
   return (
-    <ThemeProvider theme={themeSelection(theme)}>
-      <Bar>
-        <Tab className={pathName === '/' ? `active-${theme}` : `icon-${theme}`}>
-          <Link to="/" style={linkStyles}>
-            <HomeIcon />
-          </Link>
-        </Tab>
-        <Tab className={pathName === '/chat' ? `active-${theme}` : `icon-${theme}`}>
-          <Link to="/chat" style={linkStyles}>
-            <ChatIcon />
-          </Link>
-        </Tab>
-        <Tab className={pathName === '/students-list' ? `active-${theme}` : `icon-${theme}`}>
-          <Link to="/students-list" style={linkStyles}>
-            <StudentListIcon />
-          </Link>
-        </Tab>
-        <Tab className={pathName === '/settings' ? `active-${theme}` : `icon-${theme}`}>
-          <Link to="/settings" style={linkStyles}>
-            <SettingsIcon />
-          </Link>
-        </Tab>
-      </Bar>
-    </ThemeProvider>
+    <Bar>
+      <Tab className={pathName === '/' ? `active-${theme}` : `icon-${theme}`}>
+        <Link to="/" style={linkStyles}>
+          <HomeIcon />
+        </Link>
+      </Tab>
+      <Tab className={pathName === '/chat' ? `active-${theme}` : `icon-${theme}`}>
+        <Link to="/chat" style={linkStyles}>
+          <ChatIcon />
+        </Link>
+      </Tab>
+      <Tab className={pathName === '/students-list' ? `active-${theme}` : `icon-${theme}`}>
+        <Link to="/students-list" style={linkStyles}>
+          <StudentListIcon />
+        </Link>
+      </Tab>
+      <Tab className={pathName === '/settings' ? `active-${theme}` : `icon-${theme}`}>
+        <Link to="/settings" style={linkStyles}>
+          <SettingsIcon />
+        </Link>
+      </Tab>
+    </Bar>
   );
 };

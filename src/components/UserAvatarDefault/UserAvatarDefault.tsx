@@ -1,11 +1,9 @@
 import React from 'react';
 
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 import { User } from '@styled-icons/feather/User';
 
 import { ITheme } from '../../globalInterfaces';
-
-import { themeSelection } from '../../utils/themeSelection';
 
 const Wrapper = styled.div`
   position: relative;
@@ -23,12 +21,10 @@ const UserAvatar = styled(User)`
   fill: ${(props: ITheme): string => props.theme.elementsColor};
 `;
 
-export const UserAvatarDefault: React.FC<{ theme: string }> = ({ theme }) => {
+export const UserAvatarDefault: React.FC = () => {
   return (
-    <ThemeProvider theme={themeSelection(theme)}>
-      <Wrapper>
-        <UserAvatar />
-      </Wrapper>
-    </ThemeProvider>
+    <Wrapper>
+      <UserAvatar />
+    </Wrapper>
   );
 };
