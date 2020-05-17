@@ -1,16 +1,14 @@
 import React, { useContext, useState, useRef } from 'react';
 
-import styled, { ThemeProvider } from 'styled-components';
-
-import { ITheme, IMargin } from '../../globalInterfaces';
-import { IProps, ICheckUserData } from './interfaces';
+import styled from 'styled-components';
 
 import { UserAvatarDefault } from '../UserAvatarDefault/UserAvatarDefault';
 import { Loader } from '../Loader/Loader';
 
-import { Context } from '../../containers/app/appContext';
+import { ITheme, IMargin } from '../../globalInterfaces';
+import { IProps, ICheckUserData } from './interfaces';
 
-import { themeSelection } from '../../utils/themeSelection';
+import { Context } from '../../containers/app/appContext';
 
 const Page = styled.div`
   position: relative;
@@ -286,102 +284,92 @@ export const Settings: React.FC<IProps> = ({
   };
 
   return (
-    <ThemeProvider theme={themeSelection(theme)}>
-      <Page>
-        <SettingsWindow>
-          <UserInfoPreview>
-            <UserAvatar onClick={clickUserAvatar}>
-              {user.userAvatar.length ? (
-                <UserAvatarCustom src={user.userAvatar} />
-              ) : (
-                <UserAvatarDefault theme={theme} />
-              )}
-              <UserAvatarChangeLabel>правка</UserAvatarChangeLabel>
-              <UploadAvatar
-                type="file"
-                name="user-avatar"
-                onChange={(event): void => changeUserAvatar(event)}
-                ref={refUploadAvatar}
-              />
-            </UserAvatar>
-            <UserName>{`${user.firstName} ${user.lastName}`}</UserName>
-            <UserContacts>e-mail: {user.email}</UserContacts>
-            <UserContacts>телефон: {user.phoneNumber}</UserContacts>
-          </UserInfoPreview>
-          <UserDetails>
-            <Field mb="14px">
-              <Label>Имя</Label>
-              <Input
-                name="firstName"
-                defaultValue={user.firstName}
-                onKeyUp={(event): void => changeUserData(event)}
-              />
-            </Field>
-            <Field mb="14px">
-              <Label>Фамилия</Label>
-              <Input
-                name="lastName"
-                defaultValue={user.lastName}
-                onKeyUp={(event): void => changeUserData(event)}
-              />
-            </Field>
-            <Field mb="14px">
-              <Label>E-mail</Label>
-              <Input
-                name="email"
-                defaultValue={user.email}
-                onKeyUp={(event): void => changeUserData(event)}
-              />
-            </Field>
-            <Field>
-              <Label>Телефон</Label>
-              <Input
-                name="phoneNumber"
-                defaultValue={user.phoneNumber}
-                onKeyUp={(event): void => changeUserData(event)}
-              />
-            </Field>
-            <SeparationHeader>Учебная информация</SeparationHeader>
-            <Field mb="14px">
-              <Label>Группа</Label>
-              <Input defaultValue={user.group} readOnly />
-            </Field>
-            <Field>
-              <Label>Курс</Label>
-              <Input defaultValue={user.course} readOnly />
-            </Field>
-            <SeparationHeader>Цветовая схема</SeparationHeader>
-            <Field>
-              <Label>Тема</Label>
-              <Select value={theme} onChange={(event): void => changeTheme(event)}>
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-                <option value="night-blue">Night Blue</option>
-              </Select>
-            </Field>
-            <SeparationHeader>Подписка на уведомления</SeparationHeader>
-            <Field>
-              {!isSubscribed ? (
-                <SubscriptionButton type="button" onClick={subscribe} disabled={isLoading}>
-                  {isLoading ? (
-                    <Loader width="17px" theme={themeSelection(theme) || {}} />
-                  ) : (
-                    'Подписаться'
-                  )}
-                </SubscriptionButton>
-              ) : (
-                <SubscriptionButton type="button" onClick={unsubscribe} disabled={isLoading}>
-                  {isLoading ? (
-                    <Loader width="17px" theme={themeSelection(theme) || {}} />
-                  ) : (
-                    'Отписаться'
-                  )}
-                </SubscriptionButton>
-              )}
-            </Field>
-          </UserDetails>
-        </SettingsWindow>
-      </Page>
-    </ThemeProvider>
+    <Page>
+      <SettingsWindow>
+        <UserInfoPreview>
+          <UserAvatar onClick={clickUserAvatar}>
+            {user.userAvatar.length ? (
+              <UserAvatarCustom src={user.userAvatar} />
+            ) : (
+              <UserAvatarDefault />
+            )}
+            <UserAvatarChangeLabel>правка</UserAvatarChangeLabel>
+            <UploadAvatar
+              type="file"
+              name="user-avatar"
+              onChange={(event): void => changeUserAvatar(event)}
+              ref={refUploadAvatar}
+            />
+          </UserAvatar>
+          <UserName>{`${user.firstName} ${user.lastName}`}</UserName>
+          <UserContacts>e-mail: {user.email}</UserContacts>
+          <UserContacts>телефон: {user.phoneNumber}</UserContacts>
+        </UserInfoPreview>
+        <UserDetails>
+          <Field mb="14px">
+            <Label>Имя</Label>
+            <Input
+              name="firstName"
+              defaultValue={user.firstName}
+              onKeyUp={(event): void => changeUserData(event)}
+            />
+          </Field>
+          <Field mb="14px">
+            <Label>Фамилия</Label>
+            <Input
+              name="lastName"
+              defaultValue={user.lastName}
+              onKeyUp={(event): void => changeUserData(event)}
+            />
+          </Field>
+          <Field mb="14px">
+            <Label>E-mail</Label>
+            <Input
+              name="email"
+              defaultValue={user.email}
+              onKeyUp={(event): void => changeUserData(event)}
+            />
+          </Field>
+          <Field>
+            <Label>Телефон</Label>
+            <Input
+              name="phoneNumber"
+              defaultValue={user.phoneNumber}
+              onKeyUp={(event): void => changeUserData(event)}
+            />
+          </Field>
+          <SeparationHeader>Учебная информация</SeparationHeader>
+          <Field mb="14px">
+            <Label>Группа</Label>
+            <Input defaultValue={user.group} readOnly />
+          </Field>
+          <Field>
+            <Label>Курс</Label>
+            <Input defaultValue={user.course} readOnly />
+          </Field>
+          <SeparationHeader>Цветовая схема</SeparationHeader>
+          <Field>
+            <Label>Тема</Label>
+            <Select value={theme} onChange={(event): void => changeTheme(event)}>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="night-blue">Night Blue</option>
+            </Select>
+          </Field>
+          <SeparationHeader>Подписка на уведомления</SeparationHeader>
+          <Field>
+            {!isSubscribed ? (
+              <SubscriptionButton type="button" onClick={subscribe} disabled={isLoading}>
+                {isLoading ? <Loader width="17px" /> : 'Подписаться'}
+              </SubscriptionButton>
+            ) : (
+              <SubscriptionButton type="button" onClick={unsubscribe} disabled={isLoading}>
+                {isLoading ? <Loader width="17px" /> : 'Отписаться'}
+              </SubscriptionButton>
+            )}
+          </Field>
+        </UserDetails>
+      </SettingsWindow>
+    </Page>
   );
 };

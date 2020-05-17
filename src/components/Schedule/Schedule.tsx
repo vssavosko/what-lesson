@@ -1,11 +1,9 @@
 import React, { useState, forwardRef } from 'react';
 
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 
 import { ISizes, ITheme } from '../../globalInterfaces';
 import { IProps } from './interfaces';
-
-import { themeSelection } from '../../utils/themeSelection';
 
 import { ReactComponent as HideCurtainButtonIcon } from '../../assets/images/svg/hide-curtain-button-icon.svg';
 
@@ -87,7 +85,7 @@ const TeacherInfo = styled.div`
 export const Schedule = forwardRef((props: IProps, ref: React.Ref<HTMLDivElement>) => {
   const [initialPoint, setInitialPoint] = useState({ pageY: 0 });
 
-  const { currentSchedule, hideSchedule, theme } = props;
+  const { currentSchedule, hideSchedule } = props;
 
   const mouseDown = (event: React.MouseEvent): void => {
     setInitialPoint({ pageY: event.clientY });
@@ -114,38 +112,36 @@ export const Schedule = forwardRef((props: IProps, ref: React.Ref<HTMLDivElement
   };
 
   return (
-    <ThemeProvider theme={themeSelection(theme)}>
-      <Curtain
-        onMouseDown={(event): void => mouseDown(event)}
-        onMouseUp={(event): void => mouseUp(event)}
-        onTouchStart={(event): void => touchTapStart(event)}
-        onTouchMove={(event): void => touchMove(event)}
-        ref={ref}
-      >
-        <HideCurtainButton />
-        {currentSchedule &&
-          currentSchedule.map((lessonData, index) => {
-            return (
-              <Lesson key={index} height={index === currentSchedule.length - 1 ? '126px' : '100px'}>
-                <Circle />
-                <Line
-                  top={index ? '0' : '33px'}
-                  height={index || currentSchedule.length === 1 ? '100%' : '67px'}
-                />
-                <Content>
-                  <LessonInfo>
-                    <SideValues>{lessonData.time}</SideValues>
-                    <PrincipalValue>{lessonData.lessonName}</PrincipalValue>
-                    <SideValues>{lessonData.place}</SideValues>
-                  </LessonInfo>
-                  <TeacherInfo>
-                    <PrincipalValue>{lessonData.teacherName}</PrincipalValue>
-                  </TeacherInfo>
-                </Content>
-              </Lesson>
-            );
-          })}
-      </Curtain>
-    </ThemeProvider>
+    <Curtain
+      onMouseDown={(event): void => mouseDown(event)}
+      onMouseUp={(event): void => mouseUp(event)}
+      onTouchStart={(event): void => touchTapStart(event)}
+      onTouchMove={(event): void => touchMove(event)}
+      ref={ref}
+    >
+      <HideCurtainButton />
+      {currentSchedule &&
+        currentSchedule.map((lessonData, index) => {
+          return (
+            <Lesson key={index} height={index === currentSchedule.length - 1 ? '126px' : '100px'}>
+              <Circle />
+              <Line
+                top={index ? '0' : '33px'}
+                height={index || currentSchedule.length === 1 ? '100%' : '67px'}
+              />
+              <Content>
+                <LessonInfo>
+                  <SideValues>{lessonData.time}</SideValues>
+                  <PrincipalValue>{lessonData.lessonName}</PrincipalValue>
+                  <SideValues>{lessonData.place}</SideValues>
+                </LessonInfo>
+                <TeacherInfo>
+                  <PrincipalValue>{lessonData.teacherName}</PrincipalValue>
+                </TeacherInfo>
+              </Content>
+            </Lesson>
+          );
+        })}
+    </Curtain>
   );
 });

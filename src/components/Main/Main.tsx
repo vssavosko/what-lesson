@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 import Swiper from 'react-id-swiper';
 
 import { UserAvatarDefault } from '../UserAvatarDefault/UserAvatarDefault';
@@ -10,8 +10,6 @@ import { Schedule } from '../Schedule/Schedule';
 import { ScheduleType } from '../../globalTypes';
 import { ITheme, IPadding } from '../../globalInterfaces';
 import { IProps } from './interfaces';
-
-import { themeSelection } from '../../utils/themeSelection';
 
 import 'swiper/css/swiper.min.css';
 
@@ -153,7 +151,7 @@ const PrincipalValue = styled.p`
   color: ${(props: ITheme): string => props.theme.mainTextColor};
 `;
 
-export const Main: React.FC<IProps> = ({ user, schedule, theme }) => {
+export const Main: React.FC<IProps> = ({ user, schedule }) => {
   const [swiper, setSwiper] = useState<any>({});
   const [initialPoint, setInitialPoint] = useState({ pageY: 0 });
   const [showSchedule, setShowSchedule] = useState(false);
@@ -239,87 +237,84 @@ export const Main: React.FC<IProps> = ({ user, schedule, theme }) => {
   };
 
   return (
-    <ThemeProvider theme={themeSelection(theme)}>
-      <Page>
-        <Greeting>
-          <UserAvatar>
-            {user.userAvatar.length ? (
-              <UserAvatarCustom src={user.userAvatar} />
-            ) : (
-              <UserAvatarDefault theme={theme} />
-            )}
-          </UserAvatar>
-          <GreetingText>Привет, {user.firstName}</GreetingText>
-        </Greeting>
-        <Tabs>
-          <DateValue>{currentDate()}</DateValue>
-          <Swiper {...swiperParams} getSwiper={setSwiper}>
-            {dayOfWeek.map((day, index) => {
-              return (
-                <CSSTransition key={index} in={tapOnTab} timeout={0} classNames="tab">
-                  <Tab
-                    onMouseDown={(event): void => mouseDown(event)}
-                    onMouseUp={(event): void => mouseUp(event)}
-                    onTouchStart={(event): void => touchTapStart(event)}
-                    onTouchEnd={(): void => touchTapEnd()}
-                    onTouchMove={(event): void => touchMove(event)}
-                  >
-                    <IconsBar>
-                      <Circle>
-                        <CircleText>{day}</CircleText>
-                      </Circle>
-                      {schedule[index] && (
-                        <DotsButton onClick={(): void => clickOnDotsButton()}>
-                          <DotsIcon />
-                        </DotsButton>
+    <Page>
+      <Greeting>
+        <UserAvatar>
+          {user.userAvatar.length ? (
+            <UserAvatarCustom src={user.userAvatar} />
+          ) : (
+            <UserAvatarDefault />
+          )}
+        </UserAvatar>
+        <GreetingText>Привет, {user.firstName}</GreetingText>
+      </Greeting>
+      <Tabs>
+        <DateValue>{currentDate()}</DateValue>
+        <Swiper {...swiperParams} getSwiper={setSwiper}>
+          {dayOfWeek.map((day, index) => {
+            return (
+              <CSSTransition key={index} in={tapOnTab} timeout={0} classNames="tab">
+                <Tab
+                  onMouseDown={(event): void => mouseDown(event)}
+                  onMouseUp={(event): void => mouseUp(event)}
+                  onTouchStart={(event): void => touchTapStart(event)}
+                  onTouchEnd={(): void => touchTapEnd()}
+                  onTouchMove={(event): void => touchMove(event)}
+                >
+                  <IconsBar>
+                    <Circle>
+                      <CircleText>{day}</CircleText>
+                    </Circle>
+                    {schedule[index] && (
+                      <DotsButton onClick={(): void => clickOnDotsButton()}>
+                        <DotsIcon />
+                      </DotsButton>
+                    )}
+                  </IconsBar>
+                  <TabContent>
+                    {schedule[index] && (
+                      <SideValues pb="5px">
+                        {`${numberOfLessons(schedule[index])} ${
+                          numberOfLessons(schedule[index]) > 1 ? 'пары' : 'пара'
+                        }`}
+                      </SideValues>
+                    )}
+                    {schedule[index] &&
+                      schedule[index].map((lesson, index) =>
+                        index < 2 ? (
+                          <PrincipalValue key={index} pb="5px">
+                            {lesson.lessonName}
+                          </PrincipalValue>
+                        ) : (
+                          false
+                        ),
                       )}
-                    </IconsBar>
-                    <TabContent>
-                      {schedule[index] && (
-                        <SideValues pb="5px">
-                          {`${numberOfLessons(schedule[index])} ${
-                            numberOfLessons(schedule[index]) > 1 ? 'пары' : 'пара'
-                          }`}
-                        </SideValues>
-                      )}
-                      {schedule[index] &&
-                        schedule[index].map((lesson, index) =>
-                          index < 2 ? (
-                            <PrincipalValue key={index} pb="5px">
-                              {lesson.lessonName}
-                            </PrincipalValue>
-                          ) : (
-                            false
-                          ),
-                        )}
-                      {!schedule[index] && (
-                        <PrincipalValue key={index} pb="5px">
-                          Занятий нет
-                        </PrincipalValue>
-                      )}
-                      {schedule[index] && schedule[index].length > 2 && (
-                        <SideValues>И другие</SideValues>
-                      )}
-                    </TabContent>
-                  </Tab>
-                </CSSTransition>
-              );
-            })}
-          </Swiper>
-        </Tabs>
-        <CSSTransition
-          in={currentScheduleData() ? showSchedule : false}
-          timeout={0}
-          classNames="schedule"
-        >
-          <Schedule
-            currentSchedule={currentScheduleData()}
-            hideSchedule={hideSchedule}
-            theme={theme}
-            ref={refSchedule}
-          />
-        </CSSTransition>
-      </Page>
-    </ThemeProvider>
+                    {!schedule[index] && (
+                      <PrincipalValue key={index} pb="5px">
+                        Занятий нет
+                      </PrincipalValue>
+                    )}
+                    {schedule[index] && schedule[index].length > 2 && (
+                      <SideValues>И другие</SideValues>
+                    )}
+                  </TabContent>
+                </Tab>
+              </CSSTransition>
+            );
+          })}
+        </Swiper>
+      </Tabs>
+      <CSSTransition
+        in={currentScheduleData() ? showSchedule : false}
+        timeout={0}
+        classNames="schedule"
+      >
+        <Schedule
+          currentSchedule={currentScheduleData()}
+          hideSchedule={hideSchedule}
+          ref={refSchedule}
+        />
+      </CSSTransition>
+    </Page>
   );
 };

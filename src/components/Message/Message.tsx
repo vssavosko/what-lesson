@@ -1,11 +1,9 @@
 import React from 'react';
 
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 
 import { ITheme, IPadding } from '../../globalInterfaces';
 import { IProps, IMessage } from './interfaces';
-
-import { themeSelection } from '../../utils/themeSelection';
 
 const MessageDateSent = styled.p`
   font-family: 'SFProTextRegular', sans-serif;
@@ -55,11 +53,11 @@ const MessageTimeSent = styled.span`
   color: ${(props: ITheme): string => props.theme.secondTextColor};
 `;
 
-export const Message: React.FC<IProps> = ({ message, lastMessage, isShowStartDate, theme }) => {
+export const Message: React.FC<IProps> = ({ message, lastMessage, isShowStartDate }) => {
   const { text, sendingTime } = message as IMessage;
 
   return (
-    <ThemeProvider theme={themeSelection(theme)}>
+    <>
       {isShowStartDate && <MessageDateSent>сегодня</MessageDateSent>}
       <MessageBlock pb={lastMessage ? '0' : '5px'}>
         <UserAvatar />
@@ -68,6 +66,6 @@ export const Message: React.FC<IProps> = ({ message, lastMessage, isShowStartDat
           <MessageTimeSent>{sendingTime}</MessageTimeSent>
         </MessageText>
       </MessageBlock>
-    </ThemeProvider>
+    </>
   );
 };

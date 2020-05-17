@@ -1,11 +1,8 @@
 import React from 'react';
 
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 
 import { ITheme } from '../../globalInterfaces';
-import { IProps } from './interfaces';
-
-import { themeSelection } from '../../utils/themeSelection';
 
 const Header = styled.div`
   display: flex;
@@ -24,12 +21,10 @@ const Title = styled.p`
   transition: 0.2s;
 `;
 
-export const HeaderBar: React.FC<IProps> = ({ theme }) => {
+export const HeaderBar: React.FC = () => {
   return (
-    <ThemeProvider theme={themeSelection(theme)}>
-      <Header>
-        <Title>What Lesson</Title>
-      </Header>
-    </ThemeProvider>
+    <Header>
+      <Title>What Lesson</Title>
+    </Header>
   );
 };

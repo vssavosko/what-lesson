@@ -7,7 +7,6 @@ type Lesson = {
 };
 
 export interface IProps {
-  currentSchedule?: Array<Lesson>;
+  currentSchedule?: Lesson[];
   hideSchedule: () => void;
-  theme: string;
 }

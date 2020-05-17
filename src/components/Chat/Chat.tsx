@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 
 import { Message } from '../Message/Message';
 
@@ -8,7 +8,6 @@ import { ITheme } from '../../globalInterfaces';
 import { IProps, IMessage, IEventInfo } from './interfaces';
 
 import { socket } from '../../utils/socketConnection';
-import { themeSelection } from '../../utils/themeSelection';
 import { messageData } from '../../utils/mockData';
 
 import { ReactComponent as MessageButtonIcon } from '../../assets/images/svg/message-button-icon.svg';
@@ -91,7 +90,7 @@ const MessageButton = styled.button`
   }
 `;
 
-export const Chat: React.FC<IProps> = ({ userRegistrationData, theme }) => {
+export const Chat: React.FC<IProps> = ({ userRegistrationData }) => {
   const [eventInfo, setEventInfo] = useState({});
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<object[]>(messageData);
@@ -210,36 +209,33 @@ export const Chat: React.FC<IProps> = ({ userRegistrationData, theme }) => {
   }, [messages, currentDate, indexOfMessage, findIndexOfMessage]);
 
   return (
-    <ThemeProvider theme={themeSelection(theme)}>
-      <Page>
-        <ChatWindow>
-          <ChatHistory>
-            {messages.map((message, index) => (
-              <Message
-                key={index}
-                message={message}
-                lastMessage={messages.length - 1 === index}
-                isShowStartDate={indexOfMessage === index}
-                theme={theme}
-              />
-            ))}
-            <div ref={refAnchor} />
-          </ChatHistory>
-        </ChatWindow>
-        <MessageBar>
-          <MessageTextarea
-            rows={1}
-            placeholder="Сообщение"
-            onChange={(event): void => setMessage(event.target.value)}
-            onKeyPress={(event): void | null => (event.key === 'Enter' ? sendMessage(event) : null)}
-            onKeyUp={(event): void => resizeTextarea(event)}
-            ref={refTextarea}
-          />
-          <MessageButton onClick={(event): void => sendMessage(event)}>
-            <MessageButtonIcon />
-          </MessageButton>
-        </MessageBar>
-      </Page>
-    </ThemeProvider>
+    <Page>
+      <ChatWindow>
+        <ChatHistory>
+          {messages.map((message, index) => (
+            <Message
+              key={index}
+              message={message}
+              lastMessage={messages.length - 1 === index}
+              isShowStartDate={indexOfMessage === index}
+            />
+          ))}
+          <div ref={refAnchor} />
+        </ChatHistory>
+      </ChatWindow>
+      <MessageBar>
+        <MessageTextarea
+          rows={1}
+          placeholder="Сообщение"
+          onChange={(event): void => setMessage(event.target.value)}
+          onKeyPress={(event): void | null => (event.key === 'Enter' ? sendMessage(event) : null)}
+          onKeyUp={(event): void => resizeTextarea(event)}
+          ref={refTextarea}
+        />
+        <MessageButton onClick={(event): void => sendMessage(event)}>
+          <MessageButtonIcon />
+        </MessageButton>
+      </MessageBar>
+    </Page>
   );
 };
