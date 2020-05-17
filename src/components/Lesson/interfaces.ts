@@ -1,6 +1,7 @@
 import { LessonType } from '../../globalTypes';
 
 export interface IProps {
-  currentSchedule?: LessonType[];
-  hideSchedule: () => void;
+  lesson: LessonType;
+  isFirstLesson: boolean;
+  isLastLesson: boolean;
 }

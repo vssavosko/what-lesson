@@ -64,3 +64,11 @@ export type ThemeType = {
   elementsColor: string;
   elementsColorHover: string;
 };
+
+export type LessonType = {
+  id: number;
+  time: string;
+  lessonName: string;
+  place: string;
+  teacherName: string;
+};
