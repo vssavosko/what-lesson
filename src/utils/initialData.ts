@@ -1,4 +1,10 @@
-import { UserRegistrationType, UserType, ScheduleType, StudentsType } from '../globalTypes';
+import {
+  UserRegistrationType,
+  UserType,
+  ScheduleType,
+  StudentsType,
+  MessageType,
+} from '../globalTypes';
 
 const initialSubscribe = (): boolean => !!localStorage.getItem('isSubscribed');
 const initialUserRegistrationData: UserRegistrationType = {
@@ -36,6 +42,20 @@ const initialListOfStudents: StudentsType[] = [
   },
 ];
 const initialTheme = (): string => localStorage.getItem('theme') || 'light';
+const initialCurrentDate = new Date(
+  new Date().getFullYear(),
+  new Date().getMonth(),
+  new Date().getDate(),
+).toISOString();
+const initialMessages: MessageType[] = [
+  {
+    userName: '',
+    userAvatar: '',
+    messageText: '',
+    sendingDate: '',
+    sendingTime: '',
+  },
+];
 
 export const initialState = {
   isLoading: true,
@@ -48,4 +68,12 @@ export const initialState = {
   schedule: initialSchedule,
   listOfStudents: initialListOfStudents,
   theme: initialTheme(),
+};
+
+export const initialChatState = {
+  currentDate: initialCurrentDate,
+  textareaData: {},
+  message: '',
+  messages: initialMessages,
+  isLoading: true,
 };

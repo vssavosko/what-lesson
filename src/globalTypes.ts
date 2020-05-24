@@ -72,3 +72,11 @@ export type LessonType = {
   place: string;
   teacherName: string;
 };
+
+export type MessageType = {
+  userName: string;
+  userAvatar: string;
+  messageText: string;
+  sendingDate: string;
+  sendingTime: string;
+};

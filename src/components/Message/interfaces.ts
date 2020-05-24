@@ -1,11 +1,8 @@
-export interface IProps {
-  message: object;
-  lastMessage: boolean;
-  isShowStartDate: boolean;
-}
+import { MessageType } from '../../globalTypes';
 
-export interface IMessage {
-  text: string;
-  sendingDate: string;
-  sendingTime: string;
+export interface IProps {
+  currentDate: string;
+  dateСomparison: (sendingDate: string) => boolean;
+  message: MessageType;
+  lastMessage: boolean;
 }

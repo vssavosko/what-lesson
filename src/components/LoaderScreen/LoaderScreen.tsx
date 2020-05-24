@@ -49,12 +49,9 @@ export const LoaderScreen: React.FC = () => {
           groupCode,
           schedule,
           listOfStudents,
-          fingerprint,
         } = res;
 
         if (authorization) {
-          document.cookie = `fingerprint=${fingerprint}`;
-
           dispatch({
             type: 'userRegistrationData',
             payload: { userName, groupCode },
