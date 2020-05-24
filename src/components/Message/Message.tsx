@@ -2,8 +2,12 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { UserAvatarDefault } from '../UserAvatarDefault/UserAvatarDefault';
+
 import { ITheme, IPadding } from '../../globalInterfaces';
-import { IProps, IMessage } from './interfaces';
+import { IProps } from './interfaces';
+
+import { dateFormatting } from '../../utils/dateFormatting';
 
 const MessageDateSent = styled.p`
   font-family: 'SFProTextRegular', sans-serif;
@@ -22,11 +26,14 @@ const MessageBlock = styled.div`
 const UserAvatar = styled.div`
   width: 32px;
   height: 32px;
-  background-color: purple;
   border-radius: 50%;
   margin-right: 10px;
   flex-shrink: 0;
   align-self: flex-end;
+  overflow: hidden;
+`;
+const UserAvatarCustom = styled.img`
+  width: 100%;
 `;
 const MessageText = styled.div`
   position: relative;
@@ -53,19 +60,34 @@ const MessageTimeSent = styled.span`
   color: ${(props: ITheme): string => props.theme.secondTextColor};
 `;
 
-export const Message: React.FC<IProps> = ({ message, lastMessage, isShowStartDate }) => {
-  const { text, sendingTime } = message as IMessage;
+export const Message: React.FC<IProps> = ({
+  currentDate,
+  dateСomparison,
+  message,
+  lastMessage,
+}) => {
+  const { userName, userAvatar, messageText, sendingDate, sendingTime } = message;
 
   return (
     <>
-      {isShowStartDate && <MessageDateSent>сегодня</MessageDateSent>}
-      <MessageBlock pb={lastMessage ? '0' : '5px'}>
-        <UserAvatar />
-        <MessageText>
-          {text}
-          <MessageTimeSent>{sendingTime}</MessageTimeSent>
-        </MessageText>
-      </MessageBlock>
+      {dateСomparison(sendingDate) && (
+        <MessageDateSent>{dateFormatting(sendingDate, currentDate)}</MessageDateSent>
+      )}
+      {userName && (
+        <MessageBlock pb={!lastMessage ? '5px' : '0'}>
+          <UserAvatar>
+            {userAvatar.length ? (
+              <UserAvatarCustom src={userAvatar} />
+            ) : (
+              <UserAvatarDefault width="28px" height="28px" top="5px" />
+            )}
+          </UserAvatar>
+          <MessageText>
+            {messageText}
+            <MessageTimeSent>{sendingTime}</MessageTimeSent>
+          </MessageText>
+        </MessageBlock>
+      )}
     </>
   );
 };

@@ -197,7 +197,10 @@ export const App: React.FC = () => {
                   <Route
                     path="/chat"
                     render={(): JSX.Element => (
-                      <Chat userRegistrationData={state.userRegistrationData} />
+                      <Chat
+                        userRegistrationData={state.userRegistrationData}
+                        userAvatar={state.user.userAvatar}
+                      />
                     )}
                   />
                   <Route
