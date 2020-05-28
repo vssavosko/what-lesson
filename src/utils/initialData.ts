@@ -76,4 +76,5 @@ export const initialChatState = {
   message: '',
   messages: initialMessages,
   isLoading: true,
+  error: '',
 };

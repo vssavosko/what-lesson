@@ -5,10 +5,13 @@ import styled from 'styled-components';
 import { UserAvatarDefault } from '../UserAvatarDefault/UserAvatarDefault';
 import { Loader } from '../Loader/Loader';
 
+import { UserType } from '../../globalTypes';
 import { ITheme, IMargin } from '../../globalInterfaces';
 import { IProps, ICheckUserData } from './interfaces';
 
 import { Context } from '../../containers/app/appContext';
+
+import { inputMaskPhone } from '../../utils/inputMaskPhone';
 
 const Page = styled.div`
   position: relative;
@@ -113,6 +116,10 @@ const Input = styled.input`
   border-radius: 10px;
   transition: 0.2s;
   -webkit-appearance: none;
+
+  &:invalid {
+    border-color: #ed4956;
+  }
 `;
 const SeparationHeader = styled.p`
   font-family: 'SFProTextRegular', sans-serif;
@@ -211,28 +218,47 @@ export const Settings: React.FC<IProps> = ({
     }
   };
 
-  const changeUserData = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-    const target = event.currentTarget;
+  const checkForSameValue = (target: HTMLInputElement): UserType => {
     const [checkUserData] = [user].filter(
       (userData: ICheckUserData) => userData[target.name] === target.value,
     );
 
-    if (event.key === 'Enter' && !checkUserData) {
-      const payload = {
-        key: user.key,
-        name: target.name,
-        value: target.value,
-      };
+    return checkUserData;
+  };
 
-      fetch(`http://localhost:5000/update_user_profile`, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      }).then(() => {
-        const payload = { ...user, [target.name]: target.value };
+  const sendUpdatedUserData = (target: HTMLInputElement): void => {
+    const payload = {
+      key: user.key,
+      name: target.name,
+      value: target.value,
+    };
 
-        dispatch({ type: 'user', payload });
-      });
+    fetch(`http://localhost:5000/update_user_profile`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }).then(() => {
+      const payload = { ...user, [target.name]: target.value };
+
+      dispatch({ type: 'user', payload });
+    });
+  };
+
+  const changeUserDataByButton = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    const target = event.currentTarget;
+
+    if (target.name === 'phoneNumber' && event.keyCode !== 8) {
+      target.value = inputMaskPhone(target.value);
     }
+
+    if (event.keyCode === 13 && !checkForSameValue(target) && target.checkValidity()) {
+      sendUpdatedUserData(target);
+    }
+  };
+
+  const changeUserDataByBlur = (event: React.FocusEvent<HTMLInputElement>): void => {
+    const target = event.currentTarget;
+
+    if (!checkForSameValue(target) && target.checkValidity()) sendUpdatedUserData(target);
   };
 
   const changeTheme = (event: React.ChangeEvent<HTMLSelectElement>): void => {
@@ -303,39 +329,55 @@ export const Settings: React.FC<IProps> = ({
           </UserAvatar>
           <UserName>{`${user.firstName} ${user.lastName}`}</UserName>
           <UserContacts>e-mail: {user.email}</UserContacts>
-          <UserContacts>телефон: {user.phoneNumber}</UserContacts>
+          {user.phoneNumber && <UserContacts>телефон: {user.phoneNumber}</UserContacts>}
         </UserInfoPreview>
         <UserDetails>
           <Field mb="14px">
             <Label>Имя</Label>
             <Input
+              type="text"
               name="firstName"
+              placeholder="Иван"
               defaultValue={user.firstName}
-              onKeyUp={(event): void => changeUserData(event)}
+              onKeyUp={(event): void => changeUserDataByButton(event)}
+              onBlur={(event): void => changeUserDataByBlur(event)}
+              required
             />
           </Field>
           <Field mb="14px">
             <Label>Фамилия</Label>
             <Input
+              type="text"
               name="lastName"
+              placeholder="Иванов"
               defaultValue={user.lastName}
-              onKeyUp={(event): void => changeUserData(event)}
+              onKeyUp={(event): void => changeUserDataByButton(event)}
+              onBlur={(event): void => changeUserDataByBlur(event)}
             />
           </Field>
           <Field mb="14px">
             <Label>E-mail</Label>
             <Input
+              type="email"
               name="email"
+              placeholder="ivanov@gmail.com"
               defaultValue={user.email}
-              onKeyUp={(event): void => changeUserData(event)}
+              onKeyUp={(event): void => changeUserDataByButton(event)}
+              onBlur={(event): void => changeUserDataByBlur(event)}
+              required
             />
           </Field>
           <Field>
             <Label>Телефон</Label>
             <Input
+              type="tel"
               name="phoneNumber"
+              placeholder="+7 (999) 999-99-99"
+              pattern="[\+]\d{1}\s[\(]\d{3}[\)]\s\d{3}[\-]\d{2}[\-]\d{2}"
+              max="17"
               defaultValue={user.phoneNumber}
-              onKeyUp={(event): void => changeUserData(event)}
+              onKeyUp={(event): void => changeUserDataByButton(event)}
+              onBlur={(event): void => changeUserDataByBlur(event)}
             />
           </Field>
           <SeparationHeader>Учебная информация</SeparationHeader>

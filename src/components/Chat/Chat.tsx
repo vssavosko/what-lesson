@@ -45,6 +45,13 @@ const ChatHistory = styled.div`
   width: 100%;
   padding: 16px 0;
 `;
+const ErrorMessage = styled.p`
+  width: 100%;
+  font-family: 'SFProTextRegular', sans-serif;
+  color: ${(props: ITheme): string => props.theme.mainTextColor};
+  text-align: center;
+  margin-top: 20px;
+`;
 const MessageBar = styled.form`
   position: relative;
   display: flex;
@@ -178,6 +185,12 @@ export const Chat: React.FC<IProps> = ({ userRegistrationData, userAvatar }) => 
     })
       .then((res) => res.json())
       .then((res) => {
+        if (res?.error) {
+          dispatch({ type: 'error', payload: res.error });
+
+          return;
+        }
+
         const messages = Object.values(res) as MessageType[];
 
         dispatch({ type: 'messages', payload: messages });
@@ -217,7 +230,7 @@ export const Chat: React.FC<IProps> = ({ userRegistrationData, userAvatar }) => 
   return (
     <Page>
       <ChatWindow positioning={state.isLoading ? 'center' : ''}>
-        {state.isLoading && <Loader />}
+        {state.isLoading && !state.error.length && <Loader />}
         {!state.isLoading && (
           <ChatHistory>
             {state.messages.map((message: MessageType, index: number) => (
@@ -232,6 +245,7 @@ export const Chat: React.FC<IProps> = ({ userRegistrationData, userAvatar }) => 
             <div ref={refAnchor} />
           </ChatHistory>
         )}
+        {!!state.error.length && <ErrorMessage>{state.error} &#x1F628;</ErrorMessage>}
       </ChatWindow>
       <MessageBar>
         <MessageTextarea
@@ -239,7 +253,7 @@ export const Chat: React.FC<IProps> = ({ userRegistrationData, userAvatar }) => 
           placeholder="Сообщение"
           onChange={(event): void => dispatch({ type: 'message', payload: event.target.value })}
           onKeyPress={(event): void | boolean =>
-            event.key === 'Enter' ? sendMessage(event) : false
+            event.keyCode === 13 ? sendMessage(event) : false
           }
           onKeyUp={(event): void => resizeTextarea(event)}
           onKeyDownCapture={(event): void => resizeTextarea(event)}

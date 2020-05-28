@@ -23,6 +23,11 @@ export const chatReducer = (state: IChatState, action: ChatActionType): IChatSta
         ...state,
         isLoading: action.payload,
       };
+    case 'error':
+      return {
+        ...state,
+        error: action.payload,
+      };
     default:
       return state;
   }

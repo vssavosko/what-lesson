@@ -70,7 +70,7 @@ export const Message: React.FC<IProps> = ({
 
   return (
     <>
-      {dateСomparison(sendingDate) && (
+      {userName && dateСomparison(sendingDate) && (
         <MessageDateSent>{dateFormatting(sendingDate, currentDate)}</MessageDateSent>
       )}
       {userName && (
