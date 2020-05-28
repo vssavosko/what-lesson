@@ -19,6 +19,7 @@ export interface IChatState {
   message: string;
   messages: MessageType[];
   isLoading: boolean;
+  error: string;
 }
 
 export interface ITextareaAction {
@@ -39,4 +40,9 @@ export interface IMessagesAction {
 export interface ILoadingAction {
   type: 'isLoading';
   payload: boolean;
+}
+
+export interface IErrorAction {
+  type: 'error';
+  payload: string;
 }

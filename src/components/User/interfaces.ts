@@ -1,5 +1,6 @@
 export interface IStyledProps {
   ff?: string;
+  mb?: string;
 }
 
 export interface IProps {
