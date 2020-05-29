@@ -6,6 +6,8 @@ import { Loader } from '../Loader/Loader';
 
 import { Context } from '../../containers/app/appContext';
 
+import { checkingFingerprint } from '../../utils/checkingFingerprint';
+
 import { ReactComponent as CapIcon } from '../../assets/images/svg/cap-icon.svg';
 
 const Page = styled.div`
@@ -19,12 +21,6 @@ const Page = styled.div`
 
 export const LoaderScreen: React.FC = () => {
   const { dispatch } = useContext(Context);
-
-  const checkingFingerprint = (): string | null => {
-    const match = document.cookie.match(new RegExp('(^| )fingerprint=([^;]+)'));
-
-    return match ? decodeURIComponent(match[2]) : null;
-  };
 
   const fingerprint = checkingFingerprint();
 

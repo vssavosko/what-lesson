@@ -1,4 +1,5 @@
 import React, { useContext, useState, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -12,6 +13,7 @@ import { IProps, ICheckUserData } from './interfaces';
 import { Context } from '../../containers/app/appContext';
 
 import { inputMaskPhone } from '../../utils/inputMaskPhone';
+import { checkingFingerprint } from '../../utils/checkingFingerprint';
 
 const Page = styled.div`
   position: relative;
@@ -143,7 +145,7 @@ const Select = styled.select`
   transition: 0.2s;
   -webkit-appearance: none;
 `;
-const SubscriptionButton = styled.button`
+const DefaultButton = styled.button`
   box-sizing: border-box;
   width: 100%;
   font-family: 'SFProTextRegular', sans-serif;
@@ -173,6 +175,8 @@ export const Settings: React.FC<IProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const refUploadAvatar = useRef<HTMLInputElement>(null);
+
+  const history = useHistory();
 
   const clickUserAvatar = (): void => refUploadAvatar.current?.click();
 
@@ -287,16 +291,26 @@ export const Settings: React.FC<IProps> = ({
       });
   };
 
+  const requestToUnsubscribe = (): Promise<never | string> => {
+    return new Promise((resolve, reject) => {
+      fetch(`http://localhost:5000/unsubscribe`, {
+        method: 'POST',
+        body: JSON.stringify({
+          userToken,
+          userGroup: userRegistrationData.groupCode,
+        }),
+      })
+        .then(() => resolve())
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  };
+
   const unsubscribe = (): void => {
     setIsLoading(true);
 
-    fetch(`http://localhost:5000/unsubscribe`, {
-      method: 'POST',
-      body: JSON.stringify({
-        userToken,
-        userGroup: userRegistrationData.groupCode,
-      }),
-    })
+    requestToUnsubscribe()
       .then(() => {
         localStorage.removeItem('isSubscribed');
 
@@ -307,6 +321,36 @@ export const Settings: React.FC<IProps> = ({
       .catch((error) => {
         throw new Error(error);
       });
+  };
+
+  const logout = (): void => {
+    if (checkingFingerprint()) {
+      const expiresDate = new Date(new Date().getTime() - 1).toUTCString();
+
+      document.cookie = `fingerprint=; expires=${expiresDate}`;
+    }
+
+    if (isSubscribed) {
+      setIsLoading(true);
+
+      requestToUnsubscribe()
+        .then(() => {
+          localStorage.removeItem('isSubscribed');
+
+          dispatch({ type: 'isLoggedIn', payload: false });
+
+          history.go(0);
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+
+      return;
+    }
+
+    dispatch({ type: 'isLoggedIn', payload: false });
+
+    history.go(0);
   };
 
   return (
@@ -399,16 +443,21 @@ export const Settings: React.FC<IProps> = ({
             </Select>
           </Field>
           <SeparationHeader>Подписка на уведомления</SeparationHeader>
-          <Field>
+          <Field mb="16px">
             {!isSubscribed ? (
-              <SubscriptionButton type="button" onClick={subscribe} disabled={isLoading}>
-                {isLoading ? <Loader width="17px" /> : 'Подписаться'}
-              </SubscriptionButton>
+              <DefaultButton type="button" onClick={subscribe} disabled={isLoading}>
+                {isLoading ? <Loader width="16px" /> : 'Подписаться'}
+              </DefaultButton>
             ) : (
-              <SubscriptionButton type="button" onClick={unsubscribe} disabled={isLoading}>
-                {isLoading ? <Loader width="17px" /> : 'Отписаться'}
-              </SubscriptionButton>
+              <DefaultButton type="button" onClick={unsubscribe} disabled={isLoading}>
+                {isLoading ? <Loader width="16px" /> : 'Отписаться'}
+              </DefaultButton>
             )}
+          </Field>
+          <Field>
+            <DefaultButton type="button" onClick={logout} disabled={isLoading}>
+              {isLoading ? <Loader width="16px" /> : 'Выход'}
+            </DefaultButton>
           </Field>
         </UserDetails>
       </SettingsWindow>
