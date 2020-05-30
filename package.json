@@ -7,6 +7,7 @@
     "@styled-icons/evaicons-outline": "^10.2.0",
     "@styled-icons/evaicons-solid": "^10.2.0",
     "@styled-icons/feather": "^10.0.0",
+    "@styled-icons/heroicons-outline": "^10.0.0",
     "@styled-icons/remix-fill": "^10.0.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",

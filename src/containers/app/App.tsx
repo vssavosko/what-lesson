@@ -58,36 +58,6 @@ const GlobalStyles = createGlobalStyle`
     transition: 0.2s;
   }
 
-  .icon-light g {
-    stroke: rgba(0,0,0,0.5);
-    transition: .2s;
-  }
-
-  .icon-dark g {
-    stroke: #c0c0c0;
-    transition: .2s;
-  }
-
-  .icon-night-blue g {
-    stroke: #abafb4;
-    transition: .2s;
-  }
-
-  .active-light g {
-    stroke: #000;
-    transition: .2s;
-  }
-
-  .active-dark g {
-    stroke: #fefefe;
-    transition: .2s;
-  }
-
-  .active-night-blue g {
-    stroke: #5488ba;
-    transition: .2s;
-  }
-
   .tab-enter-done {
     transform: scale(0.9);
   }
@@ -220,7 +190,7 @@ export const App: React.FC = () => {
                     )}
                   />
                 </Switch>
-                <TabBar theme={state.theme} />
+                <TabBar />
               </>
             )}
           </Wrapper>

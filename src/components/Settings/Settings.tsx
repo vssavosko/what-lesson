@@ -301,9 +301,7 @@ export const Settings: React.FC<IProps> = ({
         }),
       })
         .then(() => resolve())
-        .catch((error) => {
-          reject(error);
-        });
+        .catch((error) => reject(error));
     });
   };
 
