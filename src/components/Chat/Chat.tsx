@@ -105,7 +105,7 @@ const MessageButton = styled.button`
   }
 `;
 
-export const Chat: React.FC<IProps> = ({ userRegistrationData, userAvatar }) => {
+export const Chat: React.FC<IProps> = ({ userRegistrationData, userRole, userAvatar }) => {
   const [state, dispatch] = useReducer(chatReducer, initialChatState);
 
   const refAnchor = useRef<HTMLDivElement>(null);
@@ -247,22 +247,24 @@ export const Chat: React.FC<IProps> = ({ userRegistrationData, userAvatar }) => 
         )}
         {!!state.error.length && <ErrorMessage>{state.error} &#x1F628;</ErrorMessage>}
       </ChatWindow>
-      <MessageBar>
-        <MessageTextarea
-          rows={1}
-          placeholder="Сообщение"
-          onChange={(event): void => dispatch({ type: 'message', payload: event.target.value })}
-          onKeyPress={(event): void | boolean =>
-            event.keyCode === 13 ? sendMessage(event) : false
-          }
-          onKeyUp={(event): void => resizeTextarea(event)}
-          onKeyDownCapture={(event): void => resizeTextarea(event)}
-          ref={refTextarea}
-        />
-        <MessageButton onClick={(event): void => sendMessage(event)}>
-          <MessageButtonIcon />
-        </MessageButton>
-      </MessageBar>
+      {userRole === 'headman' && (
+        <MessageBar>
+          <MessageTextarea
+            rows={1}
+            placeholder="Сообщение"
+            onChange={(event): void => dispatch({ type: 'message', payload: event.target.value })}
+            onKeyPress={(event): void | boolean =>
+              event.keyCode === 13 ? sendMessage(event) : false
+            }
+            onKeyUp={(event): void => resizeTextarea(event)}
+            onKeyDownCapture={(event): void => resizeTextarea(event)}
+            ref={refTextarea}
+          />
+          <MessageButton onClick={(event): void => sendMessage(event)}>
+            <MessageButtonIcon />
+          </MessageButton>
+        </MessageBar>
+      )}
     </Page>
   );
 };

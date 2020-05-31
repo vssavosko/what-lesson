@@ -35,6 +35,7 @@ export const LoaderScreen: React.FC = () => {
           authorization,
           key,
           userName,
+          role,
           userAvatar,
           firstName,
           lastName,
@@ -56,6 +57,7 @@ export const LoaderScreen: React.FC = () => {
             type: 'user',
             payload: {
               key,
+              role,
               userAvatar,
               firstName,
               lastName,

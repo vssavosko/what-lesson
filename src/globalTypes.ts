@@ -30,6 +30,7 @@ export type UserRegistrationType = {
 
 export type UserType = {
   key: string;
+  role: string;
   userAvatar: string;
   firstName: string;
   lastName: string;

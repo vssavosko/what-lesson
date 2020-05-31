@@ -139,6 +139,7 @@ export const LogInScreen: React.FC = () => {
             const {
               key,
               userName,
+              role,
               userAvatar,
               firstName,
               lastName,
@@ -190,6 +191,7 @@ export const LogInScreen: React.FC = () => {
               type: 'user',
               payload: {
                 key,
+                role,
                 userAvatar,
                 firstName,
                 lastName,

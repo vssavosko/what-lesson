@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   margin: 0 5px;
-  z-index: 3;
+  z-index: 10;
 `;
 const InstallBlock = styled.div`
   position: absolute;

@@ -3,13 +3,10 @@ import { Link, useLocation } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import { ITheme } from '../../globalInterfaces';
-import { IProps } from './interfaces';
+import { Home, Chat, ClipboardList } from '@styled-icons/heroicons-outline';
+import { Settings } from '@styled-icons/feather';
 
-import { ReactComponent as HomeIcon } from '../../assets/images/svg/home-icon.svg';
-import { ReactComponent as ChatIcon } from '../../assets/images/svg/chat-icon.svg';
-import { ReactComponent as StudentListIcon } from '../../assets/images/svg/student-list-icon.svg';
-import { ReactComponent as SettingsIcon } from '../../assets/images/svg/settings-icon.svg';
+import { ITheme } from '../../globalInterfaces';
 
 const Bar = styled.div`
   display: flex;
@@ -33,13 +30,52 @@ const Tab = styled.button`
   -webkit-appearance: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
-  &:hover svg g {
+  &:hover svg {
     stroke: ${(props: ITheme): string => props.theme.elementsColor};
   }
 `;
+const HomeIcon = styled(Home)`
+  width: 30px;
+  stroke: ${(props: ITheme): string =>
+    useLocation().pathname === '/' ? props.theme.elementsColor : props.theme.secondTextColor};
+  transition: 0.2s;
 
-export const TabBar: React.FC<IProps> = ({ theme }) => {
-  const pathName = useLocation().pathname;
+  & path {
+    stroke-width: 1;
+  }
+`;
+const ChatIcon = styled(Chat)`
+  width: 30px;
+  stroke: ${(props: ITheme): string =>
+    useLocation().pathname === '/chat' ? props.theme.elementsColor : props.theme.secondTextColor};
+  transition: 0.2s;
+
+  & path {
+    stroke-width: 1;
+  }
+`;
+const StudentListIcon = styled(ClipboardList)`
+  width: 30px;
+  stroke: ${(props: ITheme): string =>
+    useLocation().pathname === '/students-list'
+      ? props.theme.elementsColor
+      : props.theme.secondTextColor};
+  transition: 0.2s;
+
+  & path {
+    stroke-width: 1;
+  }
+`;
+const SettingsIcon = styled(Settings)`
+  width: 25px;
+  stroke: ${(props: ITheme): string =>
+    useLocation().pathname === '/settings'
+      ? props.theme.elementsColor
+      : props.theme.secondTextColor};
+  transition: 0.2s;
+`;
+
+export const TabBar: React.FC = () => {
   const linkStyles = {
     width: '100%',
     height: '100%',
@@ -47,22 +83,22 @@ export const TabBar: React.FC<IProps> = ({ theme }) => {
 
   return (
     <Bar>
-      <Tab className={pathName === '/' ? `active-${theme}` : `icon-${theme}`}>
+      <Tab>
         <Link to="/" style={linkStyles}>
           <HomeIcon />
         </Link>
       </Tab>
-      <Tab className={pathName === '/chat' ? `active-${theme}` : `icon-${theme}`}>
+      <Tab>
         <Link to="/chat" style={linkStyles}>
           <ChatIcon />
         </Link>
       </Tab>
-      <Tab className={pathName === '/students-list' ? `active-${theme}` : `icon-${theme}`}>
+      <Tab>
         <Link to="/students-list" style={linkStyles}>
           <StudentListIcon />
         </Link>
       </Tab>
-      <Tab className={pathName === '/settings' ? `active-${theme}` : `icon-${theme}`}>
+      <Tab>
         <Link to="/settings" style={linkStyles}>
           <SettingsIcon />
         </Link>

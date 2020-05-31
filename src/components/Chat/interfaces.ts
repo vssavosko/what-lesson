@@ -5,6 +5,7 @@ export interface IStyledProps {
 }
 export interface IProps {
   userRegistrationData: UserRegistrationType;
+  userRole: string;
   userAvatar: string;
 }
 
