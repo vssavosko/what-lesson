@@ -36,8 +36,10 @@ const ChatWindow = styled.div`
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 
-  &::-webkit-scrollbar {
-    display: none;
+  @media (min-width: 1000px) {
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 `;
 const ChatHistory = styled.div`

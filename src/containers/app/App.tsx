@@ -92,7 +92,8 @@ const Wrapper = styled.div`
 
   @media (min-width: 1000px) {
     border-radius: 25px;
-    box-shadow: 0 0 20px 5px ${(props: ITheme): string => props.theme.background};
+    box-shadow: ${(props: ITheme): string =>
+      props.theme.name !== 'light' ? `0 0 20px 5px ${props.theme.background}` : ''};
   }
 `;
 

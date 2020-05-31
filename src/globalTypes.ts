@@ -57,6 +57,7 @@ export type StudentsType = {
 };
 
 export type ThemeType = {
+  name: string;
   mainTextColor: string;
   secondTextColor: string;
   background: string;
