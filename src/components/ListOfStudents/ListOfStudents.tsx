@@ -12,7 +12,6 @@ const Page = styled.div`
   flex-grow: 1;
   flex-direction: column;
   background-color: ${(props: ITheme): string => props.theme.background};
-  padding: 0 16px;
 `;
 const StudentsWindow = styled.div`
   position: relative;
@@ -22,14 +21,17 @@ const StudentsWindow = styled.div`
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 
-  &::-webkit-scrollbar {
-    display: none;
+  @media (min-width: 1000px) {
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 `;
 const List = styled.div`
+  box-sizing: border-box;
   position: absolute;
   width: 100%;
-  padding: 16px 0;
+  padding: 16px;
 `;
 
 export const ListOfStudents: React.FC<IProps> = ({ students }) => {

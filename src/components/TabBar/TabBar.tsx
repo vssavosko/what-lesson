@@ -10,8 +10,7 @@ import { ITheme } from '../../globalInterfaces';
 
 const Bar = styled.div`
   display: flex;
-  flex-shrink: 0;
-  height: 47px;
+  min-height: 44px;
   padding: 0 16px;
   border-top: 1px solid ${(props: ITheme): string => props.theme.borderColor};
   background-color: ${(props: ITheme): string => props.theme.elementBackground};
@@ -20,12 +19,13 @@ const Bar = styled.div`
 `;
 const Tab = styled.button`
   display: flex;
-  width: 93.75px;
-  height: 47px;
-  background-color: transparent;
-  border: 0;
   justify-content: center;
   align-items: center;
+  width: 93.75px;
+  height: 44px;
+  background-color: transparent;
+  padding: 0;
+  border: 0;
   outline: none;
   -webkit-appearance: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);

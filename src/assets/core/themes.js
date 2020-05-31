@@ -1,5 +1,6 @@
 export const themes = {
   light: {
+    name: 'light',
     mainTextColor: '#000',
     secondTextColor: 'rgba(0,0,0,0.5)',
     background: '#fff',
@@ -9,6 +10,7 @@ export const themes = {
     borderColor: '#f3f3f3',
   },
   dark: {
+    name: 'dark',
     mainTextColor: '#fefefe',
     secondTextColor: '#c0c0c0',
     background: '#0a0a0a',
@@ -18,6 +20,7 @@ export const themes = {
     borderColor: '#1a1a1d',
   },
   nightBlue: {
+    name: 'nightBlue',
     mainTextColor: '#fdfdfd',
     secondTextColor: '#abafb4',
     background: '#1a202d',

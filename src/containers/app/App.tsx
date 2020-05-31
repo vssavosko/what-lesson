@@ -54,8 +54,13 @@ const GlobalStyles = createGlobalStyle`
   body {
     position: fixed;
     width: 100%;
+    height: 100%;
     overflow: hidden;
     transition: 0.2s;
+  }
+
+  #root {
+    height: 100%;
   }
 
   .tab-enter-done {
@@ -80,14 +85,15 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 1200px;
-  min-height: 100vh;
+  height: 100%;
   margin: 0 auto;
   overflow: hidden;
   transition: 0.2s;
 
   @media (min-width: 1000px) {
     border-radius: 25px;
-    box-shadow: 0 0 20px 5px ${(props: ITheme): string => props.theme.background};
+    box-shadow: ${(props: ITheme): string =>
+      props.theme.name !== 'light' ? `0 0 20px 5px ${props.theme.background}` : ''};
   }
 `;
 

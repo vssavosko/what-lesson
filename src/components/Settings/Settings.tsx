@@ -25,8 +25,10 @@ const Page = styled.div`
   transition: 0.2s;
   -webkit-overflow-scrolling: touch;
 
-  &::-webkit-scrollbar {
-    display: none;
+  @media (min-width: 1000px) {
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 `;
 const SettingsWindow = styled.div`
