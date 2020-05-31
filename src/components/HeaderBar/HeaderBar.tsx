@@ -6,11 +6,11 @@ import { ITheme } from '../../globalInterfaces';
 
 const Header = styled.div`
   display: flex;
-  height: 44px;
-  border-bottom: 1px solid ${(props: ITheme): string => props.theme.borderColor};
-  background-color: ${(props: ITheme): string => props.theme.elementBackground};
   justify-content: center;
   align-items: center;
+  min-height: 44px;
+  background-color: ${(props: ITheme): string => props.theme.elementBackground};
+  border-bottom: 1px solid ${(props: ITheme): string => props.theme.borderColor};
   z-index: 2;
   transition: 0.2s;
 `;

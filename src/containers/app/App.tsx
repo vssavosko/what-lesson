@@ -54,8 +54,13 @@ const GlobalStyles = createGlobalStyle`
   body {
     position: fixed;
     width: 100%;
+    height: 100%;
     overflow: hidden;
     transition: 0.2s;
+  }
+
+  #root {
+    height: 100%;
   }
 
   .tab-enter-done {
@@ -80,7 +85,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 1200px;
-  min-height: 100vh;
+  height: 100%;
   margin: 0 auto;
   overflow: hidden;
   transition: 0.2s;

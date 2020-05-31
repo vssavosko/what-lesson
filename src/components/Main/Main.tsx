@@ -17,16 +17,16 @@ import { ReactComponent as DotsIcon } from '../../assets/images/svg/dots-icon.sv
 
 const Page = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  flex-grow: 1;
-  justify-content: center;
-  align-items: flex-end;
+  flex: 1 0 auto;
+  flex-direction: column;
+  justify-content: flex-end;
   background-color: ${(props: ITheme): string => props.theme.background};
   padding-bottom: 16px;
 `;
 const Greeting = styled.div`
   width: 274px;
-  margin: 0 auto;
+  padding: 16px 0;
+  margin: auto;
 
   @media (max-width: 321px) {
     width: 220px;
