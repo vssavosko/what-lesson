@@ -1,6 +1,7 @@
 import { UserRegistrationType, UserType, ScheduleType } from '../../globalTypes';
 
 export interface IProps {
+  host: string;
   isSubscribed: boolean;
   userToken: string;
   userRegistrationData: UserRegistrationType;

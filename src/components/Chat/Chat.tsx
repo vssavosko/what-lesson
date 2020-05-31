@@ -107,7 +107,7 @@ const MessageButton = styled.button`
   }
 `;
 
-export const Chat: React.FC<IProps> = ({ userRegistrationData, userRole, userAvatar }) => {
+export const Chat: React.FC<IProps> = ({ host, userRegistrationData, userRole, userAvatar }) => {
   const [state, dispatch] = useReducer(chatReducer, initialChatState);
 
   const refAnchor = useRef<HTMLDivElement>(null);
@@ -154,8 +154,8 @@ export const Chat: React.FC<IProps> = ({ userRegistrationData, userRole, userAva
         notification: {
           title: 'What Lesson',
           body: messageData.messageText,
-          click_action: 'http://localhost:3000/chat',
-          icon: 'http://localhost:3000/icon-96.png',
+          click_action: `${host}/chat`,
+          icon: `${host}/icon-96.png`,
         },
         to: `/topics/${userRegistrationData.groupCode}`,
       };
@@ -171,7 +171,7 @@ export const Chat: React.FC<IProps> = ({ userRegistrationData, userRole, userAva
         scrollToBottom();
       });
 
-      fetch(`http://localhost:5000/sendMessage`, {
+      fetch(`${host}/sendMessage`, {
         method: 'POST',
         body: JSON.stringify(payload),
       }).catch((error) => {
@@ -181,7 +181,7 @@ export const Chat: React.FC<IProps> = ({ userRegistrationData, userRole, userAva
   };
 
   useEffect(() => {
-    fetch(`http://localhost:5000/getMessages`, {
+    fetch(`${host}/getMessages`, {
       method: 'POST',
       body: JSON.stringify({ userGroup: userRegistrationData.groupCode }),
     })
@@ -203,7 +203,7 @@ export const Chat: React.FC<IProps> = ({ userRegistrationData, userRole, userAva
       .catch((error) => {
         throw new Error(error);
       });
-  }, [userRegistrationData]);
+  }, [host, userRegistrationData]);
 
   useEffect(() => {
     if (Object.keys(state.textareaData).length) {
