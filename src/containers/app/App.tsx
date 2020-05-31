@@ -169,6 +169,7 @@ export const App: React.FC = () => {
                     render={(): JSX.Element => (
                       <Chat
                         userRegistrationData={state.userRegistrationData}
+                        userRole={state.user.role}
                         userAvatar={state.user.userAvatar}
                       />
                     )}

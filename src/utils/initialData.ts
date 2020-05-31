@@ -13,6 +13,7 @@ const initialUserRegistrationData: UserRegistrationType = {
 };
 const initialUser: UserType = {
   key: '',
+  role: '',
   userAvatar: '',
   firstName: '',
   lastName: '',
