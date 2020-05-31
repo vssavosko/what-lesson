@@ -19,13 +19,13 @@ const Page = styled.div`
   background: linear-gradient(-25deg, #000, #3f435f);
 `;
 
-export const LoaderScreen: React.FC = () => {
+export const LoaderScreen: React.FC<{ host: string }> = ({ host }) => {
   const { dispatch } = useContext(Context);
 
   const fingerprint = checkingFingerprint();
 
   useEffect(() => {
-    fetch('http://localhost:5000/checking_remember_me', {
+    fetch(`${host}/checking_remember_me`, {
       method: 'POST',
       body: JSON.stringify({ fingerprint }),
     })
@@ -49,6 +49,10 @@ export const LoaderScreen: React.FC = () => {
         } = res;
 
         if (authorization) {
+          dispatch({
+            type: 'host',
+            payload: host,
+          });
           dispatch({
             type: 'userRegistrationData',
             payload: { userName, groupCode },
@@ -86,7 +90,7 @@ export const LoaderScreen: React.FC = () => {
           payload: false,
         });
       });
-  }, [fingerprint, dispatch]);
+  }, [host, fingerprint, dispatch]);
 
   return (
     <Page>

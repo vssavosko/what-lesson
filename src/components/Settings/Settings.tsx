@@ -166,6 +166,7 @@ const DefaultButton = styled.button`
 `;
 
 export const Settings: React.FC<IProps> = ({
+  host,
   isSubscribed,
   userToken,
   userRegistrationData,
@@ -192,7 +193,7 @@ export const Settings: React.FC<IProps> = ({
 
       formData.append('user-avatar', files[0], user.key);
 
-      fetch(`http://localhost:5000/upload_user_avatar`, {
+      fetch(`${host}/upload_user_avatar`, {
         method: 'POST',
         body: formData,
       })
@@ -205,11 +206,11 @@ export const Settings: React.FC<IProps> = ({
               value: res.path,
             };
 
-            fetch(`http://localhost:5000/update_user_profile`, {
+            fetch(`${host}/update_user_profile`, {
               method: 'POST',
               body: JSON.stringify(payload),
             }).then(() => {
-              const payload = { ...user, userAvatar: `http://localhost:5000/${res.path}` };
+              const payload = { ...user, userAvatar: `${host}/${res.path}` };
 
               dispatch({ type: 'user', payload });
             });
@@ -239,7 +240,7 @@ export const Settings: React.FC<IProps> = ({
       value: target.value,
     };
 
-    fetch(`http://localhost:5000/update_user_profile`, {
+    fetch(`${host}/update_user_profile`, {
       method: 'POST',
       body: JSON.stringify(payload),
     }).then(() => {
@@ -274,7 +275,7 @@ export const Settings: React.FC<IProps> = ({
   const subscribe = (): void => {
     setIsLoading(true);
 
-    fetch(`http://localhost:5000/subscribe`, {
+    fetch(`${host}/subscribe`, {
       method: 'POST',
       body: JSON.stringify({
         userToken,
@@ -295,7 +296,7 @@ export const Settings: React.FC<IProps> = ({
 
   const requestToUnsubscribe = (): Promise<never | string> => {
     return new Promise((resolve, reject) => {
-      fetch(`http://localhost:5000/unsubscribe`, {
+      fetch(`${host}/unsubscribe`, {
         method: 'POST',
         body: JSON.stringify({
           userToken,

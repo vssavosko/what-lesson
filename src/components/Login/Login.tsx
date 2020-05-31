@@ -104,7 +104,7 @@ const SubmitButton = styled.button`
   -webkit-appearance: none;
 `;
 
-export const LogInScreen: React.FC = () => {
+export const LogInScreen: React.FC<{ host: string }> = ({ host }) => {
   const { dispatch } = useContext(Context);
 
   const [isAuthorizationAttempt, setIsAuthorizationAttempt] = useState(false);
@@ -129,7 +129,7 @@ export const LogInScreen: React.FC = () => {
         password: refPassword?.current?.value,
       };
 
-      fetch('http://localhost:5000/login', {
+      fetch(`${host}/login`, {
         method: 'POST',
         body: JSON.stringify(payload),
       })
@@ -160,7 +160,7 @@ export const LogInScreen: React.FC = () => {
                 token: btoa(`${email} ${key} ${window.navigator.userAgent}`),
               };
 
-              fetch(`http://localhost:5000/generating_fingerprint`, {
+              fetch(`${host}/generating_fingerprint`, {
                 method: 'POST',
                 body: JSON.stringify(payload),
               })
@@ -172,7 +172,7 @@ export const LogInScreen: React.FC = () => {
                     value: res.fingerprint,
                   };
 
-                  fetch(`http://localhost:5000/update_user_profile`, {
+                  fetch(`${host}/update_user_profile`, {
                     method: 'POST',
                     body: JSON.stringify(payload),
                   }).then(() => {
@@ -183,6 +183,10 @@ export const LogInScreen: React.FC = () => {
               document.cookie = `fingerprint=${fingerprint}`;
             }
 
+            dispatch({
+              type: 'host',
+              payload: host,
+            });
             dispatch({
               type: 'userRegistrationData',
               payload: { userName, groupCode },
@@ -222,7 +226,7 @@ export const LogInScreen: React.FC = () => {
           throw new Error(error);
         });
     }
-  }, [isAuthorizationAttempt, isChecked, dispatch]);
+  }, [host, isAuthorizationAttempt, isChecked, dispatch]);
 
   return (
     <Page>

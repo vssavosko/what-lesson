@@ -19,6 +19,7 @@ import { Context } from './appContext';
 import { appReducer } from './appReducer';
 
 import { socket } from '../../utils/socketConnection';
+import { host } from '../../utils/hostCheck';
 import { getUserToken } from '../../utils/pushNotification';
 import { initialState } from '../../utils/initialData';
 import { changingStatusBarColor } from '../../utils/changingStatusBarColor';
@@ -158,9 +159,9 @@ export const App: React.FC = () => {
         <ThemeProvider theme={themeSelection(state.theme)}>
           <GlobalStyles />
           <Wrapper theme={state.theme === 'light' ? '' : themeSelection(state.theme)}>
-            {state.isLoading && <LoaderScreen />}
+            {state.isLoading && <LoaderScreen host={host()} />}
             {state.isInstall && !state.isLoading && <Install />}
-            {!state.isLoggedIn && !state.isLoading && <LogInScreen />}
+            {!state.isLoggedIn && !state.isLoading && <LogInScreen host={host()} />}
             {state.isLoggedIn && !state.isLoading && (
               <>
                 <HeaderBar />
@@ -174,6 +175,7 @@ export const App: React.FC = () => {
                     path="/chat"
                     render={(): JSX.Element => (
                       <Chat
+                        host={state.host}
                         userRegistrationData={state.userRegistrationData}
                         userRole={state.user.role}
                         userAvatar={state.user.userAvatar}
@@ -188,6 +190,7 @@ export const App: React.FC = () => {
                     path="/settings"
                     render={(): JSX.Element => (
                       <Settings
+                        host={state.host}
                         isSubscribed={state.isSubscribed}
                         userToken={state.token}
                         userRegistrationData={state.userRegistrationData}

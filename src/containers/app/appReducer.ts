@@ -3,6 +3,11 @@ import { ActionType } from '../../globalTypes';
 
 export const appReducer = (state: IState, action: ActionType): IState => {
   switch (action.type) {
+    case 'host':
+      return {
+        ...state,
+        host: action.payload,
+      };
     case 'isLoading':
       return {
         ...state,

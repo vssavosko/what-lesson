@@ -1,4 +1,5 @@
 import {
+  IHostAction,
   ILoadingAction,
   ILoggedInAction,
   IInstallAction,
@@ -12,6 +13,7 @@ import {
 } from './globalInterfaces';
 
 export type ActionType =
+  | IHostAction
   | ILoadingAction
   | ILoggedInAction
   | IInstallAction

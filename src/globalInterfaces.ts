@@ -7,6 +7,7 @@ import {
 } from './globalTypes';
 
 export interface IState {
+  host: string;
   isLoading: boolean;
   isLoggedIn: boolean;
   isInstall: boolean;
@@ -17,6 +18,11 @@ export interface IState {
   schedule: ScheduleType[][];
   listOfStudents: StudentsType[];
   theme: string;
+}
+
+export interface IHostAction {
+  type: 'host';
+  payload: string;
 }
 
 export interface ILoadingAction {

@@ -59,6 +59,7 @@ const initialMessages: MessageType[] = [
 ];
 
 export const initialState = {
+  host: '',
   isLoading: true,
   isLoggedIn: false,
   isInstall: false,

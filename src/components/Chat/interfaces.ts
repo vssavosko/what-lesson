@@ -4,6 +4,7 @@ export interface IStyledProps {
   positioning: string;
 }
 export interface IProps {
+  host: string;
   userRegistrationData: UserRegistrationType;
   userRole: string;
   userAvatar: string;
