@@ -203,8 +203,10 @@ export const Settings: React.FC<IProps> = ({
             const payload = {
               host,
               key: user.key,
+              userGroup: userRegistrationData.groupCode,
               name: 'userAvatar',
               value: res.path,
+              oldValue: user.userAvatar,
             };
 
             fetch(`${host.api}/update_user_profile`, {
