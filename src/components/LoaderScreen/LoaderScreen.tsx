@@ -6,6 +6,7 @@ import { Loader } from '../Loader/Loader';
 
 import { Context } from '../../containers/app/appContext';
 
+import { host } from '../../utils/hostCheck';
 import { checkingFingerprint } from '../../utils/checkingFingerprint';
 
 import { ReactComponent as CapIcon } from '../../assets/images/svg/cap-icon.svg';
@@ -19,13 +20,13 @@ const Page = styled.div`
   background: linear-gradient(-25deg, #000, #3f435f);
 `;
 
-export const LoaderScreen: React.FC<{ host: string }> = ({ host }) => {
+export const LoaderScreen: React.FC = () => {
   const { dispatch } = useContext(Context);
 
   const fingerprint = checkingFingerprint();
 
   useEffect(() => {
-    fetch(`${host}/checking_remember_me`, {
+    fetch(`${host().api}/checking_remember_me`, {
       method: 'POST',
       body: JSON.stringify({ fingerprint }),
     })
@@ -51,7 +52,7 @@ export const LoaderScreen: React.FC<{ host: string }> = ({ host }) => {
         if (authorization) {
           dispatch({
             type: 'host',
-            payload: host,
+            payload: host(),
           });
           dispatch({
             type: 'userRegistrationData',
@@ -90,7 +91,7 @@ export const LoaderScreen: React.FC<{ host: string }> = ({ host }) => {
           payload: false,
         });
       });
-  }, [host, fingerprint, dispatch]);
+  }, [fingerprint, dispatch]);
 
   return (
     <Page>

@@ -154,8 +154,8 @@ export const Chat: React.FC<IProps> = ({ host, userRegistrationData, userRole, u
         notification: {
           title: 'What Lesson',
           body: messageData.messageText,
-          click_action: 'https://wl.vssavosko.tech/chat',
-          icon: `${host}/icon-96.png`,
+          click_action: `${host.name}/chat`,
+          icon: `${host.name}/icon-96.png`,
         },
         to: `/topics/${userRegistrationData.groupCode}`,
       };
@@ -171,7 +171,7 @@ export const Chat: React.FC<IProps> = ({ host, userRegistrationData, userRole, u
         scrollToBottom();
       });
 
-      fetch(`${host}/sendMessage`, {
+      fetch(`${host.api}/sendMessage`, {
         method: 'POST',
         body: JSON.stringify(payload),
       }).catch((error) => {
@@ -181,7 +181,7 @@ export const Chat: React.FC<IProps> = ({ host, userRegistrationData, userRole, u
   };
 
   useEffect(() => {
-    fetch(`${host}/getMessages`, {
+    fetch(`${host.api}/getMessages`, {
       method: 'POST',
       body: JSON.stringify({ userGroup: userRegistrationData.groupCode }),
     })

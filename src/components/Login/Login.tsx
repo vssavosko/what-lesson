@@ -8,6 +8,8 @@ import { IMargin } from '../../globalInterfaces';
 
 import { Context } from '../../containers/app/appContext';
 
+import { host } from '../../utils/hostCheck';
+
 import { ReactComponent as CapIcon } from '../../assets/images/svg/cap-icon.svg';
 
 const Page = styled.div`
@@ -104,7 +106,7 @@ const SubmitButton = styled.button`
   -webkit-appearance: none;
 `;
 
-export const LogInScreen: React.FC<{ host: string }> = ({ host }) => {
+export const LogInScreen: React.FC = () => {
   const { dispatch } = useContext(Context);
 
   const [isAuthorizationAttempt, setIsAuthorizationAttempt] = useState(false);
@@ -129,7 +131,7 @@ export const LogInScreen: React.FC<{ host: string }> = ({ host }) => {
         password: refPassword?.current?.value,
       };
 
-      fetch(`${host}/login`, {
+      fetch(`${host().api}/login`, {
         method: 'POST',
         body: JSON.stringify(payload),
       })
@@ -160,7 +162,7 @@ export const LogInScreen: React.FC<{ host: string }> = ({ host }) => {
                 token: btoa(`${email} ${key} ${window.navigator.userAgent}`),
               };
 
-              fetch(`${host}/generating_fingerprint`, {
+              fetch(`${host().api}/generating_fingerprint`, {
                 method: 'POST',
                 body: JSON.stringify(payload),
               })
@@ -172,7 +174,7 @@ export const LogInScreen: React.FC<{ host: string }> = ({ host }) => {
                     value: res.fingerprint,
                   };
 
-                  fetch(`${host}/update_user_profile`, {
+                  fetch(`${host().api}/update_user_profile`, {
                     method: 'POST',
                     body: JSON.stringify(payload),
                   }).then(() => {
@@ -185,7 +187,7 @@ export const LogInScreen: React.FC<{ host: string }> = ({ host }) => {
 
             dispatch({
               type: 'host',
-              payload: host,
+              payload: host(),
             });
             dispatch({
               type: 'userRegistrationData',
@@ -226,7 +228,7 @@ export const LogInScreen: React.FC<{ host: string }> = ({ host }) => {
           throw new Error(error);
         });
     }
-  }, [host, isAuthorizationAttempt, isChecked, dispatch]);
+  }, [isAuthorizationAttempt, isChecked, dispatch]);
 
   return (
     <Page>

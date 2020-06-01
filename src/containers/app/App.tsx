@@ -19,7 +19,6 @@ import { Context } from './appContext';
 import { appReducer } from './appReducer';
 
 import { socket } from '../../utils/socketConnection';
-import { host } from '../../utils/hostCheck';
 import { getUserToken } from '../../utils/pushNotification';
 import { initialState } from '../../utils/initialData';
 import { changingStatusBarColor } from '../../utils/changingStatusBarColor';
@@ -159,9 +158,9 @@ export const App: React.FC = () => {
         <ThemeProvider theme={themeSelection(state.theme)}>
           <GlobalStyles />
           <Wrapper theme={state.theme === 'light' ? '' : themeSelection(state.theme)}>
-            {state.isLoading && <LoaderScreen host={host()} />}
+            {state.isLoading && <LoaderScreen />}
             {state.isInstall && !state.isLoading && <Install />}
-            {!state.isLoggedIn && !state.isLoading && <LogInScreen host={host()} />}
+            {!state.isLoggedIn && !state.isLoading && <LogInScreen />}
             {state.isLoggedIn && !state.isLoading && (
               <>
                 <HeaderBar />

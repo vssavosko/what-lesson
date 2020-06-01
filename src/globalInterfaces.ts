@@ -1,4 +1,5 @@
 import {
+  HostType,
   UserRegistrationType,
   UserType,
   ScheduleType,
@@ -7,7 +8,7 @@ import {
 } from './globalTypes';
 
 export interface IState {
-  host: string;
+  host: HostType;
   isLoading: boolean;
   isLoggedIn: boolean;
   isInstall: boolean;
@@ -22,7 +23,7 @@ export interface IState {
 
 export interface IHostAction {
   type: 'host';
-  payload: string;
+  payload: HostType;
 }
 
 export interface ILoadingAction {

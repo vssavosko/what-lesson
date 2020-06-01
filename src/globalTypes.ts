@@ -25,6 +25,11 @@ export type ActionType =
   | IStudentsAction
   | IThemeAction;
 
+export type HostType = {
+  name: string;
+  api: string;
+};
+
 export type UserRegistrationType = {
   userName: string;
   groupCode: string;

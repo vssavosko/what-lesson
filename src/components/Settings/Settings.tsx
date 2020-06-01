@@ -193,7 +193,7 @@ export const Settings: React.FC<IProps> = ({
 
       formData.append('user-avatar', files[0], user.key);
 
-      fetch(`${host}/upload_user_avatar`, {
+      fetch(`${host.api}/upload_user_avatar`, {
         method: 'POST',
         body: formData,
       })
@@ -201,16 +201,17 @@ export const Settings: React.FC<IProps> = ({
         .then((res) => {
           if (res.upload) {
             const payload = {
+              host,
               key: user.key,
               name: 'userAvatar',
               value: res.path,
             };
 
-            fetch(`${host}/update_user_profile`, {
+            fetch(`${host.api}/update_user_profile`, {
               method: 'POST',
               body: JSON.stringify(payload),
             }).then(() => {
-              const payload = { ...user, userAvatar: `${host}/${res.path}` };
+              const payload = { ...user, userAvatar: `${host.name}/${res.path}` };
 
               dispatch({ type: 'user', payload });
             });
@@ -240,7 +241,7 @@ export const Settings: React.FC<IProps> = ({
       value: target.value,
     };
 
-    fetch(`${host}/update_user_profile`, {
+    fetch(`${host.api}/update_user_profile`, {
       method: 'POST',
       body: JSON.stringify(payload),
     }).then(() => {
@@ -275,7 +276,7 @@ export const Settings: React.FC<IProps> = ({
   const subscribe = (): void => {
     setIsLoading(true);
 
-    fetch(`${host}/subscribe`, {
+    fetch(`${host.api}/subscribe`, {
       method: 'POST',
       body: JSON.stringify({
         userToken,
@@ -296,7 +297,7 @@ export const Settings: React.FC<IProps> = ({
 
   const requestToUnsubscribe = (): Promise<never | string> => {
     return new Promise((resolve, reject) => {
-      fetch(`${host}/unsubscribe`, {
+      fetch(`${host.api}/unsubscribe`, {
         method: 'POST',
         body: JSON.stringify({
           userToken,

@@ -1,7 +1,7 @@
-import { UserRegistrationType, UserType, ScheduleType } from '../../globalTypes';
+import { HostType, UserRegistrationType, UserType, ScheduleType } from '../../globalTypes';
 
 export interface IProps {
-  host: string;
+  host: HostType;
   isSubscribed: boolean;
   userToken: string;
   userRegistrationData: UserRegistrationType;
