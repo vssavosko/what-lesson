@@ -154,7 +154,7 @@ export const Chat: React.FC<IProps> = ({ host, userRegistrationData, userRole, u
         notification: {
           title: 'What Lesson',
           body: messageData.messageText,
-          click_action: `${host}/chat`,
+          click_action: 'https://wl.vssavosko.tech/chat',
           icon: `${host}/icon-96.png`,
         },
         to: `/topics/${userRegistrationData.groupCode}`,
