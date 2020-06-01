@@ -1,4 +1,5 @@
 import {
+  HostType,
   UserRegistrationType,
   UserType,
   ScheduleType,
@@ -6,6 +7,10 @@ import {
   MessageType,
 } from '../globalTypes';
 
+const initialHost: HostType = {
+  name: '',
+  api: '',
+};
 const initialSubscribe = (): boolean => !!localStorage.getItem('isSubscribed');
 const initialUserRegistrationData: UserRegistrationType = {
   userName: '',
@@ -59,7 +64,7 @@ const initialMessages: MessageType[] = [
 ];
 
 export const initialState = {
-  host: '',
+  host: initialHost,
   isLoading: true,
   isLoggedIn: false,
   isInstall: false,

@@ -1,10 +1,10 @@
-import { UserRegistrationType, MessageType } from '../../globalTypes';
+import { HostType, UserRegistrationType, MessageType } from '../../globalTypes';
 
 export interface IStyledProps {
   positioning: string;
 }
 export interface IProps {
-  host: string;
+  host: HostType;
   userRegistrationData: UserRegistrationType;
   userRole: string;
   userAvatar: string;
