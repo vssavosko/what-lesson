@@ -18,9 +18,6 @@ const Bar = styled.div`
   transition: 0.2s;
 `;
 const Tab = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 93.75px;
   height: 44px;
   background-color: transparent;
@@ -33,6 +30,13 @@ const Tab = styled.button`
   &:hover svg {
     stroke: ${(props: ITheme): string => props.theme.elementsColor};
   }
+`;
+const TabLink = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 `;
 const HomeIcon = styled(Home)`
   width: 30px;
@@ -76,32 +80,27 @@ const SettingsIcon = styled(Settings)`
 `;
 
 export const TabBar: React.FC = () => {
-  const linkStyles = {
-    width: '100%',
-    height: '100%',
-  };
-
   return (
     <Bar>
       <Tab>
-        <Link to="/" style={linkStyles}>
+        <TabLink to="/">
           <HomeIcon />
-        </Link>
+        </TabLink>
       </Tab>
       <Tab>
-        <Link to="/chat" style={linkStyles}>
+        <TabLink to="/chat">
           <ChatIcon />
-        </Link>
+        </TabLink>
       </Tab>
       <Tab>
-        <Link to="/students-list" style={linkStyles}>
+        <TabLink to="/students-list">
           <StudentListIcon />
-        </Link>
+        </TabLink>
       </Tab>
       <Tab>
-        <Link to="/settings" style={linkStyles}>
+        <TabLink to="/settings">
           <SettingsIcon />
-        </Link>
+        </TabLink>
       </Tab>
     </Bar>
   );
