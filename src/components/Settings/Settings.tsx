@@ -343,6 +343,7 @@ export const Settings: React.FC<IProps> = ({
 
           dispatch({ type: 'isLoggedIn', payload: false });
 
+          history.push('/');
           history.go(0);
         })
         .catch((error) => {
@@ -354,6 +355,7 @@ export const Settings: React.FC<IProps> = ({
 
     dispatch({ type: 'isLoggedIn', payload: false });
 
+    history.push('/');
     history.go(0);
   };
 
