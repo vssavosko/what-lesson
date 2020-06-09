@@ -82,22 +82,22 @@ const SettingsIcon = styled(Settings)`
 export const TabBar: React.FC = () => {
   return (
     <Bar>
-      <Tab>
+      <Tab type="button">
         <TabLink to="/">
           <HomeIcon />
         </TabLink>
       </Tab>
-      <Tab>
+      <Tab type="button">
         <TabLink to="/chat">
           <ChatIcon />
         </TabLink>
       </Tab>
-      <Tab>
+      <Tab type="button">
         <TabLink to="/students-list">
           <StudentListIcon />
         </TabLink>
       </Tab>
-      <Tab>
+      <Tab type="button">
         <TabLink to="/settings">
           <SettingsIcon />
         </TabLink>

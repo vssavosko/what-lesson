@@ -11,6 +11,8 @@ import { ScheduleType } from '../../globalTypes';
 import { ITheme, IPadding } from '../../globalInterfaces';
 import { IProps } from './interfaces';
 
+import { nameFormatting } from '../../utils/nameFormatting';
+
 import 'swiper/css/swiper.min.css';
 
 import { ReactComponent as DotsIcon } from '../../assets/images/svg/dots-icon.svg';
@@ -283,7 +285,7 @@ export const Main: React.FC<IProps> = ({ user, schedule }) => {
                       schedule[index].map((lesson, index) =>
                         index < 2 ? (
                           <PrincipalValue key={index} pb="5px">
-                            {lesson.lessonName}
+                            {nameFormatting(lesson.lessonName, 19)}
                           </PrincipalValue>
                         ) : (
                           false
