@@ -100,8 +100,9 @@ export const Documents: React.FC<IProps> = ({ host, userRegistrationData }) => {
     {
       name: '',
       ext: '',
-      path: '',
       sendingDate: '',
+      userName: '',
+      path: '',
       size: '',
     },
   ]);
@@ -130,7 +131,7 @@ export const Documents: React.FC<IProps> = ({ host, userRegistrationData }) => {
         files[0],
         `${files[0].name}~~${userRegistrationData.groupCode}~~${
           host.name.split('//')[1]
-        }~~${date.toLocaleDateString('ru', options)}`,
+        }~~${date.toLocaleDateString('ru', options)}~~${userRegistrationData.userName}`,
       );
 
       fetch(`${host.api}/uploadDocument`, {
@@ -183,9 +184,7 @@ export const Documents: React.FC<IProps> = ({ host, userRegistrationData }) => {
       .catch((error) => {
         throw new Error(error);
       })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .finally(() => setIsLoading(false));
   }, [host, userRegistrationData]);
 
   return (
@@ -198,6 +197,7 @@ export const Documents: React.FC<IProps> = ({ host, userRegistrationData }) => {
               <DocumentItem
                 key={index}
                 host={host.api}
+                userName={userRegistrationData.userName}
                 userGroup={userRegistrationData.groupCode}
                 documentInfo={document}
                 updateDocumentsState={updateDocumentsState}

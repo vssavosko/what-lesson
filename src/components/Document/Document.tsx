@@ -86,6 +86,7 @@ const CloseIcon = styled(CloseOutline)`
 
 export const DocumentItem: React.FC<IProps> = ({
   host,
+  userName,
   userGroup,
   documentInfo,
   updateDocumentsState,
@@ -123,14 +124,16 @@ export const DocumentItem: React.FC<IProps> = ({
               </DocumentDetailInfo>
             </DocumentTextBlock>
           </DocumentLink>
-          <DocumentDeleteButton
-            type="button"
-            data-name={documentInfo.name}
-            data-ext={documentInfo.ext}
-            onClick={(event): void => deleteDocument(event)}
-          >
-            <CloseIcon />
-          </DocumentDeleteButton>
+          {userName === documentInfo.userName && (
+            <DocumentDeleteButton
+              type="button"
+              data-name={documentInfo.name}
+              data-ext={documentInfo.ext}
+              onClick={(event): void => deleteDocument(event)}
+            >
+              <CloseIcon />
+            </DocumentDeleteButton>
+          )}
         </DocumentBlock>
       ) : (
         false

@@ -85,8 +85,9 @@ export type LessonType = {
 export type DocumentType = {
   name: string;
   ext: string;
-  path: string;
   sendingDate: string;
+  userName: string;
+  path: string;
   size: string;
 };
 
