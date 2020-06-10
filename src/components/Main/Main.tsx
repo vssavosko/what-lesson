@@ -243,7 +243,7 @@ export const Main: React.FC<IProps> = ({ user, schedule }) => {
       <Greeting>
         <UserAvatar>
           {user.userAvatar.length ? (
-            <UserAvatarCustom src={user.userAvatar} />
+            <UserAvatarCustom src={user.userAvatar} alt="User avatar" />
           ) : (
             <UserAvatarDefault />
           )}

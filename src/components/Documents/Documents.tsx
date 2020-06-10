@@ -207,7 +207,7 @@ export const Documents: React.FC<IProps> = ({ host, userRegistrationData }) => {
         )}
         {!!error.length && <ErrorMessage>{error} &#x1F628;</ErrorMessage>}
         <AddDocumentBlock>
-          <AddDocumentButton onClick={clickUploadDocument}>
+          <AddDocumentButton aria-label="Add document" onClick={clickUploadDocument}>
             <PlusIcon />
             <UploadDocument
               type="file"

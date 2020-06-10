@@ -263,7 +263,7 @@ export const Chat: React.FC<IProps> = ({ host, userRegistrationData, userRole, u
             onKeyDownCapture={(event): void => resizeTextarea(event)}
             ref={refTextarea}
           />
-          <MessageButton onClick={(event): void => sendMessage(event)}>
+          <MessageButton aria-label="Send message" onClick={(event): void => sendMessage(event)}>
             <MessageButtonIcon />
           </MessageButton>
         </MessageBar>

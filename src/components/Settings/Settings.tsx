@@ -101,11 +101,12 @@ const Field = styled.div`
   margin-bottom: ${(props: IMargin): string | undefined => props.mb};
   transition: 0.2s;
 `;
-const Label = styled.div`
-  padding: 0 0 3px 7px;
+const Label = styled.label`
+  display: block;
   font-family: 'SFProTextRegular', sans-serif;
   font-size: 12px;
   color: ${(props: ITheme): string => props.theme.secondTextColor};
+  padding: 0 0 5px 7px;
   transition: 0.2s;
 `;
 const Input = styled.input`
@@ -365,7 +366,7 @@ export const Settings: React.FC<IProps> = ({
         <UserInfoPreview>
           <UserAvatar onClick={clickUserAvatar}>
             {user.userAvatar.length ? (
-              <UserAvatarCustom src={user.userAvatar} />
+              <UserAvatarCustom src={user.userAvatar} alt="User avatar" />
             ) : (
               <UserAvatarDefault />
             )}
@@ -383,8 +384,9 @@ export const Settings: React.FC<IProps> = ({
         </UserInfoPreview>
         <UserDetails>
           <Field mb="14px">
-            <Label>Имя</Label>
+            <Label htmlFor="firstName">Имя</Label>
             <Input
+              id="firstName"
               type="text"
               name="firstName"
               placeholder="Иван"
@@ -395,8 +397,9 @@ export const Settings: React.FC<IProps> = ({
             />
           </Field>
           <Field mb="14px">
-            <Label>Фамилия</Label>
+            <Label htmlFor="lastName">Фамилия</Label>
             <Input
+              id="lastName"
               type="text"
               name="lastName"
               placeholder="Иванов"
@@ -406,8 +409,9 @@ export const Settings: React.FC<IProps> = ({
             />
           </Field>
           <Field mb="14px">
-            <Label>E-mail</Label>
+            <Label htmlFor="email">E-mail</Label>
             <Input
+              id="email"
               type="email"
               name="email"
               placeholder="ivanov@gmail.com"
@@ -418,8 +422,9 @@ export const Settings: React.FC<IProps> = ({
             />
           </Field>
           <Field>
-            <Label>Телефон</Label>
+            <Label htmlFor="tel">Телефон</Label>
             <Input
+              id="tel"
               type="tel"
               name="phoneNumber"
               placeholder="+7 (999) 999-99-99"
@@ -432,17 +437,17 @@ export const Settings: React.FC<IProps> = ({
           </Field>
           <SeparationHeader>Учебная информация</SeparationHeader>
           <Field mb="14px">
-            <Label>Группа</Label>
-            <Input defaultValue={user.group} readOnly />
+            <Label htmlFor="group">Группа</Label>
+            <Input id="group" defaultValue={user.group} readOnly />
           </Field>
           <Field>
-            <Label>Курс</Label>
-            <Input defaultValue={user.course} readOnly />
+            <Label htmlFor="course">Курс</Label>
+            <Input id="course" defaultValue={user.course} readOnly />
           </Field>
           <SeparationHeader>Цветовая схема</SeparationHeader>
           <Field>
-            <Label>Тема</Label>
-            <Select value={theme} onChange={(event): void => changeTheme(event)}>
+            <Label htmlFor="theme">Тема</Label>
+            <Select id="theme" value={theme} onChange={(event): void => changeTheme(event)}>
               <option value="light">Light</option>
               <option value="dark">Dark</option>
               <option value="night-blue">Night Blue</option>

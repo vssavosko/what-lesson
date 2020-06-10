@@ -50,7 +50,11 @@ export const User: React.FC<IProps> = ({ userAvatar, firstName, lastName, email,
       {(firstName && email) || phoneNumber ? (
         <UserBlock>
           <UserAvatar>
-            {userAvatar.length ? <UserAvatarCustom src={userAvatar} /> : <UserAvatarDefault />}
+            {userAvatar.length ? (
+              <UserAvatarCustom src={userAvatar} alt={`${firstName} avatar`} />
+            ) : (
+              <UserAvatarDefault />
+            )}
           </UserAvatar>
           <UserInfo>
             <UserText ff="SFProTextSemibold" mb="4px">

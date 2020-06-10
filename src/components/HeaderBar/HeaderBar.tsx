@@ -62,7 +62,7 @@ export const HeaderBar: React.FC = () => {
   return (
     <Header>
       <Title>What Lesson</Title>
-      <DocumentsButton type="button">
+      <DocumentsButton type="button" aria-label="Routing to documents page">
         <DocumentsLink to="/documents">
           <DocumentsIcon />
         </DocumentsLink>

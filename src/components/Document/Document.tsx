@@ -127,6 +127,7 @@ export const DocumentItem: React.FC<IProps> = ({
           {userName === documentInfo.userName && (
             <DocumentDeleteButton
               type="button"
+              aria-label="Delete"
               data-name={documentInfo.name}
               data-ext={documentInfo.ext}
               onClick={(event): void => deleteDocument(event)}
