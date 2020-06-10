@@ -242,9 +242,9 @@ export const LogInScreen: React.FC = () => {
           <RememberMeCheckbox checkboxState={isChecked} onClick={toggleCheckbox} />
         </RememberMeBlock>
         <SubmitButton
-          onClick={(event: React.MouseEvent): void => authorization(event)}
           type="submit"
           disabled={isAuthorizationAttempt}
+          onClick={(event: React.MouseEvent): void => authorization(event)}
         >
           {isAuthorizationAttempt ? <Loader customTheme="#181a24" /> : 'войти'}
         </SubmitButton>

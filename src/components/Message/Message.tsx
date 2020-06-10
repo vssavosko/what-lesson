@@ -77,7 +77,7 @@ export const Message: React.FC<IProps> = ({
         <MessageBlock pb={!lastMessage ? '5px' : '0'}>
           <UserAvatar>
             {userAvatar.length ? (
-              <UserAvatarCustom src={userAvatar} />
+              <UserAvatarCustom src={userAvatar} alt={`${userName} avatar`} />
             ) : (
               <UserAvatarDefault width="28px" height="28px" top="5px" />
             )}

@@ -8,6 +8,7 @@ import { Install } from '../../components/Install/Install';
 import { LogInScreen } from '../../components/Login/Login';
 import { HeaderBar } from '../../components/HeaderBar/HeaderBar';
 import { Main } from '../../components/Main/Main';
+import { Documents } from '../../components/Documents/Documents';
 import { Chat } from '../../components/Chat/Chat';
 import { ListOfStudents } from '../../components/ListOfStudents/ListOfStudents';
 import { Settings } from '../../components/Settings/Settings';
@@ -169,6 +170,15 @@ export const App: React.FC = () => {
                     path="/"
                     exact
                     render={(): JSX.Element => <Main user={state.user} schedule={state.schedule} />}
+                  />
+                  <Route
+                    path="/documents"
+                    render={(): JSX.Element => (
+                      <Documents
+                        host={state.host}
+                        userRegistrationData={state.userRegistrationData}
+                      />
+                    )}
                   />
                   <Route
                     path="/chat"

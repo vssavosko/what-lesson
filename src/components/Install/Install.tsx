@@ -68,7 +68,7 @@ export const Install: React.FC = () => {
   return (
     <Wrapper>
       <InstallBlock>
-        <AppIcon src={WLIcon} />
+        <AppIcon src={WLIcon} alt="App icon" />
         <InstallTextBlock>
           <InstallText>Установите приложение на&nbsp;свое устройство:</InstallText>
           <InstallText>

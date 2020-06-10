@@ -82,6 +82,15 @@ export type LessonType = {
   teacherName: string;
 };
 
+export type DocumentType = {
+  name: string;
+  ext: string;
+  sendingDate: string;
+  userName: string;
+  path: string;
+  size: string;
+};
+
 export type MessageType = {
   userName: string;
   userAvatar: string;

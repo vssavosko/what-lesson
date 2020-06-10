@@ -52,7 +52,6 @@ const ErrorMessage = styled.p`
   font-family: 'SFProTextRegular', sans-serif;
   color: ${(props: ITheme): string => props.theme.mainTextColor};
   text-align: center;
-  margin-top: 20px;
 `;
 const MessageBar = styled.form`
   position: relative;
@@ -166,6 +165,8 @@ export const Chat: React.FC<IProps> = ({ host, userRegistrationData, userRole, u
           refTextarea.current.focus();
         }
 
+        if (state.messages.length + 1 === 2) dispatch({ type: 'error', payload: '' });
+
         dispatch({ type: 'message', payload: '' });
 
         scrollToBottom();
@@ -196,13 +197,13 @@ export const Chat: React.FC<IProps> = ({ host, userRegistrationData, userRole, u
         const messages = Object.values(res) as MessageType[];
 
         dispatch({ type: 'messages', payload: messages });
-        dispatch({ type: 'isLoading', payload: false });
 
         scrollToBottom();
       })
       .catch((error) => {
         throw new Error(error);
-      });
+      })
+      .finally(() => dispatch({ type: 'isLoading', payload: false }));
   }, [host, userRegistrationData]);
 
   useEffect(() => {
@@ -231,9 +232,9 @@ export const Chat: React.FC<IProps> = ({ host, userRegistrationData, userRole, u
 
   return (
     <Page>
-      <ChatWindow positioning={state.isLoading ? 'center' : ''}>
+      <ChatWindow positioning={state.isLoading || state.error.length ? 'center' : ''}>
         {state.isLoading && !state.error.length && <Loader />}
-        {!state.isLoading && (
+        {!state.isLoading && !state.error.length && (
           <ChatHistory>
             {state.messages.map((message: MessageType, index: number) => (
               <Message
@@ -262,7 +263,7 @@ export const Chat: React.FC<IProps> = ({ host, userRegistrationData, userRole, u
             onKeyDownCapture={(event): void => resizeTextarea(event)}
             ref={refTextarea}
           />
-          <MessageButton onClick={(event): void => sendMessage(event)}>
+          <MessageButton aria-label="Send message" onClick={(event): void => sendMessage(event)}>
             <MessageButtonIcon />
           </MessageButton>
         </MessageBar>
