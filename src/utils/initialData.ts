@@ -47,7 +47,7 @@ const initialListOfStudents: StudentsType[] = [
     phoneNumber: '',
   },
 ];
-const initialTheme = (): string => localStorage.getItem('theme') || 'light';
+const initialTheme = (): string => localStorage.getItem('theme') || 'night-blue';
 const initialCurrentDate = new Date(
   new Date().getFullYear(),
   new Date().getMonth(),

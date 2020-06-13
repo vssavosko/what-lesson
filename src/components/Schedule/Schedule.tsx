@@ -22,13 +22,13 @@ const Curtain = styled.div`
   border-top: 1px solid ${(props: ITheme): string => props.theme.elementBackground};
   border-radius: 10px 10px 0 0;
   z-index: 2;
-  cursor: pointer;
   transform: translateY(${window.innerHeight}px);
   transition: 0.8s;
 `;
 const HideCurtainButton = styled(HideCurtainButtonIcon)`
   fill: ${(props: ITheme): string => props.theme.elementsColor};
   padding: 10px 0 24px 0;
+  cursor: pointer;
 `;
 
 export const Schedule = forwardRef((props: IProps, ref: React.Ref<HTMLDivElement>) => {
@@ -68,7 +68,7 @@ export const Schedule = forwardRef((props: IProps, ref: React.Ref<HTMLDivElement
       onTouchMove={(event): void => touchMove(event)}
       ref={ref}
     >
-      <HideCurtainButton />
+      <HideCurtainButton onClick={hideSchedule} />
       {currentSchedule &&
         currentSchedule.map((lessonData, index) => (
           <Lesson
