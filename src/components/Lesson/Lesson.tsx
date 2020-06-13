@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { ISizes, ITheme } from '../../globalInterfaces';
 import { IProps } from './interfaces';
 
+import { nameFormatting } from '../../utils/nameFormatting';
+
 const LessonBlock = styled.div`
   position: relative;
   width: 100%;
@@ -70,11 +72,11 @@ export const Lesson: React.FC<IProps> = ({ lesson, isFirstLesson, isLastLesson }
       <Content>
         <LessonInfo>
           <SideValues>{lesson.time}</SideValues>
-          <PrincipalValue>{lesson.lessonName}</PrincipalValue>
-          <SideValues>{lesson.place}</SideValues>
+          <PrincipalValue>{nameFormatting(lesson.lessonName, 17)}</PrincipalValue>
+          <SideValues>{nameFormatting(lesson.place, 17)}</SideValues>
         </LessonInfo>
         <TeacherInfo>
-          <PrincipalValue>{lesson.teacherName}</PrincipalValue>
+          <PrincipalValue>{nameFormatting(lesson.teacherName, 14)}</PrincipalValue>
         </TeacherInfo>
       </Content>
     </LessonBlock>

@@ -45,7 +45,8 @@ const DocumentTextBlock = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  padding-left: 16px;
+  padding: 0 16px;
+  word-break: break-word;
 `;
 const DocumentName = styled.p`
   font-family: 'SFProTextRegular', sans-serif;
