@@ -12,7 +12,7 @@ PWA for planning a student's study time. The app allows you to view the student'
 
 # How do use app?
 1. Go to wl.vssavosko.tech;
-2. Enter username and password (Test data. ***Login: test***, ***password: test123789***);
+2. Enter username and password (Test data. ***Login: test@gmail.com***, ***password: test123789***);
 3. You can use the app from the browser or install it on your device (follow the browser instructions to install the app).
 
 P.S. If you install apps using a mobile device or tablet running on iOS, then you need to press Share > add to Home screen.
