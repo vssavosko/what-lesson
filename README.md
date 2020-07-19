@@ -1,4 +1,4 @@
-# what-lesson
+# What Lesson
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 PWA for planning a student's study time. The app allows you to view the student's study schedule, allows you to share information using the document Manager, and helps you stay up to date with events via chat. Also, the app has screen the list of classmates to quickly find the right contacts a person, and a settings screen for managing your personal information, color schemes, and subscriptions.
